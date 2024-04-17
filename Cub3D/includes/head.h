@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/17 17:30:30 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:50:10 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ int		update_node(t_node node, t_node *list);
 int		get_list_size(t_node *list);
 int		get_list_xlen(t_node *list);
 int		get_list_ylen(t_node *list);
-int		is_node_free(int x, int y, t_data *data);
 //MAP_INIT
 int		do_map_checks(int fd, char *reader);
 t_node	*read_map(int fd, int fc, char *reader, t_node *list);

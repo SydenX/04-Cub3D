@@ -6,7 +6,7 @@
 #    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/04/17 17:26:23 by jtollena         ###   ########.fr        #
+#    Updated: 2024/04/17 17:54:31 by jtollena         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,18 @@ OBJSDIR = objs
 INC = 
 
 SRC = \
-	 main.c
+	 main.c \
+		utils.c \
+		map_checks/surrounded.c \
+		map_checks/linesize.c \
+		map_checks/nodestype.c \
+		map_checks/get_sizes.c \
+		map_checks/pathfinder.c \
+		map_checks/pathfinder_arround.c \
+		map_checks/map_init.c \
+		node_manager/node_1.c \
+		node_manager/node_utils.c \
+		error_manager/errors.c
 
 # **************************************************************************** #
 
