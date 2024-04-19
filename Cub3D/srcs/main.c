@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 14:04:39 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:33:33 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,7 @@ int	main(int argc, char **argv)
 	// mlx_hook(data.prog->win, 2, 0, &event_key_pressed, &data);
 	// mlx_hook(data.prog->win, 17, 0, &close_window, &data);
 	// mlx_loop(data.prog->mlx);
+		// system("leaks cub3d");
+
 	return (argc);
 }

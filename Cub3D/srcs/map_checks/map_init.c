@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 14:05:26 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:14:29 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 		if (!path)
 			error_allocation((void *)list, (void *)reader, data);
 		if (ft_strlen(path) == 0)
-			error_notformatted((void *)list, (void *)reader, data);
+			error_notformatted(path, (void *)reader, data);
 		printf("%s-\n", path);
 		free(path);
 	}
