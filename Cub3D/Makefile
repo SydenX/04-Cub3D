@@ -6,7 +6,7 @@
 #    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/04/17 17:54:31 by jtollena         ###   ########.fr        #
+#    Updated: 2024/04/19 10:02:23 by jtollena         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ NAME = cub3d
 
 RM = rm -rf
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra 
+CFLAGS = #-Wall -Werror -Wextra 
 
 # Directories
 
@@ -34,12 +34,8 @@ INC =
 SRC = \
 	 main.c \
 		utils.c \
-		map_checks/surrounded.c \
-		map_checks/linesize.c \
 		map_checks/nodestype.c \
 		map_checks/get_sizes.c \
-		map_checks/pathfinder.c \
-		map_checks/pathfinder_arround.c \
 		map_checks/map_init.c \
 		node_manager/node_1.c \
 		node_manager/node_utils.c \
@@ -68,7 +64,7 @@ OBJS = $(addprefix $(OBJSDIR)/, $(addsuffix .o, $(basename $(SRC))))
 OBJS_DIR = $(sort $(dir $(OBJS)))
 
 INCS_DIR = $(addsuffix /, $(INCSDIR))
-INCS = $(addprefix -I, $(INCS_DIR)) -Ilibft -Imlx -I
+INCS = $(addprefix -I, $(INCS_DIR)) -Ilibft -Imlx
 
 all : $(NAME)
 

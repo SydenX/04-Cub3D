@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 08:31:26 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:36:46 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_node	*get_node(int x, int y, t_node *list)
 	{
 		if (list[i].x == x && list[i].y == y)
 		{
-			if (list[i].type == NULLT)
+			if (list[i].type == NULLT || list[i].type == ENDL)
 				return NULL;
 			return &list[i];
 		}
@@ -49,34 +49,141 @@ int	check_surrounded_points(t_node *list)
 	return 1;
 }
 
-t_node	*read_map(int fd, int fc, char *reader, t_node *list)
+int read_texture()
+{
+
+	return (1);
+}
+
+int read_rgb(char *reader, t_node *list, t_data *data, int i)
+{
+	int	isok;
+	int	digit;
+	int	isf;
+	int	count;
+
+	count = 0;
+	if (reader[i++] == 'F')
+		isf = 1;
+	else
+		isf = 0;
+	isok = 0;
+	digit = -1;
+	while (reader[i] != 0 && reader[i] != '\n')
+	{
+		while (reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13))
+			i++;
+		while (ft_isdigit(reader[i])){
+			if (digit == -1)
+				digit++;
+			digit = (reader[i] - '0') + 10 * digit;
+			i++;
+		}
+		if (((reader[i] == ',' && count < 2) || (reader[i] == '\n')) && digit >= 0 && digit <= 255)
+		{
+			if (isf)
+			{
+				if (count == 0)
+					data->f.r = digit;
+				else if (count == 1)
+					data->f.g = digit;
+				else if (count == 2)
+					data->f.b = digit;
+			}
+			else
+			{
+				if (count == 0)
+					data->c.r = digit;
+				else if (count == 1)
+					data->c.g = digit;
+				else if (count == 2)
+					data->c.b = digit;
+			}
+			digit = -1;
+			count++;
+			i++;
+		}
+		else
+			error_notformatted((void *)list, (void *)reader);
+	}
+	return (1);
+}
+
+int	check_infos(char *reader, int i, t_node *list, t_data *data)
+{
+	int numberoftextures;
+	int fc;
+
+	numberoftextures = 0;
+	fc = 0;
+	while (reader[++i])
+	{
+		while (reader[i] == '\n' || reader[i] == ' '
+			|| (reader[i] >= 9 && reader[i] < 13))
+			i++;
+		if (!reader[i])
+			exit_error("0", NULL, (void *)list, (void *)reader);
+		if ((reader[i] == 'N' && reader[i + 1] == 'O')
+			|| (reader[i] == 'E' && reader[i + 1] == 'A')
+			|| (reader[i] == 'S' && reader[i + 1] == 'O')
+			|| (reader[i] == 'W' && reader[i + 1] == 'E')
+			|| (reader[i] == 'F') || (reader[i] == 'C'))
+		{
+			if ((reader[i] == 'F') || (reader[i] == 'C'))
+				fc += read_rgb(reader, list, data, i);
+			else
+				numberoftextures += read_texture();
+		}
+		else
+			error_notformatted((void *)list, (void *)reader);
+		while (reader[i] != '\n')
+			if (reader[i++] == 0)
+				error_notformatted((void *)list, (void *)reader);
+		if (numberoftextures == 4 && fc == 2)
+			break ;
+	}
+	printf("%d %d %d\n", data->f.r, data->f.g, data->f.b);
+	printf("%d %d %d\n", data->c.r, data->c.g, data->c.b);
+	while (reader[i++] == '\n')
+	{
+	}
+	if (reader[i] == 0)
+		error_notformatted((void *)list, (void *)reader);
+	return (i - 1);
+}
+
+t_node	*read_map(int fd, int x, char *reader, t_data *data)
 {
 	int		readable;
 	int		i;
 	int		j;
 	int		y;
+	t_node	*list;
 
+	list = *data->nodes;
 	readable = 1;
 	i = -1;
 	j = 0;
 	y = 0;
-	readable = read(fd, reader, fc);
+	readable = read(fd, reader, x);
 	if (readable == -1)
 		error_inputfile((void *)reader, (void *)list);
-	fc = close(fd);
+	close(fd);
+	i = check_infos(reader, i, list, data);
+	x = 0;
 	while (reader[++i])
 	{
 		if (reader[i] != '\n')
-			list[j++] = create_node(reader[i], fc++, y);
+			list[j++] = create_node(reader[i], x++, y);
 		else
 		{
 			y++;
-			fc = 0;
+			x = 0;
 		}
 	}
 	list[j] = create_node(1, 0, 0);
 	if (check_surrounded_points(list) == 0)
-		exit_error("SURROUNDED", NULL, list, NULL);
+		error_notsurrounded((void *)(list), (void *)reader);
 	return (free(reader), check_nodes_type(list, j));
 }
 

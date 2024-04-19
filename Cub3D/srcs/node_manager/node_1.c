@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/19 08:27:02 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 09:38:02 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,19 @@ t_node	create_node(char name, int x, int y)
 		new.type = WALL;
 	else if (name == '0')
 		new.type = FLOOR;
-	else if (name == 'P')
+	else if (name == 'N' || name == 'S' || name == 'W' || name == 'E')
 	{
 		new.f = 10000;
 		new.type = SPAWN;
+		if (name == 'N')
+			new.direction = NORTH;
+		if (name == 'E')
+			new.direction = EAST;
+		if (name == 'S')
+			new.direction = SOUTH;
+		if (name == 'W')
+			new.direction = WEST;
 	}
-	else if (name == 'E')
-		new.type = EXIT;
-	else if (name == 'C')
-		new.type = COLLECTIBLE;
 	else if (name == 1)
 		new.type = ENDL;
 	else

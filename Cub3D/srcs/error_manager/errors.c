@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/17 17:54:12 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:43:42 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,11 @@ void	error_notcorrectinterest(void *toFree, void *toFree2)
 void	error_nopathfound(void *toFree, void *toFree2)
 {
 	exit_error("Map collectibles or exit not reachable.",
+		NULL, toFree, toFree2);
+}
+
+void	error_notsurrounded(void *toFree, void *toFree2)
+{
+	exit_error("Map must be surrounded by walls.",
 		NULL, toFree, toFree2);
 }
