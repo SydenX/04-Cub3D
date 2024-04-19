@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 17:12:42 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 08:36:14 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:03:34 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ t_node	*check_nodes_type(t_node *nodes, int size)
 		cpy = nodes[i++];
 	}
 	if (spawn != 1)
-		error_notcorrectinterest((void *)nodes, NULL);
+		error_notcorrectinterest((void *)nodes, NULL, NULL);
 	return (nodes);
 }

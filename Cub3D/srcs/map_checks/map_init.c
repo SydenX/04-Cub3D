@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 11:03:57 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:59:37 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 		else if ((reader[i] == 'S' && reader[i + 1] == 'O'))
 			type = 3;
 		else
-			error_notformatted((void *)list, (void *)reader);
+			error_notformatted((void *)list, (void *)reader, data);
 		i += 2;
 		while ((reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13)) && reader[i] != '\n')
 			i++;
@@ -76,12 +76,12 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 		while (reader[i] != '\n' && reader[i] != 0)
 			i++;
 		if (reader[i] == 0)
-			error_notformatted((void *)list, (void *)reader);
+			error_notformatted((void *)list, (void *)reader, data);
 		path = ft_substr(reader, j, i - j);
 		if (!path)
-			error_allocation((void *)list, (void *)reader);
+			error_allocation((void *)list, (void *)reader, data);
 		if (ft_strlen(path) == 0)
-			error_notformatted((void *)list, (void *)reader);
+			error_notformatted((void *)list, (void *)reader, data);
 		printf("%s-\n", path);
 	}
 	return (1);
@@ -136,7 +136,7 @@ int read_rgb(char *reader, t_node *list, t_data *data, int i)
 			i++;
 		}
 		else
-			error_notformatted((void *)list, (void *)reader);
+			error_notformatted((void *)list, (void *)reader, data);
 	}
 	return (1);
 }
@@ -154,7 +154,7 @@ int	check_infos(char *reader, int i, t_node *list, t_data *data)
 			|| (reader[i] >= 9 && reader[i] < 13))
 			i++;
 		if (!reader[i])
-			exit_error("0", NULL, (void *)list, (void *)reader);
+			exit_error("0", data, (void *)list, (void *)reader);
 		if ((reader[i] == 'N' && reader[i + 1] == 'O')
 			|| (reader[i] == 'E' && reader[i + 1] == 'A')
 			|| (reader[i] == 'S' && reader[i + 1] == 'O')
@@ -167,10 +167,10 @@ int	check_infos(char *reader, int i, t_node *list, t_data *data)
 				numberoftextures += read_texture(reader, list, data, i);
 		}
 		else
-			error_notformatted((void *)list, (void *)reader);
+			error_notformatted((void *)list, (void *)reader, data);
 		while (reader[i] != '\n')
 			if (reader[i++] == 0)
-				error_notformatted((void *)list, (void *)reader);
+				error_notformatted((void *)list, (void *)reader, data);
 		if (numberoftextures == 4 && fc == 2)
 			break ;
 	}
@@ -180,7 +180,7 @@ int	check_infos(char *reader, int i, t_node *list, t_data *data)
 	{
 	}
 	if (reader[i] == 0)
-		error_notformatted((void *)list, (void *)reader);
+		error_notformatted((void *)list, (void *)reader, data);
 	return (i - 1);
 }
 
@@ -199,7 +199,7 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	y = 0;
 	readable = read(fd, reader, x);
 	if (readable == -1)
-		error_inputfile((void *)reader, (void *)list);
+		error_inputfile((void *)reader, (void *)list, data);
 	close(fd);
 	i = check_infos(reader, i, list, data);
 	x = 0;
@@ -215,7 +215,7 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	}
 	list[j] = create_node(1, 0, 0);
 	if (check_surrounded_points(list) == 0)
-		error_notsurrounded((void *)(list), (void *)reader);
+		error_notsurrounded((void *)(list), (void *)reader, data);
 	return (free(reader), check_nodes_type(list, j));
 }
 
@@ -249,7 +249,7 @@ void	map_init(t_data *data)
 	}
 	moves = get_moves(ft_itoa(data->moves));
 	if (!moves)
-		exit_error("Failed malloc allocation", data->prog, data, NULL);
+		exit_error("Failed malloc allocation", data, NULL, NULL);
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win,
 		loadafter->img, loadafter->x * SIZE, loadafter->y * SIZE);
 	mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);

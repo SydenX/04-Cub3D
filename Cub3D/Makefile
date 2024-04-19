@@ -6,7 +6,7 @@
 #    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/04/19 10:02:23 by jtollena         ###   ########.fr        #
+#    Updated: 2024/04/19 13:42:01 by jtollena         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,10 @@ SRC = \
 		map_checks/nodestype.c \
 		map_checks/get_sizes.c \
 		map_checks/map_init.c \
+		map_checks/map_size.c \
 		node_manager/node_1.c \
 		node_manager/node_utils.c \
+		image_manager/image_init.c \
 		error_manager/errors.c
 
 # **************************************************************************** #

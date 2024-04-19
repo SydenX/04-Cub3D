@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 10:57:17 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:58:48 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,13 @@ t_img	create_image(int x, int y, t_type type, t_prog *prog);
 t_img	*load_images(t_img *imgs, t_node *list, t_prog *prog);
 void	*get_image(t_prog *prog, t_type type);
 //ERROR_1
-void	exit_error(char *error, t_prog *prog, void *toFree, void *toFree2);
-void	error_notcorrectinterest(void *toFree, void *toFree2);
-void	error_nopathfound(void *toFree, void *toFree2);
-void	error_inputfile(void *toFree, void *toFree2);
-void	error_notformatted(void *toFree, void *toFree2);
-void	error_notsurrounded(void *toFree, void *toFree2);
-void	error_allocation(void *toFree, void *toFree2);
+void	exit_error(char *error, t_data *data, void *toFree, void *toFree2);
+void	error_notcorrectinterest(void *toFree, void *toFree2, t_data *data);
+void	error_nopathfound(void *toFree, void *toFree2, t_data *data);
+void	error_inputfile(void *toFree, void *toFree2, t_data *data);
+void	error_notformatted(void *toFree, void *toFree2, t_data *data);
+void	error_notsurrounded(void *toFree, void *toFree2, t_data *data);
+void	error_allocation(void *toFree, void *toFree2, t_data *data);
 //NODE_1
 t_node	create_node(char name, int x, int y);
 t_node	find_exit_point(t_node *list);
@@ -126,5 +126,7 @@ int		get_list_ylen(t_node *list);
 int		do_map_checks(int fd, char *reader);
 t_node	*read_map(int fd, int fc, char *reader, t_data *data);
 void	map_init(t_data *data);
+//MAP_SIZE
+int	count_map(int fd, int x, char *reader);
 
 #endif
