@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/19 14:33:50 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:34:15 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	exit_error(char *error, t_data *data, void *toFree, void *toFree2)
 		free(toFree2);
 	}
 	ft_printf("Error\n%s\n", error);
-	// system("leaks cub3d");
+	system("leaks cub3d");
 	exit(0);
 }
 

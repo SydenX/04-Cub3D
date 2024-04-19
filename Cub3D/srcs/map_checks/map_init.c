@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 14:14:29 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:36:33 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,25 +198,25 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	i = -1;
 	j = 0;
 	y = 0;
-	readable = read(fd, reader, x);
-	if (readable == -1)
-		error_inputfile((void *)reader, (void *)list, data);
-	close(fd);
-	i = check_infos(reader, i, list, data);
-	x = 0;
-	while (reader[++i])
-	{
-		if (reader[i] != '\n')
-			list[j++] = create_node(reader[i], x++, y);
-		else
-		{
-			y++;
-			x = 0;
-		}
-	}
-	list[j] = create_node(1, 0, 0);
-	if (check_surrounded_points(list) == 0)
-		error_notsurrounded((void *)(list), (void *)reader, data);
+	// readable = read(fd, reader, x);
+	// if (readable == -1)
+	// 	error_inputfile((void *)reader, (void *)list, data);
+	// close(fd);
+	// i = check_infos(reader, i, list, data);
+	// x = 0;
+	// while (reader[++i])
+	// {
+	// 	if (reader[i] != '\n')
+	// 		list[j++] = create_node(reader[i], x++, y);
+	// 	else
+	// 	{
+	// 		y++;
+	// 		x = 0;
+	// 	}
+	// }
+	// list[j] = create_node(1, 0, 0);
+	// if (check_surrounded_points(list) == 0)
+	// 	error_notsurrounded((void *)(list), (void *)reader, data);
 	return (free(reader), check_nodes_type(list, j));
 }
 
