@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 10:26:26 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:57:17 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ typedef struct s_data {
 	t_prog	*prog;
 	t_node	**nodes;
 	t_img	*imgs;
-	char	*txt_path_north;
-	char	*txt_path_east;
-	char	*txt_path_south;
-	char	*txt_path_west;
+	void	*txt_path_north;
+	void	*txt_path_east;
+	void	*txt_path_south;
+	void	*txt_path_west;
 	t_rgb	f;
 	t_rgb	c;
 	int		moves;
@@ -111,6 +111,7 @@ void	error_nopathfound(void *toFree, void *toFree2);
 void	error_inputfile(void *toFree, void *toFree2);
 void	error_notformatted(void *toFree, void *toFree2);
 void	error_notsurrounded(void *toFree, void *toFree2);
+void	error_allocation(void *toFree, void *toFree2);
 //NODE_1
 t_node	create_node(char name, int x, int y);
 t_node	find_exit_point(t_node *list);

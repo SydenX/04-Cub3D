@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 10:36:46 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:01:24 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,41 @@ int	check_surrounded_points(t_node *list)
 	return 1;
 }
 
-int read_texture()
+int read_texture(char *reader, t_node *list, t_data *data, int i)
 {
+	int		j;
+	char	*path;
+	int 	type;
 
+	while (reader[i] != 0 && reader[i] != '\n')
+	{
+		while (reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13))
+			i++;
+		if ((reader[i] == 'W' && reader[i + 1] == 'E'))
+			type = 0;
+		else if ((reader[i] == 'N' && reader[i + 1] == 'O'))
+			type = 1;
+		else if ((reader[i] == 'E' && reader[i + 1] == 'A'))
+			type = 2;
+		else if ((reader[i] == 'S' && reader[i + 1] == 'O'))
+			type = 3;
+		else
+			error_notformatted((void *)list, (void *)reader);
+		i += 2;
+		while (reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13))
+			i++;
+		j = i;
+		while (reader[i] != '\n' && reader[i] != 0)
+			i++;
+		if (reader[i] == 0)
+			error_notformatted((void *)list, (void *)reader);
+		path = ft_substr(reader, j, i - j - 1);
+		if (!path)
+			error_allocation((void *)list, (void *)reader);
+		if (ft_strlen(path) == 0)
+			error_notformatted((void *)list, (void *)reader);
+		printf("%s-\n", path);
+	}
 	return (1);
 }
 
@@ -132,7 +164,7 @@ int	check_infos(char *reader, int i, t_node *list, t_data *data)
 			if ((reader[i] == 'F') || (reader[i] == 'C'))
 				fc += read_rgb(reader, list, data, i);
 			else
-				numberoftextures += read_texture();
+				numberoftextures += read_texture(reader, list, data, i);
 		}
 		else
 			error_notformatted((void *)list, (void *)reader);

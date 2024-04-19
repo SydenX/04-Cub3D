@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/19 08:43:42 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 10:57:35 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,11 @@ void	error_nopathfound(void *toFree, void *toFree2)
 void	error_notsurrounded(void *toFree, void *toFree2)
 {
 	exit_error("Map must be surrounded by walls.",
+		NULL, toFree, toFree2);
+}
+
+void	error_allocation(void *toFree, void *toFree2)
+{
+	exit_error("Error during allocation.",
 		NULL, toFree, toFree2);
 }
