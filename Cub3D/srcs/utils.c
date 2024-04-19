@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:53:57 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/17 17:54:53 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:26:56 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	collectibles_left(t_img *list)
 	t_img	*cpy;
 
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->type == COLLECTIBLE)
 			return (1);

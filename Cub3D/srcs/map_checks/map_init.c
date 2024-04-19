@@ -6,18 +6,47 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2023/12/11 12:18:53 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:31:26 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
 
-int	do_map_checks(int fd, char *reader)
+t_node	*get_node(int x, int y, t_node *list)
 {
-	close(fd);
-	linesize_checks(reader);
-	surr_checks(reader);
-	return (0);
+	int	i = 0;
+	while(list[i].type != ENDL)
+	{
+		if (list[i].x == x && list[i].y == y)
+		{
+			if (list[i].type == NULLT)
+				return NULL;
+			return &list[i];
+		}
+		i++;
+	}
+	return NULL;
+}
+
+int	check_surrounded_points(t_node *list)
+{
+	int	i = 0;
+	while(list[i].type != ENDL)
+	{
+		if (list[i].type != WALL && list[i].type != NULLT)
+		{
+			if (get_node(list[i].x - 1, list[i].y, list) == NULL)
+				return 0;
+			if (get_node(list[i].x + 1, list[i].y, list) == NULL)
+				return 0;
+			if (get_node(list[i].x, list[i].y - 1, list) == NULL)
+				return 0;
+			if (get_node(list[i].x, list[i].y + 1, list) == NULL)
+				return 0;
+		}
+		i++;
+	}
+	return 1;
 }
 
 t_node	*read_map(int fd, int fc, char *reader, t_node *list)
@@ -34,7 +63,7 @@ t_node	*read_map(int fd, int fc, char *reader, t_node *list)
 	readable = read(fd, reader, fc);
 	if (readable == -1)
 		error_inputfile((void *)reader, (void *)list);
-	fc = do_map_checks(fd, reader);
+	fc = close(fd);
 	while (reader[++i])
 	{
 		if (reader[i] != '\n')
@@ -46,6 +75,8 @@ t_node	*read_map(int fd, int fc, char *reader, t_node *list)
 		}
 	}
 	list[j] = create_node(1, 0, 0);
+	if (check_surrounded_points(list) == 0)
+		exit_error("SURROUNDED", NULL, list, NULL);
 	return (free(reader), check_nodes_type(list, j));
 }
 
@@ -68,7 +99,7 @@ void	map_init(t_data *data)
 
 	cpy = data->imgs;
 	mlx_clear_window(data->prog->mlx, data->prog->win);
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->type == SPAWN)
 			loadafter = cpy;

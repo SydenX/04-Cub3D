@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2023/12/07 16:16:56 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:27:02 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ t_node	create_node(char name, int x, int y)
 	else if (name == 'C')
 		new.type = COLLECTIBLE;
 	else if (name == 1)
-		new.type = NULLT;
+		new.type = ENDL;
 	else
-		new.type = 0;
+		new.type = NULLT;
 	return (new);
 }
 
@@ -45,7 +45,7 @@ t_node	find_exit_point(t_node *list)
 	t_node	*cpy;
 
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->type == EXIT)
 			return (*cpy);
@@ -59,7 +59,7 @@ t_node	find_spawn_point(t_node *list)
 	t_node	*cpy;
 
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->type == SPAWN)
 			return (*cpy);
@@ -75,7 +75,7 @@ t_node	*get_node_at(t_node *list, int x, int y)
 
 	i = 0;
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->x == x && cpy->y == y)
 			return (&list[i]);
@@ -90,7 +90,7 @@ int	update_node(t_node node, t_node *list)
 	t_node	*cpy;
 
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->x == node.x && cpy->y == node.y)
 		{

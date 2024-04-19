@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 20:43:28 by jetol             #+#    #+#             */
-/*   Updated: 2023/12/12 13:49:20 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:26:23 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	pathf_setup_h(t_node *list)
 
 	exit = find_exit_point(list);
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		xdiff = absolute(cpy->x - exit.x);
 		ydiff = absolute(cpy->y - exit.y);
@@ -35,7 +35,7 @@ void	reset_node(t_node *list)
 	t_node	*cpy;
 
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		cpy->g = 0;
 		cpy->f = 0;
@@ -51,7 +51,7 @@ void	pathf_run(t_node *list)
 
 	cpy = list;
 	lstsize = get_list_size(list);
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->type == COLLECTIBLE || cpy->type == SPAWN)
 		{

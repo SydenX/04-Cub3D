@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/17 17:50:10 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:25:48 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ typedef enum e_type {
 	SPAWN,
 	EXIT,
 	COLLECTIBLE,
-	NULLT
+	NULLT,
+	ENDL,
 }	t_type;
 
 typedef struct s_prog {

@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:13:16 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/17 17:52:59 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 08:26:13 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	get_list_size(t_node *list)
 
 	i = 0;
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		i++;
 		cpy++;
@@ -34,7 +34,7 @@ int	get_list_xlen(t_node *list)
 
 	lastx = 0;
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->x > lastx)
 			lastx = cpy->x;
@@ -50,7 +50,7 @@ int	get_list_ylen(t_node *list)
 
 	lasty = 0;
 	cpy = list;
-	while (cpy->type != NULLT)
+	while (cpy->type != ENDL)
 	{
 		if (cpy->y > lasty)
 			lasty = cpy->y;
