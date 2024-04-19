@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 11:01:24 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/19 11:03:57 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 		else
 			error_notformatted((void *)list, (void *)reader);
 		i += 2;
-		while (reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13))
+		while ((reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13)) && reader[i] != '\n')
 			i++;
 		j = i;
 		while (reader[i] != '\n' && reader[i] != 0)
 			i++;
 		if (reader[i] == 0)
 			error_notformatted((void *)list, (void *)reader);
-		path = ft_substr(reader, j, i - j - 1);
+		path = ft_substr(reader, j, i - j);
 		if (!path)
 			error_allocation((void *)list, (void *)reader);
 		if (ft_strlen(path) == 0)
@@ -103,7 +103,7 @@ int read_rgb(char *reader, t_node *list, t_data *data, int i)
 	digit = -1;
 	while (reader[i] != 0 && reader[i] != '\n')
 	{
-		while (reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13))
+		while ((reader[i] == ' ' || (reader[i] >= 9 && reader[i] < 13)) && reader[i] != '\n')
 			i++;
 		while (ft_isdigit(reader[i])){
 			if (digit == -1)
