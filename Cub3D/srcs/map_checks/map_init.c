@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:37:15 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:51:36 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,24 @@ int	check_surrounded_points(t_node *list)
 	return 1;
 }
 
-void check_file(char *path, char *reader, t_data *data)
+void check_texture_file(char *path, char *reader, t_data *data, int type)
 {
-	int fd;
+	int 	fd;
+	int		img_width;
+	int		img_height;
+	void	*img;
 
 	fd = open(path, O_RDONLY);
     if (fd != -1) {
-        // TODO -> Save textures to data
+		img = mlx_xpm_file_to_image(data->prog->mlx, path, &img_width, &img_height);
+		if (type == 0)
+			data->txt_path_west = img;
+		if (type == 1)
+			data->txt_path_north = img;
+		if (type == 2)
+			data->txt_path_east = img;
+		if (type == 3)
+			data->txt_path_south = img;
         close(fd);
 		return ;
     }
@@ -98,7 +109,7 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 			error_allocation((void *)list, (void *)reader, data);
 		if (ft_strlen(path) == 0)
 			error_notformatted(path, (void *)reader, data);
-		check_file(path, reader, data);
+		check_texture_file(path, reader, data, type);
 		free(path);
 	}
 	return (1);

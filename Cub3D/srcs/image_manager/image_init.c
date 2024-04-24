@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:50:27 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 12:50:28 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:48:26 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,6 @@ void	*get_image(t_prog *prog, t_type type)
 	if (type == WALL)
 		return (mlx_xpm_file_to_image(prog->mlx,
 				"img/Bush.xpm", &img_width, &img_height));
-	if (type == COLLECTIBLE)
-		return (mlx_xpm_file_to_image(prog->mlx,
-				"img/Mushroom.xpm", &img_width, &img_height));
-	if (type == EXIT)
-		return (mlx_xpm_file_to_image(prog->mlx,
-				"img/Exit.xpm", &img_width, &img_height));
 	if (type == SPAWN)
 		return (mlx_xpm_file_to_image(prog->mlx,
 				"img/Player.xpm", &img_width, &img_height));

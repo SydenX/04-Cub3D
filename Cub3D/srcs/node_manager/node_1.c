@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/24 12:02:12 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:48:14 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,6 @@ t_node	create_node(char name, int x, int y)
 	else
 		new.type = NULLT;
 	return (new);
-}
-
-t_node	find_exit_point(t_node *list)
-{
-	t_node	*cpy;
-
-	cpy = list;
-	while (cpy->type != ENDL)
-	{
-		if (cpy->type == EXIT)
-			return (*cpy);
-		cpy++;
-	}
-	return (*cpy);
 }
 
 t_node	find_spawn_point(t_node *list)

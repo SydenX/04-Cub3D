@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:06:02 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:51:09 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ int	main(int argc, char **argv)
 		exit_error("Failed malloc allocation", NULL, NULL, NULL);
 	reader[filechars] = 0;
 	data.prog = NULL;
+	prog = get_prog(*data.nodes);
+	data.prog = &prog;
 	init_list(argv, reader, filechars, &data);
-	// prog = get_prog(*data.nodes);
-	// data.prog = &prog;
 	// data.imgs = get_img(argv, *data.nodes, data.prog);
 
 	// mlx_hook(data.prog->win, 2, 0, &event_key_pressed, &data);

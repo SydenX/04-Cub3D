@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:17:00 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:47:48 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,12 @@ typedef enum e_direction {
 	EAST,
 	SOUTH,
 	WEST
-}	e_direction;
+}	t_direction;
 
 typedef enum e_type {
 	FLOOR,
 	WALL,
 	SPAWN,
-	EXIT,
-	COLLECTIBLE,
 	NULLT,
 	ENDL,
 }	t_type;
@@ -59,7 +57,7 @@ typedef struct s_node {
 	int				g;
 	int				f;
 	t_type			type;
-	e_direction		direction;
+	t_direction		direction;
 }	t_node;
 
 typedef struct s_img {
@@ -67,6 +65,7 @@ typedef struct s_img {
 	int				y;
 	void			*img;
 	t_type			type;
+	t_direction		direction;
 }	t_img;
 
 typedef struct s_data {
