@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 14:34:20 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:06:02 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	init_list(char **argv, char *reader, int fileChars, t_data *data)
 		free(reader);
 		exit_error("Failed malloc allocation", data, NULL, NULL);
 	}
-	data->nodes = malloc(sizeof(t_node *));
 	data->nodes = &list;
 	list = read_map(get_fd(argv[1], (void *)list, (void *)reader),
 			fileChars, reader, data);
@@ -109,7 +108,8 @@ int	main(int argc, char **argv)
 	// mlx_hook(data.prog->win, 2, 0, &event_key_pressed, &data);
 	// mlx_hook(data.prog->win, 17, 0, &close_window, &data);
 	// mlx_loop(data.prog->mlx);
-	system("leaks cub3d");
 
+	free(*(data.nodes));
+	// system("leaks cub3d");
 	return (argc);
 }

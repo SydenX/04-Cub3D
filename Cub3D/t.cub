@@ -1,4 +1,4 @@
-   WE                            textures/wolfenstein/eagle.xpm  
+   WE                            textures/wolfenstein/eagle.xpm
 NO      textures/wolfenstein/grey_stone.xpm
 
 
@@ -38,5 +38,5 @@ C 255, 198, 52
 100100001000000000000001
 100111111000000000000001
 100000000000000000000001
-1000000000000000000000 1
+100000000000000000000001
 111111111111111111111111

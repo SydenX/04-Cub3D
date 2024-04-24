@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 14:36:33 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:23:32 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,24 @@ int	check_surrounded_points(t_node *list)
 	return 1;
 }
 
+int check_file(char *path, char *reader, t_data *data)
+{
+	int fd;
+
+	fd = open(path, O_RDONLY);
+    if (fd != -1) {
+        // TODO -> Save textures to data
+        close(fd);
+    }
+	else 
+	{
+        if (errno == 2)
+            error_filedonotexist(path, (void *)reader, data);
+        else
+            error_fileerror(path, (void *)reader, data);
+    }
+}
+
 int read_texture(char *reader, t_node *list, t_data *data, int i)
 {
 	int		j;
@@ -83,6 +101,7 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 		if (ft_strlen(path) == 0)
 			error_notformatted(path, (void *)reader, data);
 		printf("%s-\n", path);
+		check_file(path, reader, data);
 		free(path);
 	}
 	return (1);
@@ -198,37 +217,26 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	i = -1;
 	j = 0;
 	y = 0;
-	// readable = read(fd, reader, x);
-	// if (readable == -1)
-	// 	error_inputfile((void *)reader, (void *)list, data);
-	// close(fd);
-	// i = check_infos(reader, i, list, data);
-	// x = 0;
-	// while (reader[++i])
-	// {
-	// 	if (reader[i] != '\n')
-	// 		list[j++] = create_node(reader[i], x++, y);
-	// 	else
-	// 	{
-	// 		y++;
-	// 		x = 0;
-	// 	}
-	// }
-	// list[j] = create_node(1, 0, 0);
-	// if (check_surrounded_points(list) == 0)
-	// 	error_notsurrounded((void *)(list), (void *)reader, data);
+	readable = read(fd, reader, x);
+	if (readable == -1)
+		error_inputfile((void *)reader, (void *)list, data);
+	close(fd);
+	i = check_infos(reader, i, list, data);
+	x = 0;
+	while (reader[++i])
+	{
+		if (reader[i] != '\n')
+			list[j++] = create_node(reader[i], x++, y);
+		else
+		{
+			y++;
+			x = 0;
+		}
+	}
+	list[j] = create_node(1, 0, 0);
+	if (check_surrounded_points(list) == 0)
+		error_notsurrounded((void *)(list), (void *)reader, data);
 	return (free(reader), check_nodes_type(list, j));
-}
-
-char	*get_moves(char *moves)
-{
-	char	*msg;
-
-	if (!moves)
-		return (NULL);
-	msg = ft_strjoin("Total moves: ", moves);
-	free(moves);
-	return (msg);
 }
 
 void	map_init(t_data *data)
@@ -248,11 +256,8 @@ void	map_init(t_data *data)
 				cpy->img, cpy->x * SIZE, cpy->y * SIZE);
 		cpy++;
 	}
-	moves = get_moves(ft_itoa(data->moves));
-	if (!moves)
-		exit_error("Failed malloc allocation", data, NULL, NULL);
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win,
 		loadafter->img, loadafter->x * SIZE, loadafter->y * SIZE);
-	mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	free(moves);
+	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+	// free(moves);
 }

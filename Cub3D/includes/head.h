@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/19 13:58:48 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:17:00 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <string.h>
 # include <fcntl.h>
 #include <stdio.h>
+#include <errno.h>
 
 # define SIZE 64
 
@@ -112,6 +113,8 @@ void	error_inputfile(void *toFree, void *toFree2, t_data *data);
 void	error_notformatted(void *toFree, void *toFree2, t_data *data);
 void	error_notsurrounded(void *toFree, void *toFree2, t_data *data);
 void	error_allocation(void *toFree, void *toFree2, t_data *data);
+void	error_filedonotexist(void *path, void *toFree2, t_data *data);
+void	error_fileerror(void *path, void *toFree2, t_data *data);
 //NODE_1
 t_node	create_node(char name, int x, int y);
 t_node	find_exit_point(t_node *list);

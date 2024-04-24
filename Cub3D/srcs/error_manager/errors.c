@@ -6,14 +6,13 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/19 14:34:15 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:20:48 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
 
-void	exit_error(char *error, t_data *data, void *toFree, void *toFree2)
-{
+void	clear(t_data *data, void *toFree, void *toFree2){
 	if (data != NULL)
 	{
 		if (data->prog != NULL)
@@ -39,8 +38,13 @@ void	exit_error(char *error, t_data *data, void *toFree, void *toFree2)
 		toFree2 = NULL;
 		free(toFree2);
 	}
+}
+
+void	exit_error(char *error, t_data *data, void *toFree, void *toFree2)
+{
+	clear(data, toFree, toFree2);
 	ft_printf("Error\n%s\n", error);
-	system("leaks cub3d");
+	// system("leaks cub3d");
 	exit(0);
 }
 
@@ -76,4 +80,20 @@ void	error_allocation(void *toFree, void *toFree2, t_data *data)
 {
 	exit_error("Error during allocation.",
 		data, toFree, toFree2);
+}
+
+void	error_filedonotexist(void *path, void *toFree2, t_data *data)
+{
+	clear(data, path, toFree2);
+	ft_printf("Error\nFile '%s' do not exist.\n", path);
+	// system("leaks cub3d");
+	exit(0);
+}
+
+void	error_fileerror(void *path, void *toFree2, t_data *data)
+{
+	clear(data, path, toFree2);
+	ft_printf("Error\nError while trying to read the file '%s'.\n", path);
+	// system("leaks cub3d");
+	exit(0);
 }
