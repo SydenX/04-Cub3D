@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:23:32 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:37:15 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	check_surrounded_points(t_node *list)
 	return 1;
 }
 
-int check_file(char *path, char *reader, t_data *data)
+void check_file(char *path, char *reader, t_data *data)
 {
 	int fd;
 
@@ -57,14 +57,12 @@ int check_file(char *path, char *reader, t_data *data)
     if (fd != -1) {
         // TODO -> Save textures to data
         close(fd);
+		return ;
     }
-	else 
-	{
-        if (errno == 2)
-            error_filedonotexist(path, (void *)reader, data);
-        else
-            error_fileerror(path, (void *)reader, data);
-    }
+	if (errno == 2)
+		error_filedonotexist(path, (void *)reader, data);
+	else
+		error_fileerror(path, (void *)reader, data);
 }
 
 int read_texture(char *reader, t_node *list, t_data *data, int i)
@@ -100,7 +98,6 @@ int read_texture(char *reader, t_node *list, t_data *data, int i)
 			error_allocation((void *)list, (void *)reader, data);
 		if (ft_strlen(path) == 0)
 			error_notformatted(path, (void *)reader, data);
-		printf("%s-\n", path);
 		check_file(path, reader, data);
 		free(path);
 	}
