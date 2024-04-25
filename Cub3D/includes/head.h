@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:47:48 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:59:30 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,12 @@ typedef struct s_img {
 typedef struct s_data {
 	t_prog	*prog;
 	t_node	**nodes;
-	t_img	*imgs;
 	void	*txt_path_north;
 	void	*txt_path_east;
 	void	*txt_path_south;
 	void	*txt_path_west;
+	int 	playerx;
+	int		playery;
 	t_rgb	f;
 	t_rgb	c;
 	int		moves;
@@ -89,7 +90,7 @@ int		collectibles_left(t_img *list);
 void	exit_win(char *msg, t_data *data, char *prefix);
 int		absolute(int i);
 void	move_player(int key, t_data *data);
-int		event_key_pressed(int keycode, t_data *data);
+// int		event_key_pressed(int keycode, t_data *data);
 //NODESTYPE
 t_node	*check_nodes_type(t_node *nodes, int size);
 //LINESIZE

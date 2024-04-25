@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:51:36 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:53:46 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,25 +247,29 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	return (free(reader), check_nodes_type(list, j));
 }
 
+char	*get_moves(char *moves)
+{
+	char	*msg;
+
+	if (!moves)
+		return (NULL);
+	msg = ft_strjoin("Total moves: ", moves);
+	free(moves);
+	return (msg);
+}
+
 void	map_init(t_data *data)
 {
-	t_img	*cpy;
-	t_img	*loadafter;
 	char	*moves;
-
-	cpy = data->imgs;
-	mlx_clear_window(data->prog->mlx, data->prog->win);
-	while (cpy->type != ENDL)
-	{
-		if (cpy->type == SPAWN)
-			loadafter = cpy;
-		else
-			mlx_put_image_to_window(data->prog->mlx, data->prog->win,
-				cpy->img, cpy->x * SIZE, cpy->y * SIZE);
-		cpy++;
+	int i = 0;
+	t_node *list = *(data->nodes);
+	while (list[i].type != ENDL) {
+		printf("%u, %d - %d\n", list[i].type, list[i].x, list[i].y);
+		i++;
 	}
-	mlx_put_image_to_window(data->prog->mlx, data->prog->win,
-		loadafter->img, loadafter->x * SIZE, loadafter->y * SIZE);
-	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	// free(moves);
+	mlx_clear_window(data->prog->mlx, data->prog->win);
+	moves = get_moves(ft_itoa(data->moves++));
+	mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+    mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
+	free(moves);
 }

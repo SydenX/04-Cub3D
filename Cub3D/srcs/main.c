@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:51:09 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:17:19 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 
 int	close_window(t_data *data)
 {
-	t_img	*imgsc;
-
-	imgsc = data->imgs;
-	while (imgsc->type != NULLT)
-	{
-		mlx_destroy_image(data->prog->mlx, imgsc->img);
-		imgsc++;
-	}
-	free(imgsc->img);
-	free(data->imgs);
 	mlx_clear_window(data->prog->mlx, data->prog->win);
 	mlx_destroy_window(data->prog->mlx, data->prog->win);
 	free(data->nodes);
@@ -47,42 +37,59 @@ void	init_list(char **argv, char *reader, int fileChars, t_data *data)
 			fileChars, reader, data);
 }
 
-t_prog	get_prog(t_node *list)
+t_prog	get_prog()
 {
 	t_prog	prog;
 
 	prog.mlx = mlx_init();
 	if (prog.mlx == NULL)
-		exit_error("Failed malloc allocation", NULL, list, NULL);
+		exit_error("Failed malloc allocation", NULL, NULL, NULL);
 	prog.win = mlx_new_window(prog.mlx, 10 * SIZE,
 			10 * SIZE, "Cub3D by Syden_");
 	if (prog.win == NULL)
-		exit_error("Failed malloc allocation", NULL, prog.mlx, list);
+		exit_error("Failed malloc allocation", NULL, prog.mlx, NULL);
 	return (prog);
 }
 
-t_img	*get_img(char **argv, t_node *list, t_prog *prog)
+void	move_player(int key, t_data *data)
 {
-	t_img	*imgs;
-
-	imgs = malloc(((node_size(argv[1]) * 2) + 1) * sizeof(t_node));
-	if (!imgs)
-		exit_error("Failed malloc allocation", NULL, list, NULL);
-	imgs = load_images(imgs, list, prog);
-	return (imgs);
+	mlx_pixel_put(data->prog->mlx, data->prog->win, 150, 150, 0x000000);
+	if ((key == KEY_W || key == KEY_UP))
+		data->playery -= 1;
+	else if ((key == KEY_S || key == KEY_DOWN))
+		data->playery += 1;
+	else if ((key == KEY_A || key == KEY_LEFT))
+		data->playerx -= 1;
+	else if ((key == KEY_D || key == KEY_RIGHT))
+		data->playerx += 1;
+	map_init(data);
 }
 
-int	event_key_pressed(int keycode, t_data *data)
+int	event_key_pressed(int keycode, void *datav)
 {
-	if (keycode == KEY_W || keycode == KEY_A 
-		|| keycode == KEY_D || keycode == KEY_S
-		|| keycode == KEY_UP || keycode == KEY_RIGHT 
-		|| keycode == KEY_LEFT || keycode == KEY_DOWN)
-		printf("Move player called\n");
-		// move_player(keycode, data);
-	else if (keycode == KEY_ESCAPE)
-		close_window(data);
+	int i = 0;
+	t_data *data = (t_data *)datav;
+	t_node *list = *(data->nodes);
+	while (list[i].type != ENDL) {
+		printf("%d, %d - %d\n", list[i].type, list[i].x, list[i].y);
+		i++;
+	}
+	return 1;
+	// if (keycode == KEY_W || keycode == KEY_A 
+	// 	|| keycode == KEY_D || keycode == KEY_S
+	// 	|| keycode == KEY_UP || keycode == KEY_RIGHT 
+	// 	|| keycode == KEY_LEFT || keycode == KEY_DOWN)
+	// 	move_player(keycode, data);
+	// else if (keycode == KEY_ESCAPE)
+	// 	close_window(data);
 	return (1);
+}
+
+void	s(t_data *data)
+{
+	mlx_hook(data->prog->win, 2, 0, &event_key_pressed, data);
+	mlx_hook(data->prog->win, 17, 0, &close_window, data);
+	mlx_loop(data->prog->mlx);
 }
 
 int	main(int argc, char **argv)
@@ -100,16 +107,15 @@ int	main(int argc, char **argv)
 		exit_error("Failed malloc allocation", NULL, NULL, NULL);
 	reader[filechars] = 0;
 	data.prog = NULL;
-	prog = get_prog(*data.nodes);
+	data.playery = 0;
+	data.playerx = 0;
+	prog = get_prog();
 	data.prog = &prog;
+	data.nodes = malloc(sizeof(t_node *));
 	init_list(argv, reader, filechars, &data);
+	s(&data);
 	// data.imgs = get_img(argv, *data.nodes, data.prog);
-
-	// mlx_hook(data.prog->win, 2, 0, &event_key_pressed, &data);
-	// mlx_hook(data.prog->win, 17, 0, &close_window, &data);
-	// mlx_loop(data.prog->mlx);
-
-	free(*(data.nodes));
+	// free(*(data.nodes));
 	// system("leaks cub3d");
 	return (argc);
 }
