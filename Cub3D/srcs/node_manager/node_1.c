@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/13 16:25:52 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:43:32 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_node_free(float x, float y, t_data *data)
 	// 	else
 	// 		return (1);
 	// }
-	return (node_isfree);
+	return (node->is_free);
 }
 
 t_node	create_node(char name, int x, int y)

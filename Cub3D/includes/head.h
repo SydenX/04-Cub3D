@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 16:17:53 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:31:26 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 # define SIZE 64
 # define HITBOX 15
+# define PLAYER_SIZE 10
 
 typedef enum e_direction {
 	NORTH,

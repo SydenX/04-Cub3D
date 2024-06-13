@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 16:16:31 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:31:53 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,7 @@ void	map_init(t_data *data)
 	mlx_clear_window(data->prog->mlx, data->prog->win);
 	moves = get_moves(ft_itoa(data->moves++));
 	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, HITBOX);
+	dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
     // mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	free(moves);
 }
