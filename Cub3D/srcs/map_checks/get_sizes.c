@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:12:20 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/19 14:03:30 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:03:45 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	node_size(char *path)
 		readable = read(fd, reader, 1);
 		if (readable == -1)
 			error_inputfile(NULL, NULL, NULL);
-		if (reader[0] == '1' || reader[0] == '0' || reader[0] == 'N'
+		if (reader[0] == '1' || reader[0] == '0' || reader[0] == 'N' || reader[0] == 'D'
 			|| reader[0] == 'E' || reader[0] == 'S' || reader[0] == 'W' || reader[0] == ' ')
 			wc++;
 		// else if (reader[0] != '\n' && reader[0] != 0)

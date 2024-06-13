@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/04/24 12:20:48 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:16:47 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	clear(t_data *data, void *toFree, void *toFree2){
 				mlx_destroy_window(data->prog->mlx, data->prog->win);
 			}
 		}
-		if (*data->nodes)
-			free(*data->nodes);
+		if (data->nodes)
+			free(data->nodes);
 		data = NULL;
 		free(data);
 	}
@@ -73,6 +73,12 @@ void	error_nopathfound(void *toFree, void *toFree2, t_data *data)
 void	error_notsurrounded(void *toFree, void *toFree2, t_data *data)
 {
 	exit_error("Map must be surrounded by walls.",
+		data, toFree, toFree2);
+}
+
+void	error_doornotparsedcorrectly(void *toFree, void *toFree2, t_data *data)
+{
+	exit_error("Doors must be between only 2 walls on the same axis.",
 		data, toFree, toFree2);
 }
 

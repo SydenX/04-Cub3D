@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/25 14:17:19 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 12:41:29 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	init_list(char **argv, char *reader, int fileChars, t_data *data)
 		free(reader);
 		exit_error("Failed malloc allocation", data, NULL, NULL);
 	}
-	data->nodes = &list;
+	data->nodes = list;
 	list = read_map(get_fd(argv[1], (void *)list, (void *)reader),
 			fileChars, reader, data);
 }
@@ -65,14 +65,16 @@ void	move_player(int key, t_data *data)
 	map_init(data);
 }
 
-int	event_key_pressed(int keycode, void *datav)
+int	event_key_pressed(int keycode, t_data *datav)
 {
 	int i = 0;
-	t_data *data = (t_data *)datav;
-	t_node *list = *(data->nodes);
-	while (list[i].type != ENDL) {
-		printf("%d, %d - %d\n", list[i].type, list[i].x, list[i].y);
-		i++;
+	t_node	*imgsc;
+
+	imgsc = datav->nodes;
+	while (imgsc->type != NULLT)
+	{
+		printf("%d, %d - %d\n", imgsc->type, imgsc->x, imgsc->y);
+		imgsc++;
 	}
 	return 1;
 	// if (keycode == KEY_W || keycode == KEY_A 
@@ -85,11 +87,11 @@ int	event_key_pressed(int keycode, void *datav)
 	return (1);
 }
 
-void	s(t_data *data)
+void	init_hooks(t_data *data)
 {
-	mlx_hook(data->prog->win, 2, 0, &event_key_pressed, data);
-	mlx_hook(data->prog->win, 17, 0, &close_window, data);
-	mlx_loop(data->prog->mlx);
+	mlx_hook((*data).prog->win, 2, 0, &event_key_pressed, (data));
+	mlx_hook((*data).prog->win, 17, 0, &close_window, (data));
+	mlx_loop((*data).prog->mlx);
 }
 
 int	main(int argc, char **argv)
@@ -113,9 +115,9 @@ int	main(int argc, char **argv)
 	data.prog = &prog;
 	data.nodes = malloc(sizeof(t_node *));
 	init_list(argv, reader, filechars, &data);
-	s(&data);
+	init_hooks(&data);
 	// data.imgs = get_img(argv, *data.nodes, data.prog);
 	// free(*(data.nodes));
-	// system("leaks cub3d");
+	system("leaks cub3d");
 	return (argc);
 }

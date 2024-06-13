@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/25 13:53:46 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:26:38 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	check_surrounded_points(t_node *list)
 	int	i = 0;
 	while(list[i].type != ENDL)
 	{
-		if (list[i].type != WALL && list[i].type != NULLT)
+		if ((list[i].type != WALL) && list[i].type != NULLT)
 		{
 			if (get_node(list[i].x - 1, list[i].y, list) == NULL)
 				return 0;
@@ -47,6 +47,41 @@ int	check_surrounded_points(t_node *list)
 		i++;
 	}
 	return 1;
+}
+
+int	check_surrounded_doors(t_node *list)
+{
+	int	i = 0;
+	int x = 0;
+	int y = 0;
+	while(list[i].type != ENDL)
+	{
+		if (list[i].type == DOOR)
+		{
+			if (get_node(list[i].x - 1, list[i].y, list) != NULL)
+				if(get_node(list[i].x - 1, list[i].y, list)->type == WALL)
+					x++;
+			if (get_node(list[i].x + 1, list[i].y, list) != NULL)
+				if(get_node(list[i].x + 1, list[i].y, list)->type == WALL)
+					x++;
+			if (get_node(list[i].x, list[i].y + 1, list) != NULL)
+				if(get_node(list[i].x, list[i].y + 1, list)->type == WALL)
+					y++;
+			if (get_node(list[i].x, list[i].y - 1, list) != NULL)
+				if(get_node(list[i].x, list[i].y - 1, list)->type == WALL)
+					y++;
+			if (x == 2)
+				list[i].direction = LAT;
+			if (y == 2)
+				list[i].direction = LONG;
+		}
+		i++;
+	}
+	if (x == 2 && y == 0)
+		return 1;
+	if (x == 0 && y == 2)
+		return 1;
+	return 0;
 }
 
 void check_texture_file(char *path, char *reader, t_data *data, int type)
@@ -220,7 +255,7 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	int		y;
 	t_node	*list;
 
-	list = *data->nodes;
+	list = data->nodes;
 	readable = 1;
 	i = -1;
 	j = 0;
@@ -244,6 +279,8 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	list[j] = create_node(1, 0, 0);
 	if (check_surrounded_points(list) == 0)
 		error_notsurrounded((void *)(list), (void *)reader, data);
+	if (check_surrounded_doors(list) == 0)
+		error_doornotparsedcorrectly((void *)(list), (void *)reader, data);
 	return (free(reader), check_nodes_type(list, j));
 }
 
@@ -262,7 +299,7 @@ void	map_init(t_data *data)
 {
 	char	*moves;
 	int i = 0;
-	t_node *list = *(data->nodes);
+	t_node *list = (data->nodes);
 	while (list[i].type != ENDL) {
 		printf("%u, %d - %d\n", list[i].type, list[i].x, list[i].y);
 		i++;

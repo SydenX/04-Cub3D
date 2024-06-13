@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/25 13:59:30 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:21:31 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ typedef enum e_direction {
 	NORTH,
 	EAST,
 	SOUTH,
-	WEST
+	WEST,
+	LAT,
+	LONG
 }	t_direction;
 
 typedef enum e_type {
 	FLOOR,
 	WALL,
 	SPAWN,
+	DOOR,
 	NULLT,
 	ENDL,
 }	t_type;
@@ -53,9 +56,6 @@ typedef struct s_rgb {
 typedef struct s_node {
 	int				x;
 	int				y;
-	int				h;
-	int				g;
-	int				f;
 	t_type			type;
 	t_direction		direction;
 }	t_node;
@@ -70,7 +70,7 @@ typedef struct s_img {
 
 typedef struct s_data {
 	t_prog	*prog;
-	t_node	**nodes;
+	t_node	*nodes;
 	void	*txt_path_north;
 	void	*txt_path_east;
 	void	*txt_path_south;
@@ -112,6 +112,7 @@ void	error_nopathfound(void *toFree, void *toFree2, t_data *data);
 void	error_inputfile(void *toFree, void *toFree2, t_data *data);
 void	error_notformatted(void *toFree, void *toFree2, t_data *data);
 void	error_notsurrounded(void *toFree, void *toFree2, t_data *data);
+void	error_doornotparsedcorrectly(void *toFree, void *toFree2, t_data *data);
 void	error_allocation(void *toFree, void *toFree2, t_data *data);
 void	error_filedonotexist(void *path, void *toFree2, t_data *data);
 void	error_fileerror(void *path, void *toFree2, t_data *data);
