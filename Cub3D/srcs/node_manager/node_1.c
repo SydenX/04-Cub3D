@@ -6,11 +6,25 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/13 13:02:55 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:25:52 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
+
+int	is_node_free(float x, float y, t_data *data)
+{
+	t_node	*node;
+	
+	node = get_node_at(data->nodes, x, y);
+	// if (!node_isfree){
+	// 	if ((x + HITBOX - 1) / HITBOX < 1)
+	// 		return (0);
+	// 	else
+	// 		return (1);
+	// }
+	return (node_isfree);
+}
 
 t_node	create_node(char name, int x, int y)
 {
@@ -18,6 +32,7 @@ t_node	create_node(char name, int x, int y)
 
 	new.x = x;
 	new.y = y;
+
 	if (name == '1')
 		new.type = WALL;
 	else if (name == '0')
@@ -42,6 +57,10 @@ t_node	create_node(char name, int x, int y)
 		new.type = ENDL;
 	else
 		new.type = NULLT;
+	if (new.type == WALL || new.type == DOOR || new.type == NULLT || new.type == ENDL)
+		new.is_free = 0;
+	else
+		new.is_free = 1;
 	return (new);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 13:21:31 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:17:53 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <errno.h>
 
 # define SIZE 64
+# define HITBOX 15
 
 typedef enum e_direction {
 	NORTH,
@@ -53,20 +54,25 @@ typedef struct s_rgb {
 	int	b;
 }	t_rgb;
 
-typedef struct s_node {
-	int				x;
-	int				y;
-	t_type			type;
-	t_direction		direction;
-}	t_node;
-
 typedef struct s_img {
-	int				x;
-	int				y;
 	void			*img;
 	t_type			type;
 	t_direction		direction;
 }	t_img;
+
+typedef struct s_node {
+	int				x;
+	int				y;
+	t_img			img_top;
+	t_img			img_floor;
+	t_img			img_N;
+	t_img			img_E;
+	t_img			img_S;
+	t_img			img_W;
+	t_type			type;
+	int				is_free;
+	t_direction		direction;
+}	t_node;
 
 typedef struct s_data {
 	t_prog	*prog;
@@ -75,8 +81,10 @@ typedef struct s_data {
 	void	*txt_path_east;
 	void	*txt_path_south;
 	void	*txt_path_west;
-	int 	playerx;
-	int		playery;
+	float 	playerx;
+	float	playery;
+	float 	playeryaw;
+	float	playerpitch;
 	t_rgb	f;
 	t_rgb	c;
 	int		moves;
@@ -106,6 +114,7 @@ t_img	create_image(int x, int y, t_type type, t_prog *prog);
 t_img	*load_images(t_img *imgs, t_node *list, t_prog *prog);
 void	*get_image(t_prog *prog, t_type type);
 //ERROR_1
+void	clear(t_data *data, void *toFree, void *toFree2);
 void	exit_error(char *error, t_data *data, void *toFree, void *toFree2);
 void	error_notcorrectinterest(void *toFree, void *toFree2, t_data *data);
 void	error_nopathfound(void *toFree, void *toFree2, t_data *data);
@@ -116,12 +125,14 @@ void	error_doornotparsedcorrectly(void *toFree, void *toFree2, t_data *data);
 void	error_allocation(void *toFree, void *toFree2, t_data *data);
 void	error_filedonotexist(void *path, void *toFree2, t_data *data);
 void	error_fileerror(void *path, void *toFree2, t_data *data);
+void	error_texturefileincorect(void *path, void *toFree2, t_data *data);
 //NODE_1
 t_node	create_node(char name, int x, int y);
 t_node	find_exit_point(t_node *list);
 t_node	find_spawn_point(t_node *list);
 t_node	*get_node_at(t_node *list, int x, int y);
 int		update_node(t_node node, t_node *list);
+int		is_node_free(float x, float y, t_data *data);
 //NODE_UTILS
 int		get_list_size(t_node *list);
 int		get_list_xlen(t_node *list);

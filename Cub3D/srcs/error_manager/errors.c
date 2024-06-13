@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/13 13:16:47 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 15:17:06 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,12 @@ void	clear(t_data *data, void *toFree, void *toFree2){
 				mlx_destroy_window(data->prog->mlx, data->prog->win);
 			}
 		}
-		if (data->nodes)
-			free(data->nodes);
+		// while(data->nodes->type != ENDL)
+		// {
+		// 	free(data->nodes);
+		// 	data->nodes++;
+		// }
+		// free(data->nodes);
 		data = NULL;
 		free(data);
 	}
@@ -44,7 +48,7 @@ void	exit_error(char *error, t_data *data, void *toFree, void *toFree2)
 {
 	clear(data, toFree, toFree2);
 	ft_printf("Error\n%s\n", error);
-	// system("leaks cub3d");
+	system("leaks cub3d");
 	exit(0);
 }
 
@@ -101,5 +105,13 @@ void	error_fileerror(void *path, void *toFree2, t_data *data)
 	clear(data, path, toFree2);
 	ft_printf("Error\nError while trying to read the file '%s'.\n", path);
 	// system("leaks cub3d");
+	exit(0);
+}
+
+void	error_texturefileincorect(void *path, void *toFree2, t_data *data)
+{
+	clear(data, path, toFree2);
+	ft_printf("Error\nError while trying to read the texture file '%s'.\n", path);
+	system("leaks cub3d");
 	exit(0);
 }

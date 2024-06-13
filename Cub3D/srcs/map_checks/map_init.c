@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 13:26:38 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:16:31 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,11 @@ void check_texture_file(char *path, char *reader, t_data *data, int type)
 	fd = open(path, O_RDONLY);
     if (fd != -1) {
 		img = mlx_xpm_file_to_image(data->prog->mlx, path, &img_width, &img_height);
+		if (img == NULL)
+		{
+			close(fd);
+			return (error_texturefileincorect(path, (void *)reader, data));
+		}
 		if (type == 0)
 			data->txt_path_west = img;
 		if (type == 1)
@@ -282,6 +287,7 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	if (check_surrounded_doors(list) == 0)
 		error_doornotparsedcorrectly((void *)(list), (void *)reader, data);
 	return (free(reader), check_nodes_type(list, j));
+	return NULL;
 }
 
 char	*get_moves(char *moves)
@@ -295,18 +301,38 @@ char	*get_moves(char *moves)
 	return (msg);
 }
 
+void	dessiner_des_carres_pour_tester(int color, int startX, int startY, t_data *data, int taille)
+{
+	int x = 0;
+	int y = 0;
+	while (x < taille){
+		y = 0;
+		while (y < taille){
+			mlx_pixel_put(data->prog->mlx, data->prog->win, x + startX, y + startY, color);
+			y++;
+		}
+		x++;
+	}
+}
+
 void	map_init(t_data *data)
 {
 	char	*moves;
 	int i = 0;
 	t_node *list = (data->nodes);
 	while (list[i].type != ENDL) {
-		printf("%u, %d - %d\n", list[i].type, list[i].x, list[i].y);
+		// printf("%u, %d - %d\n", list[i].type, list[i].x, list[i].y);
+		if (list[i].type == WALL)
+			dessiner_des_carres_pour_tester(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
+			// mlx_pixel_put(data->prog->mlx, data->prog->win, list[i].x, list[i].y, 0xFF0000);
+		if (list[i].type == DOOR && list[i].is_free == 0)
+			dessiner_des_carres_pour_tester(0x000FFF, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
 		i++;
 	}
 	mlx_clear_window(data->prog->mlx, data->prog->win);
 	moves = get_moves(ft_itoa(data->moves++));
-	mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-    mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
+	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+	dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, HITBOX);
+    // mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	free(moves);
 }
