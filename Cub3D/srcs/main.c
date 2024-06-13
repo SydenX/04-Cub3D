@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 16:24:00 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:28:17 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,13 @@ void	move_player(int key, t_data *data)
 	mlx_pixel_put(data->prog->mlx, data->prog->win, 150, 150, 0x000000);
 	printf("  %f\n", (data->playerx + speed) / HITBOX);
 	printf("- %f\n", (data->playerx + speed) / HITBOX + HITBOX - 1);
-	if ((key == KEY_W || key == KEY_UP) && is_node_free((data->playerx) / HITBOX, (data->playery - speed) / HITBOX, data) == 1
-			&& is_node_free(((data->playerx) / HITBOX) + HITBOX - 1, ((data->playery - speed) / HITBOX) + HITBOX - 1, data) == 1)
+	if ((key == KEY_W || key == KEY_UP) && is_node_free((data->playerx) / HITBOX, (data->playery - speed) / HITBOX, data) == 1)
 		data->playery -= speed;
-	else if ((key == KEY_S || key == KEY_DOWN) && is_node_free((data->playerx) / HITBOX, (data->playery + speed) / HITBOX, data) == 1
-			&& is_node_free(((data->playerx) / HITBOX) + HITBOX - 1, ((data->playery + speed) / HITBOX) + HITBOX - 1, data) == 1)
+	else if ((key == KEY_S || key == KEY_DOWN) && is_node_free((data->playerx) / HITBOX, (data->playery + speed) / HITBOX, data) == 1)
 		data->playery += speed;
-	else if ((key == KEY_A || key == KEY_LEFT) && is_node_free((data->playerx - speed) / HITBOX, (data->playery) / HITBOX, data) == 1
-			&& is_node_free(((data->playerx - speed) / HITBOX) + HITBOX - 1, ((data->playery) / HITBOX) + HITBOX - 1, data) == 1)
+	else if ((key == KEY_A || key == KEY_LEFT) && is_node_free((data->playerx - speed) / HITBOX, (data->playery) / HITBOX, data) == 1)
 		data->playerx -= speed;
-	else if ((key == KEY_D || key == KEY_RIGHT) && is_node_free((data->playerx + speed) / HITBOX, (data->playery) / HITBOX, data) == 1
-			&& is_node_free(((data->playerx + speed) / HITBOX) + HITBOX - 1, ((data->playery) / HITBOX) + HITBOX - 1, data) == 1)
+	else if ((key == KEY_D || key == KEY_RIGHT) && is_node_free((data->playerx + speed) / HITBOX, (data->playery) / HITBOX, data) == 1)
 		data->playerx += speed;
 	map_init(data);
 }
