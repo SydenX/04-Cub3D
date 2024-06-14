@@ -6,23 +6,42 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/13 16:43:32 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:37:41 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
+
+void	check_to_door(t_data *data, int x, int y)
+{
+	t_node	*cpy;
+	int		i;
+
+	i = 0;
+	cpy = data->nodes;
+	while (cpy->type != ENDL)
+	{
+		if (cpy->type == DOOR)
+		{
+			int dx = x - ((cpy->x * HITBOX) + (HITBOX / 2));
+			int dy = y - ((cpy->y * HITBOX) + (HITBOX / 2));
+			double distance = sqrt(dx * dx + dy * dy);
+			printf("%f\n", distance);
+			if (distance <= HITBOX * 1.5)
+				cpy->is_free = 1;
+			else
+				cpy->is_free = 0;
+		}
+		i++;
+		cpy++;
+	}
+}
 
 int	is_node_free(float x, float y, t_data *data)
 {
 	t_node	*node;
 	
 	node = get_node_at(data->nodes, x, y);
-	// if (!node_isfree){
-	// 	if ((x + HITBOX - 1) / HITBOX < 1)
-	// 		return (0);
-	// 	else
-	// 		return (1);
-	// }
 	return (node->is_free);
 }
 

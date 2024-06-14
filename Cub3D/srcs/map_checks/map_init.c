@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 16:31:53 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:32:01 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	check_surrounded_doors(t_node *list)
 	int y = 0;
 	while(list[i].type != ENDL)
 	{
+		x = 0;
+		y = 0;
 		if (list[i].type == DOOR)
 		{
 			if (get_node(list[i].x - 1, list[i].y, list) != NULL)
@@ -74,14 +76,12 @@ int	check_surrounded_doors(t_node *list)
 				list[i].direction = LAT;
 			if (y == 2)
 				list[i].direction = LONG;
+			if (!(x == 2 && y == 0) && !(x == 0 && y == 2))
+				return 0;
 		}
 		i++;
 	}
-	if (x == 2 && y == 0)
-		return 1;
-	if (x == 0 && y == 2)
-		return 1;
-	return 0;
+	return 1;
 }
 
 void check_texture_file(char *path, char *reader, t_data *data, int type)
@@ -315,6 +315,46 @@ void	dessiner_des_carres_pour_tester(int color, int startX, int startY, t_data *
 	}
 }
 
+void draw_line(void *mlx, void *win, int x0, int y0, int x1, int y1, int color) {
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = x0 < x1 ? 1 : -1;
+    int sy = y0 < y1 ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) / 2, e2;
+
+    while (1) {
+        mlx_pixel_put(mlx, win, x0, y0, color);
+        if (x0 == x1 && y0 == y1) break;
+        e2 = err;
+        if (e2 > -dx) { err -= dy; x0 += sx; }
+        if (e2 < dy) { err += dx; y0 += sy; }
+    }
+}
+
+void dessiner_joueur_avec_orientation(int color, int startX, int startY, t_data *data, int taille, double yaw_degrees) {
+    // Convertir Yaw en radians
+    double yaw_radians = (yaw_degrees - 125) * M_PI / 180.0;
+
+    // Points du triangle
+    int x0 = startX;
+    int y0 = startY;
+
+    int x1 = x0 + (int)(taille * cos(yaw_radians));
+    int y1 = y0 + (int)(taille * sin(yaw_radians));
+
+    int x2 = x0 + (int)(taille * cos(yaw_radians + 2.0 * M_PI / 3.0));
+    int y2 = y0 + (int)(taille * sin(yaw_radians + 2.0 * M_PI / 3.0));
+
+    int x3 = x0 + (int)(taille * cos(yaw_radians - 2.0 * M_PI / 3.0));
+    int y3 = y0 + (int)(taille * sin(yaw_radians - 2.0 * M_PI / 3.0));
+
+    // Dessiner les lignes du triangle
+    draw_line(data->prog->mlx, data->prog->win, x0, y0, x1, y1, color);
+    draw_line(data->prog->mlx, data->prog->win, x1, y1, x2, y2, color);
+    draw_line(data->prog->mlx, data->prog->win, x2, y2, x3, y3, color);
+    draw_line(data->prog->mlx, data->prog->win, x3, y3, x0, y0, color);
+}
+
 void	map_init(t_data *data)
 {
 	char	*moves;
@@ -332,7 +372,8 @@ void	map_init(t_data *data)
 	mlx_clear_window(data->prog->mlx, data->prog->win);
 	moves = get_moves(ft_itoa(data->moves++));
 	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
+	dessiner_joueur_avec_orientation(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE, data->playeryaw);
+	// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
     // mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	free(moves);
 }

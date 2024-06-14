@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 16:31:26 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:37:11 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
+# include <math.h>
 #include <stdio.h>
 #include <errno.h>
 
 # define SIZE 64
 # define HITBOX 15
-# define PLAYER_SIZE 10
+# define PLAYER_SIZE 5
 
 typedef enum e_direction {
 	NORTH,
@@ -128,6 +129,7 @@ void	error_filedonotexist(void *path, void *toFree2, t_data *data);
 void	error_fileerror(void *path, void *toFree2, t_data *data);
 void	error_texturefileincorect(void *path, void *toFree2, t_data *data);
 //NODE_1
+void	check_to_door(t_data *data, int x, int y);
 t_node	create_node(char name, int x, int y);
 t_node	find_exit_point(t_node *list);
 t_node	find_spawn_point(t_node *list);

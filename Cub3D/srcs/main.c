@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/13 16:58:44 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:35:27 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,35 +45,82 @@ t_prog	get_prog()
 	return (prog);
 }
 
+int	check_move_hitbox(t_data *data, int new_x, int new_y)
+{
+	printf("Node checked %d %d\n", (new_x - PLAYER_SIZE) / HITBOX, (new_y) / HITBOX);
+	printf("Node checked right %d %d\n", (new_x + PLAYER_SIZE) / HITBOX, (new_y) / HITBOX);
+	printf("Node checked down %d %d\n", (new_x) / HITBOX, (new_y + PLAYER_SIZE) / HITBOX);
+	printf("Node checked right down %d %d\n", (new_x + PLAYER_SIZE) / HITBOX, (new_y + PLAYER_SIZE) / HITBOX);
+	if (is_node_free((new_x - PLAYER_SIZE) / HITBOX, (new_y - PLAYER_SIZE) / HITBOX, data) == 1
+		&& is_node_free((new_x + PLAYER_SIZE) / HITBOX, (new_y) / HITBOX, data) == 1
+		&& is_node_free((new_x + PLAYER_SIZE) / HITBOX, (new_y + PLAYER_SIZE) / HITBOX, data) == 1
+		&& is_node_free((new_x) / HITBOX, (new_y + PLAYER_SIZE) / HITBOX, data) == 1)
+		return 1;
+	return 0;
+}
+
 void	move_player(int key, t_data *data)
 {
 	int speed = 5;
-
 	mlx_pixel_put(data->prog->mlx, data->prog->win, 150, 150, 0x000000);
-	printf("  %f\n", (data->playerx + speed) / HITBOX);
-	printf("- %f\n", (data->playerx + speed) / HITBOX + HITBOX - 1);
-	
-	if ((key == KEY_W || key == KEY_UP) && is_node_free((data->playerx) / HITBOX, (data->playery - speed) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery - speed) / HITBOX, data) == 1
-			&& is_node_free((data->playerx) / HITBOX, (data->playery + PLAYER_SIZE - speed) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery + PLAYER_SIZE - speed) / HITBOX, data) == 1)
-		data->playery -= speed;
-	else if ((key == KEY_S || key == KEY_DOWN) && is_node_free((data->playerx) / HITBOX, (data->playery + speed) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery + speed) / HITBOX, data) == 1
-			&& is_node_free((data->playerx) / HITBOX, (data->playery + PLAYER_SIZE + speed) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery + PLAYER_SIZE + speed) / HITBOX, data) == 1)
-		data->playery += speed;
-	else if ((key == KEY_A || key == KEY_LEFT) && is_node_free((data->playerx - speed) / HITBOX, (data->playery) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE - speed) / HITBOX, (data->playery) / HITBOX, data) == 1
-			&& is_node_free((data->playerx - speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE - speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1)
-		data->playerx -= speed;
-	else if ((key == KEY_D || key == KEY_RIGHT) && is_node_free((data->playerx + speed) / HITBOX, (data->playery) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE + speed) / HITBOX, (data->playery) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1
-			&& is_node_free((data->playerx + PLAYER_SIZE + speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1)
-		data->playerx += speed;
+	double yaw_radians = data->playeryaw * M_PI / 180.0;
+	float	new_x = data->playerx;
+	float	new_y = data->playery;
+
+	if (key == KEY_W)
+	{
+		new_x = data->playerx + speed * cos(yaw_radians);
+		new_y = data->playery + speed * sin(yaw_radians);
+	}
+	else if (key == KEY_S)
+	{
+		new_x = data->playerx - speed * cos(yaw_radians);
+		new_y = data->playery - speed * sin(yaw_radians);
+	}
+	else if (key == KEY_A)
+	{
+		new_x = data->playerx + speed * cos(yaw_radians - M_PI / 2);
+		new_y = data->playery + speed * sin(yaw_radians - M_PI / 2);
+	}
+	else if (key == KEY_D)
+	{
+		new_x = data->playerx + speed * cos(yaw_radians + M_PI / 2);
+		new_y = data->playery + speed * sin(yaw_radians + M_PI / 2);
+	}
+	else if (key == KEY_RIGHT)
+		data->playeryaw += 10;
+	else if (key == KEY_LEFT)
+		data->playeryaw -= 10;
+
+	if(check_move_hitbox(data, new_x, new_y))
+	{
+		data->playerx = new_x;
+		data->playery = new_y;
+	}
+	check_to_door(data, new_x, new_y);
 	map_init(data);
+	return ;
+	// if ((key == KEY_W || key == KEY_UP) && is_node_free((data->playerx) / HITBOX, (data->playery - speed) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery - speed) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx) / HITBOX, (data->playery + PLAYER_SIZE - speed) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery + PLAYER_SIZE - speed) / HITBOX, data) == 1)
+	// 	data->playery -= speed;
+	// else if ((key == KEY_S || key == KEY_DOWN) && is_node_free((data->playerx) / HITBOX, (data->playery + speed) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery + speed) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx) / HITBOX, (data->playery + PLAYER_SIZE + speed) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE) / HITBOX, (data->playery + PLAYER_SIZE + speed) / HITBOX, data) == 1)
+	// 	data->playery += speed;
+	// else if ((key == KEY_A || key == KEY_LEFT) && is_node_free((data->playerx - speed) / HITBOX, (data->playery) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE - speed) / HITBOX, (data->playery) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx - speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE - speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1)
+	// 	data->playerx -= speed;
+	// else if ((key == KEY_D || key == KEY_RIGHT) && is_node_free((data->playerx + speed) / HITBOX, (data->playery) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE + speed) / HITBOX, (data->playery) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1
+	// 		&& is_node_free((data->playerx + PLAYER_SIZE + speed) / HITBOX, (data->playery + PLAYER_SIZE) / HITBOX, data) == 1)
+	// 	data->playerx += speed;
+	// map_init(data);
 }
 
 int	event_key_pressed(int keycode, t_data *datav)
@@ -120,8 +167,8 @@ int	main(int argc, char **argv)
 		exit_error("Failed malloc allocation", NULL, NULL, NULL);
 	reader[filechars] = 0;
 	data.prog = NULL;
-	data.playery = 16;
-	data.playerx = 16;
+	data.playery = 25;
+	data.playerx = 25;
 	prog = get_prog();
 	data.prog = &prog;
 	init_list(argv, reader, filechars, &data);
