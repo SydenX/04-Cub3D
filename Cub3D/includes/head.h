@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/14 12:37:11 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:12:04 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ typedef enum e_direction {
 	LAT,
 	LONG
 }	t_direction;
+
+typedef enum e_doorstate {
+	OPEN,
+	CLOSE,
+	OPENNING,
+	CLOSING
+}	t_doorstate;
 
 typedef enum e_type {
 	FLOOR,
@@ -72,34 +79,47 @@ typedef struct s_node {
 	t_img			img_S;
 	t_img			img_W;
 	t_type			type;
+	t_doorstate		door_state;
+	int				running_door;
+	int				door_loc;
 	int				is_free;
 	t_direction		direction;
 }	t_node;
 
 typedef struct s_data {
-	t_prog	*prog;
-	t_node	*nodes;
-	void	*txt_path_north;
-	void	*txt_path_east;
-	void	*txt_path_south;
-	void	*txt_path_west;
-	float 	playerx;
-	float	playery;
-	float 	playeryaw;
-	float	playerpitch;
-	t_rgb	f;
-	t_rgb	c;
-	int		moves;
+	t_prog		*prog;
+	t_node		*nodes;
+	void		*txt_path_north;
+	void		*txt_path_east;
+	void		*txt_path_south;
+	void		*txt_path_west;
+	float 		playerx;
+	float		playery;
+	float 		playeryaw;
+	float		playerpitch;
+	int			newplayerx;
+	int			newplayery;
+	int			playerspeed;
+	int			playersensivity;
+	int			playerxw;
+	int			playerxa;
+	int			playerxs;
+	int			playerxd;
+	int			playeryawr;
+	int			playeryawl;
+	t_rgb		f;
+	t_rgb		c;
+	int			moves;
 }	t_data;
 
 //MAIN
-void	map_init(t_data *data);
+int		map_init(t_data *data);
 int		close_window(t_data *data);
 //UTILS
 int		collectibles_left(t_img *list);
 void	exit_win(char *msg, t_data *data, char *prefix);
 int		absolute(int i);
-void	move_player(int key, t_data *data);
+void	move_player(t_data *data);
 // int		event_key_pressed(int keycode, t_data *data);
 //NODESTYPE
 t_node	*check_nodes_type(t_node *nodes, int size);
@@ -136,6 +156,7 @@ t_node	find_spawn_point(t_node *list);
 t_node	*get_node_at(t_node *list, int x, int y);
 int		update_node(t_node node, t_node *list);
 int		is_node_free(float x, float y, t_data *data);
+int		toggle_door(t_node *cpy, t_data *data);
 //NODE_UTILS
 int		get_list_size(t_node *list);
 int		get_list_xlen(t_node *list);
@@ -143,7 +164,7 @@ int		get_list_ylen(t_node *list);
 //MAP_INIT
 int		do_map_checks(int fd, char *reader);
 t_node	*read_map(int fd, int fc, char *reader, t_data *data);
-void	map_init(t_data *data);
+void	write_cubes(int color, int startX, int startY, t_data *data, int taille);
 //MAP_SIZE
 int	count_map(int fd, int x, char *reader);
 

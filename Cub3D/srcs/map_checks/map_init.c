@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/14 12:32:01 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:18:04 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ char	*get_moves(char *moves)
 	return (msg);
 }
 
-void	dessiner_des_carres_pour_tester(int color, int startX, int startY, t_data *data, int taille)
+void	write_cubes(int color, int startX, int startY, t_data *data, int taille)
 {
 	int x = 0;
 	int y = 0;
@@ -331,11 +331,9 @@ void draw_line(void *mlx, void *win, int x0, int y0, int x1, int y1, int color) 
     }
 }
 
-void dessiner_joueur_avec_orientation(int color, int startX, int startY, t_data *data, int taille, double yaw_degrees) {
-    // Convertir Yaw en radians
+void draw_oriented_player(int color, int startX, int startY, t_data *data, int taille, double yaw_degrees) {
     double yaw_radians = (yaw_degrees - 125) * M_PI / 180.0;
 
-    // Points du triangle
     int x0 = startX;
     int y0 = startY;
 
@@ -348,32 +346,40 @@ void dessiner_joueur_avec_orientation(int color, int startX, int startY, t_data 
     int x3 = x0 + (int)(taille * cos(yaw_radians - 2.0 * M_PI / 3.0));
     int y3 = y0 + (int)(taille * sin(yaw_radians - 2.0 * M_PI / 3.0));
 
-    // Dessiner les lignes du triangle
     draw_line(data->prog->mlx, data->prog->win, x0, y0, x1, y1, color);
     draw_line(data->prog->mlx, data->prog->win, x1, y1, x2, y2, color);
     draw_line(data->prog->mlx, data->prog->win, x2, y2, x3, y3, color);
     draw_line(data->prog->mlx, data->prog->win, x3, y3, x0, y0, color);
 }
 
-void	map_init(t_data *data)
+int	map_init(t_data *data)
 {
 	char	*moves;
 	int i = 0;
+	move_player(data);
 	t_node *list = (data->nodes);
 	while (list[i].type != ENDL) {
 		// printf("%u, %d - %d\n", list[i].type, list[i].x, list[i].y);
 		if (list[i].type == WALL)
-			dessiner_des_carres_pour_tester(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
+			write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
 			// mlx_pixel_put(data->prog->mlx, data->prog->win, list[i].x, list[i].y, 0xFF0000);
-		if (list[i].type == DOOR && list[i].is_free == 0)
-			dessiner_des_carres_pour_tester(0x000FFF, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
+		if (list[i].type == DOOR){
+			write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+			if (!list[i].running_door){
+				toggle_door(&list[i], data);
+			}
+			write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+		}
+		// if (list[i].type == DOOR && list[i].is_free == 0)
+		// 	write_cubes(0x000FFF, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
 		i++;
 	}
 	mlx_clear_window(data->prog->mlx, data->prog->win);
 	moves = get_moves(ft_itoa(data->moves++));
 	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	dessiner_joueur_avec_orientation(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE, data->playeryaw);
+	draw_oriented_player(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE, data->playeryaw);
 	// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
     // mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	free(moves);
+	return 0;
 }

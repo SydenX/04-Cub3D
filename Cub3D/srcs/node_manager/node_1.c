@@ -6,11 +6,34 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/14 12:37:41 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/14 14:32:57 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
+
+int	toggle_door(t_node *cpy, t_data *data)
+{
+	if (cpy->door_state == OPENNING)
+	{
+		if (cpy->door_loc == HITBOX - 1)
+		{
+			cpy->door_state = OPEN;
+			cpy->is_free = 1;
+		}
+		cpy->door_loc+=1;
+	}
+	if (cpy->door_state == CLOSING)
+	{
+		if (cpy->door_loc == 1)
+		{
+			cpy->door_state = CLOSE;
+			cpy->is_free = 0;
+		}
+		cpy->door_loc--;
+	}
+	return 0;
+}
 
 void	check_to_door(t_data *data, int x, int y)
 {
@@ -26,11 +49,10 @@ void	check_to_door(t_data *data, int x, int y)
 			int dx = x - ((cpy->x * HITBOX) + (HITBOX / 2));
 			int dy = y - ((cpy->y * HITBOX) + (HITBOX / 2));
 			double distance = sqrt(dx * dx + dy * dy);
-			printf("%f\n", distance);
-			if (distance <= HITBOX * 1.5)
-				cpy->is_free = 1;
-			else
-				cpy->is_free = 0;
+			if (distance <= HITBOX * (sqrt(HITBOX) / 4) && cpy->door_state != OPENNING && cpy->door_state != OPEN)
+				cpy->door_state = OPENNING;
+			else if (distance > HITBOX * (sqrt(HITBOX) / 4) && cpy->door_state != CLOSING && cpy->door_state != CLOSE)
+				cpy->door_state = CLOSING;
 		}
 		i++;
 		cpy++;
@@ -59,6 +81,9 @@ t_node	create_node(char name, int x, int y)
 	else if (name == 'D')
 	{
 		new.type = DOOR;
+		new.door_state = CLOSE;
+		new.running_door = 0;
+		new.door_loc = 0;
 	}
 	else if (name == 'N' || name == 'S' || name == 'W' || name == 'E')
 	{
