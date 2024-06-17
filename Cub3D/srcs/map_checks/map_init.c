@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 14:31:27 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:11:47 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,15 +355,16 @@ void draw_oriented_player(int color, int startX, int startY, t_data *data, int t
 void	get_mouse_move(t_data *data)
 {
 	int	deadangle = 15;
+
 	mlx_mouse_get_pos(data->prog->win, (data->mousex), (data->mousey));
 	if ((*data->mousex) > (SIZE * 10 / 2) + deadangle)
 	{
-		data->player.righting_yaw = data->player.sensivity;
+		data->player.righting_yaw = (limitor(*data->mousex, SIZE * 10) - (SIZE * 10 / 2)) / data->player.sensivity;
 		data->player.lefting_yaw = 0;
 	}
 	else if ((*data->mousex) < (SIZE * 10 / 2) - deadangle)
 	{
-		data->player.lefting_yaw = data->player.sensivity;
+		data->player.lefting_yaw = ((-1 * (limitor(*data->mousex, - (SIZE * 10)) - (SIZE * 10 / 2)))) / data->player.sensivity;
 		data->player.righting_yaw = 0;
 	}
 	else if ((*data->mousex) >= (SIZE * 10 / 2) - deadangle && (*data->mousex) <= (SIZE * 10 / 2) + deadangle)

@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:53:57 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 12:48:03 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:11:56 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,19 @@ int	absolute(int i)
 	if (i < 0)
 		return (-i);
 	return (i);
+}
+
+int		limitor(int	tolimit, int limit)
+{
+	if (limit >= 0)
+	{
+		if (tolimit > limit)
+			return limit;
+		else
+			return tolimit;
+	}
+	if (tolimit < limit)
+		return limit;
+	else
+		return tolimit;
 }

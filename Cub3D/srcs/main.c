@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 14:28:19 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:04:39 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ void	key_pressed(int key, t_data *data)
 		data->player.righting = data->player.speed;
 	}
 	else if (key == KEY_RIGHT)
-		data->player.righting_yaw = data->player.sensivity;
+		data->player.righting_yaw_key = data->player.sensivity;
 	else if (key == KEY_LEFT)
-		data->player.lefting_yaw = data->player.sensivity;
+		data->player.lefting_yaw_key = data->player.sensivity;
 }
 
 int	key_released(int key, t_data *data)
@@ -101,20 +101,30 @@ int	key_released(int key, t_data *data)
 		data->player.righting = 0;
 	}
 	else if (key == KEY_RIGHT)
-		data->player.righting_yaw = 0;
+		data->player.righting_yaw_key = 0;
 	else if (key == KEY_LEFT)
-		data->player.lefting_yaw = 0;
+		data->player.lefting_yaw_key = 0;
 	return 0;
 }
 
 void	move_player(t_data *data)
 {
 	mlx_pixel_put(data->prog->mlx, data->prog->win, 150, 150, 0x000000);
-
-	if (data->player.righting_yaw != 0)
+	
+	// GESTION SOURIS, SI ON BOUGE LE YAW VIA LES KEYs CELA OVERRIDE LA SOURIS
+	if (data->player.righting_yaw_key != 0 || data->player.lefting_yaw_key != 0)
+	{
+		if (data->player.righting_yaw_key != 0)
+			data->player.yaw += data->player.righting_yaw_key;
+		if (data->player.lefting_yaw_key != 0)
+			data->player.yaw -= data->player.lefting_yaw_key;
+	}
+	else if (data->player.righting_yaw != 0)
 		data->player.yaw += data->player.righting_yaw;
-	if (data->player.lefting_yaw != 0)
+	else if (data->player.lefting_yaw != 0)
 		data->player.yaw -= data->player.lefting_yaw;
+	
+	// CALCULS COORDONNEES DEPLACEMENTS
 	float yaw_radians = (data->player.yaw) * (3.14159 / 180.0);
 	int oldx = data->player.newx;
 	int oldy = data->player.newy;
@@ -153,7 +163,7 @@ void	move_player(t_data *data)
 }
 int mouse_hook(int x,int y,t_data *data)
 {
-	printf("%d %d\n", x, y);
+	// printf("%d %d\n", x, y);
 	return 0;
 }
 
@@ -173,6 +183,7 @@ int	event_key_pressed(int keycode, t_data *datav)
 void	init_hooks(t_data *data)
 {
 	mlx_mouse_hide();
+	mlx_do_key_autorepeaton((*data).prog->mlx);
 	mlx_hook((*data).prog->win, 2, 0, &event_key_pressed, (data));
 	mlx_hook((*data).prog->win, 3, 0, &key_released, (data));
 	mlx_hook((*data).prog->win, 17, 0, &close_window, (data));
@@ -196,13 +207,15 @@ t_player	init_player(t_node spawn)
 	t_player	player;
 
 	player.speed = 10;
-	player.sensivity = 15;
+	player.sensivity = 11;
 	player.forwarding = 0;
 	player.lefting = 0;
 	player.backwarding = 0;
 	player.righting = 0;
 	player.righting_yaw = 0;
 	player.lefting_yaw = 0;
+	player.righting_yaw_key = 0;
+	player.lefting_yaw_key = 0;
 	player.righting_pitch = 0;
 	player.lefting_pitch = 0;
 	player.x = spawn.x * HITBOX + (HITBOX / 2);

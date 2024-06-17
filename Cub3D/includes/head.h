@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 14:28:31 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:12:05 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,22 @@ typedef struct s_img {
 typedef struct s_node {
 	int				x;
 	int				y;
+
 	t_img			img_top;
 	t_img			img_floor;
 	t_img			img_N;
 	t_img			img_E;
 	t_img			img_S;
 	t_img			img_W;
+	
 	t_type			type;
+	
 	t_doorstate		door_state;
 	int				running_door;
 	int				door_loc;
+	
 	int				is_free;
+	
 	t_direction		direction;
 }	t_node;
 
@@ -91,16 +96,23 @@ typedef struct s_player {
 	int			y;
 	float 		yaw;
 	float		pitch;
+	
 	int			newx;
 	int			newy;
+
 	int			speed;
 	int			sensivity;
+
 	int			forwarding;
 	int			lefting;
 	int			backwarding;
 	int			righting;
+
 	int			righting_yaw;
 	int			lefting_yaw;
+	int			righting_yaw_key;
+	int			lefting_yaw_key;
+	
 	int			righting_pitch;
 	int			lefting_pitch;
 }	t_player;
@@ -127,6 +139,7 @@ int		close_window(t_data *data);
 int		collectibles_left(t_img *list);
 void	exit_win(char *msg, t_data *data, char *prefix);
 int		absolute(int i);
+int		limitor(int	tolimit, int limit);
 void	move_player(t_data *data);
 // int		event_key_pressed(int keycode, t_data *data);
 //NODESTYPE
