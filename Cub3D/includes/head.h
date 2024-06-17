@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/14 15:12:04 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:28:31 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 #include <stdio.h>
 #include <errno.h>
 
-# define SIZE 64
-# define HITBOX 15
+# define SIZE 100
+# define HITBOX 35
 # define PLAYER_SIZE 5
 
 typedef enum e_direction {
@@ -86,27 +86,35 @@ typedef struct s_node {
 	t_direction		direction;
 }	t_node;
 
+typedef struct s_player {
+	int 		x;
+	int			y;
+	float 		yaw;
+	float		pitch;
+	int			newx;
+	int			newy;
+	int			speed;
+	int			sensivity;
+	int			forwarding;
+	int			lefting;
+	int			backwarding;
+	int			righting;
+	int			righting_yaw;
+	int			lefting_yaw;
+	int			righting_pitch;
+	int			lefting_pitch;
+}	t_player;
+
 typedef struct s_data {
 	t_prog		*prog;
 	t_node		*nodes;
+	t_player	player;
 	void		*txt_path_north;
 	void		*txt_path_east;
 	void		*txt_path_south;
 	void		*txt_path_west;
-	float 		playerx;
-	float		playery;
-	float 		playeryaw;
-	float		playerpitch;
-	int			newplayerx;
-	int			newplayery;
-	int			playerspeed;
-	int			playersensivity;
-	int			playerxw;
-	int			playerxa;
-	int			playerxs;
-	int			playerxd;
-	int			playeryawr;
-	int			playeryawl;
+	int			*mousex;
+	int			*mousey;
 	t_rgb		f;
 	t_rgb		c;
 	int			moves;

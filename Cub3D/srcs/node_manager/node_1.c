@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:56:14 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/14 14:32:57 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 13:41:31 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ int	toggle_door(t_node *cpy, t_data *data)
 	}
 	if (cpy->door_state == CLOSING)
 	{
+		cpy->is_free = 0;
 		if (cpy->door_loc == 1)
-		{
 			cpy->door_state = CLOSE;
-			cpy->is_free = 0;
-		}
 		cpy->door_loc--;
 	}
 	return 0;

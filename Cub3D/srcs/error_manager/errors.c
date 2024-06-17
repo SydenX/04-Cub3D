@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:10:07 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/13 15:17:06 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:28:56 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	clear(t_data *data, void *toFree, void *toFree2){
 		// 	data->nodes++;
 		// }
 		// free(data->nodes);
+		free(data->mousex);
+		free(data->mousey);
 		data = NULL;
 		free(data);
 	}

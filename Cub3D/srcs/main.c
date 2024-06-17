@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/14 15:23:04 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:28:19 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ t_prog	get_prog()
 	prog.mlx = mlx_init();
 	if (prog.mlx == NULL)
 		exit_error("Failed malloc allocation", NULL, NULL, NULL);
-	prog.win = mlx_new_window(prog.mlx, 10 * SIZE,
-			10 * SIZE, "Cub3D by Syden_");
+	prog.win = mlx_new_window(prog.mlx, 10 * SIZE, 10 * SIZE, "Cub3D by Syden_");
 	if (prog.win == NULL)
 		exit_error("Failed malloc allocation", NULL, prog.mlx, NULL);
 	return (prog);
@@ -63,48 +62,48 @@ void	key_pressed(int key, t_data *data)
 {
 	if (key == KEY_W)
 	{
-		data->playerxw = data->playerspeed;
+		data->player.forwarding = data->player.speed;
 	}
 	else if (key == KEY_S)
 	{
-		data->playerxs = data->playerspeed;
+		data->player.backwarding = data->player.speed;
 	}
 	else if (key == KEY_A)
 	{
-		data->playerxa = data->playerspeed;
+		data->player.lefting = data->player.speed;
 	}
 	else if (key == KEY_D)
 	{
-		data->playerxd = data->playerspeed;
+		data->player.righting = data->player.speed;
 	}
 	else if (key == KEY_RIGHT)
-		data->playeryawr = data->playersensivity;
+		data->player.righting_yaw = data->player.sensivity;
 	else if (key == KEY_LEFT)
-		data->playeryawl = data->playersensivity;
+		data->player.lefting_yaw = data->player.sensivity;
 }
 
 int	key_released(int key, t_data *data)
 {
 	if (key == KEY_W)
 	{
-		data->playerxw = 0;
+		data->player.forwarding = 0;
 	}
 	else if (key == KEY_S)
 	{
-		data->playerxs = 0;
+		data->player.backwarding = 0;
 	}
 	else if (key == KEY_A)
 	{
-		data->playerxa = 0;
+		data->player.lefting = 0;
 	}
 	else if (key == KEY_D)
 	{
-		data->playerxd = 0;
+		data->player.righting = 0;
 	}
 	else if (key == KEY_RIGHT)
-		data->playeryawr = 0;
+		data->player.righting_yaw = 0;
 	else if (key == KEY_LEFT)
-		data->playeryawl = 0;
+		data->player.lefting_yaw = 0;
 	return 0;
 }
 
@@ -112,83 +111,52 @@ void	move_player(t_data *data)
 {
 	mlx_pixel_put(data->prog->mlx, data->prog->win, 150, 150, 0x000000);
 
-	if (data->playeryawr != 0)
-		data->playeryaw += data->playeryawr;
-	if (data->playeryawl != 0)
-		data->playeryaw -= data->playeryawl;
-	float yaw_radians = data->playeryaw * M_PI / 180.0;
-	// printf("%d\n", data->playerxw);
-	int oldx = data->newplayerx;
-	int oldy = data->newplayery;
-	// if (data->playerxw != 0 || data->playerxs != 0 || data->playerxa != 0 || data->playerxd != 0)
-	// {
-	// 	float move_length = sqrt(data->playerxw * data->playerxw + data->playerxs * data->playerxs +
-	// 							data->playerxa * data->playerxa + data->playerxd * data->playerxd);
-	// 	printf("%f\n", move_length);
-	// 	float move_factor = 0.0;
-	// 	if (move_length != 0.0)
-	// 	{
-	// 		move_factor = 1.0 / move_length;
-	// 	}
-	// 	float move_direction = yaw_radians;
-
-	// 	if (data->playerxs != 0)
-	// 	{
-	// 		data->newplayerx -= data->playerxs * move_factor * cos(move_direction);
-	// 		data->newplayery -= data->playerxs * move_factor * sin(move_direction);
-	// 	}
-
-	// 	if (data->playerxw != 0)
-	// 	{
-	// 		data->newplayerx += data->playerxw * move_factor * cos(move_direction);
-	// 		data->newplayery += data->playerxw * move_factor * sin(move_direction);
-	// 	}
-
-	// 	if (data->playerxd != 0)
-	// 	{
-	// 		data->newplayerx += data->playerxd * move_factor * cos(move_direction + M_PI / 2);
-	// 		data->newplayery += data->playerxd * move_factor * sin(move_direction + M_PI / 2);
-	// 	}
-
-	// 	if (data->playerxa != 0)
-	// 	{
-	// 		data->newplayerx += data->playerxa * move_factor * cos(move_direction - M_PI / 2);
-	// 		data->newplayery += data->playerxa * move_factor * sin(move_direction - M_PI / 2);
-	// 	}
-	// }
-	if (data->playerxw != 0)
+	if (data->player.righting_yaw != 0)
+		data->player.yaw += data->player.righting_yaw;
+	if (data->player.lefting_yaw != 0)
+		data->player.yaw -= data->player.lefting_yaw;
+	float yaw_radians = (data->player.yaw) * (3.14159 / 180.0);
+	int oldx = data->player.newx;
+	int oldy = data->player.newy;
+	if (data->player.forwarding != 0)
 	{
-		data->newplayerx += data->playerxw * cos(yaw_radians);
-		data->newplayery += data->playerxw * sin(yaw_radians);
+		data->player.newx += data->player.forwarding * cos(yaw_radians);
+		data->player.newy += data->player.forwarding * sin(yaw_radians);
 	}
-	if (data->playerxs != 0)
+	if (data->player.backwarding != 0)
 	{
-		data->newplayerx -= data->playerxs * cos(yaw_radians);
-		data->newplayery -= data->playerxs * sin(yaw_radians);
+		data->player.newx -= (data->player.backwarding * cos(yaw_radians));
+		data->player.newy -= (data->player.backwarding * sin(yaw_radians));
 	}
-	if (data->playerxa != 0)
+	if (data->player.lefting != 0)
 	{
-		data->newplayerx += data->playerxa * cos(yaw_radians - M_PI / 2);
-		data->newplayery += data->playerxa * sin(yaw_radians - M_PI / 2);
+		data->player.newx += data->player.lefting * cos(yaw_radians - M_PI / 2);
+		data->player.newy += data->player.lefting * sin(yaw_radians - M_PI / 2);
 	}
-	if (data->playerxd != 0)
+	if (data->player.righting != 0)
 	{
-		data->newplayerx += data->playerxd * cos(yaw_radians + M_PI / 2);
-		data->newplayery += data->playerxd * sin(yaw_radians + M_PI / 2);
+		data->player.newx += data->player.righting * cos(yaw_radians + M_PI / 2);
+		data->player.newy += data->player.righting * sin(yaw_radians + M_PI / 2);
 	}
-	if(check_move_hitbox(data, data->newplayerx, data->newplayery))
+	if(check_move_hitbox(data, data->player.newx, data->player.newy))
 	{
-		data->playerx = data->newplayerx;
-		data->playery = data->newplayery;
-		check_to_door(data, data->newplayerx, data->newplayery);
+		data->player.x = data->player.newx;
+		data->player.y = data->player.newy;
+		check_to_door(data, data->player.newx, data->player.newy);
 	}
 	else
 	{
-		data->newplayerx = oldx;
-		data->newplayery = oldy;
+		data->player.newx = oldx;
+		data->player.newy = oldy;
 	}
 	return ;
 }
+int mouse_hook(int x,int y,t_data *data)
+{
+	printf("%d %d\n", x, y);
+	return 0;
+}
+
 
 int	event_key_pressed(int keycode, t_data *datav)
 {
@@ -204,9 +172,11 @@ int	event_key_pressed(int keycode, t_data *datav)
 
 void	init_hooks(t_data *data)
 {
+	mlx_mouse_hide();
 	mlx_hook((*data).prog->win, 2, 0, &event_key_pressed, (data));
 	mlx_hook((*data).prog->win, 3, 0, &key_released, (data));
 	mlx_hook((*data).prog->win, 17, 0, &close_window, (data));
+	mlx_hook((*data).prog->win, 6, 0, &mouse_hook, (data));
 	mlx_loop_hook(data->prog->mlx, map_init, data);
 	mlx_loop((*data).prog->mlx);
 }
@@ -219,6 +189,35 @@ void init_images(t_data *data)
 	// 	if (data->nodes[i].type == FLOOR);
 	// 		data->nodes[i].img_top
 	// }
+}
+
+t_player	init_player(t_node spawn)
+{
+	t_player	player;
+
+	player.speed = 10;
+	player.sensivity = 15;
+	player.forwarding = 0;
+	player.lefting = 0;
+	player.backwarding = 0;
+	player.righting = 0;
+	player.righting_yaw = 0;
+	player.lefting_yaw = 0;
+	player.righting_pitch = 0;
+	player.lefting_pitch = 0;
+	player.x = spawn.x * HITBOX + (HITBOX / 2);
+	player.y = spawn.y * HITBOX + (HITBOX / 2);
+	player.newx = player.x;
+	player.newy = player.y;
+	if (spawn.direction == NORTH)
+		player.yaw = 270;
+	else if (spawn.direction == EAST)
+		player.yaw = 0;
+	else if (spawn.direction == SOUTH)
+		player.yaw = 90;
+	else if (spawn.direction == WEST)
+		player.yaw = 180;
+	return (player.pitch = 0, player);
 }
 
 int	main(int argc, char **argv)
@@ -236,21 +235,13 @@ int	main(int argc, char **argv)
 		exit_error("Failed malloc allocation", NULL, NULL, NULL);
 	reader[filechars] = 0;
 	data.prog = NULL;
-	data.playery = 25;
-	data.playerx = 25;
-	data.playerspeed = 2;
-	data.playersensivity = 4;
-	data.playerxa = 0;
-	data.playerxs = 0;
-	data.playerxw = 0;
-	data.playerxd = 0;
-	data.playeryawl = 0;
-	data.playeryawr = 0;
-	data.newplayery = data.playery;
-	data.newplayerx = data.playerx;
 	prog = get_prog();
 	data.prog = &prog;
 	init_list(argv, reader, filechars, &data);
+	t_node spawn = find_spawn_point(data.nodes);
+	data.player = init_player(spawn);
+	data.mousex = malloc(sizeof(int));
+	data.mousey = malloc(sizeof(int));
 	init_hooks(&data);
 	init_images(&data);
 	system("leaks cub3d");
