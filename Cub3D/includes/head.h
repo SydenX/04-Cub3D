@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 15:12:05 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:30:07 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <errno.h>
 
-# define SIZE 100
+# define SIZE 130
 # define HITBOX 35
 # define PLAYER_SIZE 5
 
@@ -100,6 +100,11 @@ typedef struct s_player {
 	int			newx;
 	int			newy;
 
+	int			oldx;
+	int			oldy;
+	int			oldyaw;
+	int			oldpitch;
+
 	int			speed;
 	int			sensivity;
 
@@ -121,14 +126,17 @@ typedef struct s_data {
 	t_prog		*prog;
 	t_node		*nodes;
 	t_player	player;
+
 	void		*txt_path_north;
 	void		*txt_path_east;
 	void		*txt_path_south;
 	void		*txt_path_west;
-	int			*mousex;
-	int			*mousey;
 	t_rgb		f;
 	t_rgb		c;
+	
+	int			*mousex;
+	int			*mousey;
+	
 	int			moves;
 }	t_data;
 

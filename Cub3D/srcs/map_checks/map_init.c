@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 15:11:47 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:32:39 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,8 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	x = 0;
 	while (reader[++i])
 	{
+		if (reader[i] == 9)
+			error_notformatted((void *)list, (void *)reader, data);
 		if (reader[i] != '\n')
 			list[j++] = create_node(reader[i], x++, y);
 		else
@@ -400,9 +402,9 @@ int	map_init(t_data *data)
 		}
 		i++;
 	}
-	mlx_clear_window(data->prog->mlx, data->prog->win);
 	moves = get_moves(ft_itoa(data->moves++));
 	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+	draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
 	draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
 	// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
     // mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
