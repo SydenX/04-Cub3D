@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:26:48 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:50:02 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@
 # define PLAYER_SIZE 5
 # define WIDTH 1024
 # define HEIGHT 512
+
+# define ERROR_INPUTFILE "Unable to read the input file."
+# define ERROR_NOTFORMATTED "File is not correctly formatted."
+# define ERROR_NOTINTERESTS "Map doesn't contains the interest points needed."
+# define ERROR_NOTSURROUNDED "Map must be surrounded by walls."
+# define ERROR_DOORNOTPARSED "Doors must be between only 2 walls on the same axis."
+# define ERROR_ALLOCATION "Error during allocation."
+#define ERROR_ ""
 
 typedef enum e_direction {
 	NORTH,
@@ -145,12 +153,8 @@ typedef struct s_data {
 //MAIN
 int		map_init(t_data *data);
 int		close_window(t_data *data);
-int	open_menu(t_data *data);
+int		open_menu(t_data *data);
 //UTILS
-int		collectibles_left(t_img *list);
-void	exit_win(char *msg, t_data *data, char *prefix);
-int		absolute(int i);
-int		limitor(int	tolimit, int limit);
 void	move_player(t_data *data);
 //LINESIZE
 int		linesize_checks(char *reader);
@@ -167,13 +171,6 @@ void	*get_image(t_prog *prog, t_type type);
 //ERROR_1
 void	clear(t_data *data, void *toFree, void *toFree2);
 void	exit_error(char *error, t_data *data, void *toFree, void *toFree2);
-void	error_notcorrectinterest(void *toFree, void *toFree2, t_data *data);
-void	error_nopathfound(void *toFree, void *toFree2, t_data *data);
-void	error_inputfile(void *toFree, void *toFree2, t_data *data);
-void	error_notformatted(void *toFree, void *toFree2, t_data *data);
-void	error_notsurrounded(void *toFree, void *toFree2, t_data *data);
-void	error_doornotparsedcorrectly(void *toFree, void *toFree2, t_data *data);
-void	error_allocation(void *toFree, void *toFree2, t_data *data);
 void	error_filedonotexist(void *path, void *toFree2, t_data *data);
 void	error_fileerror(void *path, void *toFree2, t_data *data);
 void	error_texturefileincorect(void *path, void *toFree2, t_data *data);
@@ -222,7 +219,11 @@ int		toggle_door(t_node *cpy, t_data *data);
 //MAP_MANAGER
 t_node	*check_nodes_type(t_node *nodes, int size);
 
+
+
+
 //UTILS
 int		ulimitor(int	tolimit, int limit);
+int		limitor(int	tolimit, int limit);
 
 #endif

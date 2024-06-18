@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:29:27 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:49:11 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	init_list(char **argv, char *reader, int fileChars, t_data *data)
 	if (!data->nodes)
 	{
 		free(reader);
-		exit_error("Failed malloc allocation", data, NULL, NULL);
+		exit_error(ERROR_ALLOCATION, data, NULL, NULL);
 	}
 	data->nodes = read_map(get_fd(argv[1], (void *)data->nodes, (void *)reader), fileChars, reader, data);
 }
@@ -37,10 +37,10 @@ t_prog	get_prog()
 
 	prog.mlx = mlx_init();
 	if (prog.mlx == NULL)
-		exit_error("Failed malloc allocation", NULL, NULL, NULL);
+		exit_error(ERROR_ALLOCATION, NULL, NULL, NULL);
 	prog.win = mlx_new_window(prog.mlx, WIDTH, HEIGHT, "Cub3D by Syden_");
 	if (prog.win == NULL)
-		exit_error("Failed malloc allocation", NULL, prog.mlx, NULL);
+		exit_error(ERROR_ALLOCATION, NULL, prog.mlx, NULL);
 	return (prog);
 }
 
@@ -172,7 +172,7 @@ int	main(int argc, char **argv)
 	filechars = file_chars(argv[1]);
 	reader = malloc((filechars + 1) * sizeof(char));
 	if (!reader)
-		exit_error("Failed malloc allocation", NULL, NULL, NULL);
+		exit_error(ERROR_ALLOCATION, NULL, NULL, NULL);
 	reader[filechars] = 0;
 	data.prog = NULL;
 	data.mousex = NULL;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nodestype.c                                        :+:      :+:    :+:   */
+/*   nodes_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 17:12:42 by jtollena          #+#    #+#             */
-/*   Updated: 2024/04/24 11:58:43 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:47:44 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ t_node	*check_nodes_type(t_node *nodes, int size)
 		cpy = nodes[i++];
 	}
 	if (spawn != 1)
-		error_notcorrectinterest((void *)nodes, NULL, NULL);
+		exit_error(ERROR_NOTINTERESTS, NULL, (void *)nodes, NULL);
 	return (nodes);
 }

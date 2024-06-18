@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:12:20 by jetol             #+#    #+#             */
-/*   Updated: 2024/06/18 13:36:23 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:47:55 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	node_size(char *path)
 	readable = 1;
 	fd = open(path, O_RDONLY, 0);
 	if (fd <= 0)
-		error_inputfile(NULL, NULL, NULL);
+		exit_error(ERROR_INPUTFILE, NULL, NULL, NULL);
 	while (readable > 0)
 	{
 		readable = read(fd, reader, 1);
 		if (readable == -1)
-			error_inputfile(NULL, NULL, NULL);
+			exit_error(ERROR_INPUTFILE, NULL, NULL, NULL);
 		if (reader[0] == '1' || reader[0] == '0'
 			|| reader[0] == 'N' || reader[0] == 'D'
 			|| reader[0] == 'E' || reader[0] == 'S'
@@ -62,12 +62,12 @@ int	file_chars(char *path)
 	readable = 1;
 	fd = open(path, O_RDONLY, 0);
 	if (fd <= 0)
-		error_inputfile(NULL, NULL, NULL);
+		exit_error(ERROR_INPUTFILE, NULL, NULL, NULL);
 	while (readable > 0)
 	{
 		readable = read(fd, reader, 1);
 		if (readable == -1)
-			error_inputfile(NULL, NULL, NULL);
+			exit_error(ERROR_INPUTFILE, NULL, NULL, NULL);
 		wc++;
 	}
 	close(fd);
@@ -80,6 +80,6 @@ int	get_fd(char *path, void *toFree, void *toFree2)
 
 	fd = open(path, O_RDONLY, 0);
 	if (fd <= 0)
-		error_inputfile(toFree, toFree2, NULL);
+		exit_error(ERROR_INPUTFILE, NULL, toFree, toFree2);
 	return (fd);
 }
