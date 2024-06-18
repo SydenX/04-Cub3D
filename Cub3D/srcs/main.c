@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 12:05:17 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:37:46 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,6 @@ int	open_menu(t_data *data)
 
 void init_images(t_data *data)
 {
-	// int	i = 0;
-	// while(data->nodes[i].type != NULLT)
-	// {
-	// 	if (data->nodes[i].type == FLOOR);
-	// 		data->nodes[i].img_top
-	// }
 }
 
 int	main(int argc, char **argv)
@@ -163,7 +157,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (argc != 2)
-		exit_error("You must put a map path as argument.", NULL, NULL, NULL);
+		exit_error("You must put a map file path (.cub) as argument.", NULL, NULL, NULL);
 	filechars = file_chars(argv[1]);
 	reader = malloc((filechars + 1) * sizeof(char));
 	if (!reader)

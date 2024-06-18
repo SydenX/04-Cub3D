@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 12:11:35 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:43:12 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,6 @@ void	exit_win(char *msg, t_data *data, char *prefix);
 int		absolute(int i);
 int		limitor(int	tolimit, int limit);
 void	move_player(t_data *data);
-// int		event_key_pressed(int keycode, t_data *data);
-//NODESTYPE
-t_node	*check_nodes_type(t_node *nodes, int size);
 //LINESIZE
 int		linesize_checks(char *reader);
 //GET_SIZES
@@ -183,15 +180,9 @@ void	error_texturefileincorect(void *path, void *toFree2, t_data *data);
 void	check_to_door(t_data *data, int x, int y);
 t_node	create_node(char name, int x, int y);
 t_node	find_exit_point(t_node *list);
-t_node	find_spawn_point(t_node *list);
-t_node	*get_node_at(t_node *list, int x, int y);
 int		update_node(t_node node, t_node *list);
 int		is_node_free(float x, float y, t_data *data);
 int		toggle_door(t_node *cpy, t_data *data);
-//NODE_UTILS
-int		get_list_size(t_node *list);
-int		get_list_xlen(t_node *list);
-int		get_list_ylen(t_node *list);
 //MAP_INIT
 int		do_map_checks(int fd, char *reader);
 t_node	*read_map(int fd, int fc, char *reader, t_data *data);
@@ -199,7 +190,7 @@ void	write_cubes(int color, int startX, int startY, t_data *data, int taille);
 //MAP_SIZE
 int	count_map(int fd, int x, char *reader);
 
-// P2
+// P2 ----------------=----------------=----------------=----------------=----------------=----------------
 
 //PLAYER_MANAGER
 t_player	init_player(t_node spawn);
@@ -213,5 +204,18 @@ int 	mouse_hook(int keycode, int x,int y,t_data *data);
 void	get_mouse_move(t_data *data);
 
 void	init_hooks(t_data *data);
+
+//NODES_MANAGER
+int		get_list_ylen(t_node *list);
+int		get_list_xlen(t_node *list);
+int		get_list_size(t_node *list);
+
+t_node	*get_node_at(t_node *list, int x, int y);
+t_node	find_spawn_point(t_node *list);
+int		update_node(t_node node, t_node *list);
+
+//MAP_MANAGER
+t_node	*check_nodes_type(t_node *nodes, int size);
+
 
 #endif

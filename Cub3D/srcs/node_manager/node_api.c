@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   node_utils.c                                       :+:      :+:    :+:   */
+/*   node_api.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/07 16:13:16 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 13:39:55 by jtollena         ###   ########.fr       */
+/*   Created: 2024/06/18 13:40:01 by jtollena          #+#    #+#             */
+/*   Updated: 2024/06/18 13:41:34 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
 
-int	get_list_size(t_node *list)
+t_node	*get_node_at(t_node *list, int x, int y)
 {
 	t_node	*cpy;
 	int		i;
@@ -21,40 +21,41 @@ int	get_list_size(t_node *list)
 	cpy = list;
 	while (cpy->type != ENDL)
 	{
+		if (cpy->x == x && cpy->y == y)
+			return (&list[i]);
 		i++;
 		cpy++;
 	}
-	return (i);
+	return (list);
 }
 
-int	get_list_xlen(t_node *list)
+t_node	find_spawn_point(t_node *list)
 {
 	t_node	*cpy;
-	int		lastx;
 
-	lastx = 0;
 	cpy = list;
 	while (cpy->type != ENDL)
 	{
-		if (cpy->x > lastx)
-			lastx = cpy->x;
+		if (cpy->type == SPAWN)
+			return (*cpy);
 		cpy++;
 	}
-	return (lastx + 1);
+	return (*cpy);
 }
 
-int	get_list_ylen(t_node *list)
+int	update_node(t_node node, t_node *list)
 {
 	t_node	*cpy;
-	int		lasty;
 
-	lasty = 0;
 	cpy = list;
 	while (cpy->type != ENDL)
 	{
-		if (cpy->y > lasty)
-			lasty = cpy->y;
+		if (cpy->x == node.x && cpy->y == node.y)
+		{
+			*cpy = node;
+			return (1);
+		}
 		cpy++;
 	}
-	return (lasty + 1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/06/18 12:05:38 by jtollena         ###   ########.fr        #
+#    Updated: 2024/06/18 13:42:46 by jtollena         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,12 @@ INC =
 SRC = \
 	 main.c \
 		utils.c \
-		map_checks/nodestype.c \
-		map_checks/get_sizes.c \
-		map_checks/map_init.c \
-		map_checks/map_size.c \
+		map_manager/nodes_type.c \
+		map_manager/get_sizes.c \
+		map_manager/map_init.c \
+		map_manager/map_size.c \
 		node_manager/node_1.c \
+		node_manager/node_api.c \
 		node_manager/node_utils.c \
 		error_manager/errors.c \
 		player_manager/player_init.c \
