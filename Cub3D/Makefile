@@ -6,7 +6,7 @@
 #    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/06/17 14:48:39 by jtollena         ###   ########.fr        #
+#    Updated: 2024/06/18 12:05:38 by jtollena         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,11 @@ SRC = \
 		map_checks/map_size.c \
 		node_manager/node_1.c \
 		node_manager/node_utils.c \
-		error_manager/errors.c
+		error_manager/errors.c \
+		player_manager/player_init.c \
+		hooks_manager/key_hooks.c \
+		hooks_manager/mouse_hooks.c \
+		hooks_manager/init_hooks.c
 
 # **************************************************************************** #
 

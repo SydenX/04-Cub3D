@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 15:32:39 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:10:45 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,17 +292,6 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	return NULL;
 }
 
-char	*get_moves(char *moves)
-{
-	char	*msg;
-
-	if (!moves)
-		return (NULL);
-	msg = ft_strjoin("Total moves: ", moves);
-	free(moves);
-	return (msg);
-}
-
 void	write_cubes(int color, int startX, int startY, t_data *data, int taille)
 {
 	int x = 0;
@@ -354,60 +343,39 @@ void draw_oriented_player(int color, int startX, int startY, t_data *data, int t
     draw_line(data->prog->mlx, data->prog->win, x3, y3, x0, y0, color);
 }
 
-void	get_mouse_move(t_data *data)
-{
-	int	deadangle = 15;
-
-	mlx_mouse_get_pos(data->prog->win, (data->mousex), (data->mousey));
-	if ((*data->mousex) > (SIZE * 10 / 2) + deadangle)
-	{
-		data->player.righting_yaw = (limitor(*data->mousex, SIZE * 10) - (SIZE * 10 / 2)) / data->player.sensivity;
-		data->player.lefting_yaw = 0;
-	}
-	else if ((*data->mousex) < (SIZE * 10 / 2) - deadangle)
-	{
-		data->player.lefting_yaw = ((-1 * (limitor(*data->mousex, - (SIZE * 10)) - (SIZE * 10 / 2)))) / data->player.sensivity;
-		data->player.righting_yaw = 0;
-	}
-	else if ((*data->mousex) >= (SIZE * 10 / 2) - deadangle && (*data->mousex) <= (SIZE * 10 / 2) + deadangle)
-	{
-		data->player.righting_yaw = 0;
-		data->player.lefting_yaw = 0;
-	}
-	mlx_mouse_move(data->prog->win, (SIZE * 10 / 2), (SIZE * 10 / 2));
-}
 
 int	map_init(t_data *data)
 {
 	char	*moves;
 	int i = 0;
-	get_mouse_move(data);
-	move_player(data);
-	t_node *list = (data->nodes);
-	while (list[i].type != ENDL) {
-		if (list[i].type == WALL)
-			write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
-		if (list[i].type == DOOR){
-			if (list[i].direction == LAT)
-				write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
-			else
-				write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
-			if (!list[i].running_door){
-				toggle_door(&list[i], data);
+	if (!data->in_menu)
+	{
+		get_mouse_move(data);
+		move_player(data);
+		t_node *list = (data->nodes);
+		while (list[i].type != ENDL) {
+			if (list[i].type == WALL)
+				write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
+			if (list[i].type == DOOR){
+				if (list[i].direction == LAT)
+					write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+				else
+					write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+				if (!list[i].running_door){
+					toggle_door(&list[i], data);
+				}
+				if (list[i].direction == LAT)
+					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+				else
+					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
 			}
-			if (list[i].direction == LAT)
-				write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
-			else
-				write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+			i++;
 		}
-		i++;
+		// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+		draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
+		draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+		// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
+		// mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	}
-	moves = get_moves(ft_itoa(data->moves++));
-	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
-	draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
-	// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
-    // mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
-	free(moves);
 	return 0;
 }

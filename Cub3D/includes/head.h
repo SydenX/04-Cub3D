@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 15:30:07 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:11:35 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,14 @@ typedef struct s_data {
 	int			*mousex;
 	int			*mousey;
 	
+	int			in_menu;
 	int			moves;
 }	t_data;
 
 //MAIN
 int		map_init(t_data *data);
 int		close_window(t_data *data);
+int	open_menu(t_data *data);
 //UTILS
 int		collectibles_left(t_img *list);
 void	exit_win(char *msg, t_data *data, char *prefix);
@@ -196,5 +198,20 @@ t_node	*read_map(int fd, int fc, char *reader, t_data *data);
 void	write_cubes(int color, int startX, int startY, t_data *data, int taille);
 //MAP_SIZE
 int	count_map(int fd, int x, char *reader);
+
+// P2
+
+//PLAYER_MANAGER
+t_player	init_player(t_node spawn);
+
+//HOOKS_MANAGER
+int		key_released(int key, t_data *data);
+void	key_pressed(int key, t_data *data);
+int		event_key_pressed(int keycode, t_data *datav);
+
+int 	mouse_hook(int keycode, int x,int y,t_data *data);
+void	get_mouse_move(t_data *data);
+
+void	init_hooks(t_data *data);
 
 #endif
