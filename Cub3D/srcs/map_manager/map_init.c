@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 15:19:41 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:25:55 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,13 +292,13 @@ t_node	*read_map(int fd, int x, char *reader, t_data *data)
 	return NULL;
 }
 
-void	write_cubes(int color, int startX, int startY, t_data *data, int taille)
+void	write_cubes(int color, int startX, int startY, t_data *data, int tailleX, int tailleY)
 {
 	int x = 0;
 	int y = 0;
-	while (x < taille){
+	while (x < tailleX){
 		y = 0;
-		while (y < taille){
+		while (y < tailleY){
 			mlx_pixel_put(data->prog->mlx, data->prog->win, x + startX, y + startY, color);
 			y++;
 		}
@@ -322,20 +322,20 @@ void draw_line(void *mlx, void *win, int x0, int y0, int x1, int y1, int color) 
     }
 }
 
-void draw_oriented_player(int color, int startX, int startY, t_data *data, int taille, double yaw_degrees) {
+void draw_oriented_player(int color, double startX, double startY, t_data *data, int taille, double yaw_degrees) {
     double yaw_radians = (yaw_degrees - 125) * M_PI / 180.0;
 
-    int x0 = startX;
-    int y0 = startY;
+    double x0 = startX;
+    double y0 = startY;
 
-    int x1 = x0 + (int)(taille * cos(yaw_radians));
-    int y1 = y0 + (int)(taille * sin(yaw_radians));
+    double x1 = x0 + (double)(taille * cos(yaw_radians));
+    double y1 = y0 + (double)(taille * sin(yaw_radians));
 
-    int x2 = x0 + (int)(taille * cos(yaw_radians + 2.0 * M_PI / 3.0));
-    int y2 = y0 + (int)(taille * sin(yaw_radians + 2.0 * M_PI / 3.0));
+    double x2 = x0 + (double)(taille * cos(yaw_radians + 2.0 * M_PI / 3.0));
+    double y2 = y0 + (double)(taille * sin(yaw_radians + 2.0 * M_PI / 3.0));
 
-    int x3 = x0 + (int)(taille * cos(yaw_radians - 2.0 * M_PI / 3.0));
-    int y3 = y0 + (int)(taille * sin(yaw_radians - 2.0 * M_PI / 3.0));
+    double x3 = x0 + (double)(taille * cos(yaw_radians - 2.0 * M_PI / 3.0));
+    double y3 = y0 + (double)(taille * sin(yaw_radians - 2.0 * M_PI / 3.0));
 
     draw_line(data->prog->mlx, data->prog->win, x0, y0, x1, y1, color);
     draw_line(data->prog->mlx, data->prog->win, x1, y1, x2, y2, color);
@@ -343,7 +343,7 @@ void draw_oriented_player(int color, int startX, int startY, t_data *data, int t
     draw_line(data->prog->mlx, data->prog->win, x3, y3, x0, y0, color);
 }
 
-void	check_nodes_arround(t_node node, t_data *data)
+void	check_nodes_arround(t_node node, t_data *data, int is_player)
 {
 	t_node node1 = *get_node_at(data->nodes, node.x, node.y + 1);
 	t_node node2 = *get_node_at(data->nodes, node.x, node.y - 1);
@@ -351,13 +351,13 @@ void	check_nodes_arround(t_node node, t_data *data)
 	t_node node4 = *get_node_at(data->nodes, node.x + 1, node.y);
 
 	if (node1.type == WALL)
-		write_cubes(0xFF0000, node1.x * HITBOX, node1.y * HITBOX, data, HITBOX);
+		write_cubes(0xFF0000, node1.x * HITBOX, node1.y * HITBOX, data, HITBOX, HITBOX);
 	if (node2.type == WALL)
-		write_cubes(0xFF0000, node2.x * HITBOX, node2.y * HITBOX, data, HITBOX);
+		write_cubes(0xFF0000, node2.x * HITBOX, node2.y * HITBOX, data, HITBOX, HITBOX);
 	if (node3.type == WALL)
-		write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX);
+		write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX, HITBOX);
 	if (node4.type == WALL)
-		write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX);
+		write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX, HITBOX);
 }
 
 int	map_loop(t_data *data)
@@ -371,30 +371,26 @@ int	map_loop(t_data *data)
 		t_node *list = (data->nodes);
 		while (list[i].type != ENDL) {
 			if (list[i].type == DOOR){
-				check_nodes_arround(list[i], data);
 				if (list[i].direction == LAT)
-					write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+					write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX - list[i].door_loc, HITBOX);
 				else
-					write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+					write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX - list[i].door_loc);
 				if (!list[i].running_door){
 					toggle_door(&list[i], data);
 				}
 				if (list[i].direction == LAT)
-					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX - list[i].door_loc, HITBOX);
 				else
-					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX - list[i].door_loc);
 			}
 			i++;
 		}
-		// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
 		if (data->player.oldx != data->player.x || data->player.oldy != data->player.y || data->player.oldyaw != data->player.yaw)
 		{
 			draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
 			draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
-			check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data);
+			check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
 		}
-		// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
-		// mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	}
 	return 0;
 }
@@ -405,32 +401,21 @@ int	map_init(t_data *data)
 	int i = 0;
 	if (!data->in_menu)
 	{
-		get_mouse_move(data);
-		// move_player(data);
 		t_node *list = (data->nodes);
 		while (list[i].type != ENDL) {
 			if (list[i].type == WALL)
-				write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX);
+				write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX, HITBOX);
 			if (list[i].type == DOOR){
 				if (list[i].direction == LAT)
-					write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX, HITBOX);
 				else
-					write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
-				if (!list[i].running_door){
-					toggle_door(&list[i], data);
-				}
-				if (list[i].direction == LAT)
-					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
-				else
-					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX);
 			}
 			i++;
 		}
 		// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
 		draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
 		draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
-		// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
-		// mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
 	}
 	return 0;
 }

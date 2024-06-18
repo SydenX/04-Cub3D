@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:57:24 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 15:21:29 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:12:50 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_player	init_player(t_node spawn)
 {
 	t_player	player;
 
-	player.speed = 10;
-	player.sensivity = 11;
+	player.speed = 2;
+	player.sensivity = 18;
 	player.forwarding = 0;
 	player.lefting = 0;
 	player.backwarding = 0;
@@ -39,12 +39,10 @@ t_player	init_player(t_node spawn)
 	player.lefting_yaw = 0;
 	player.righting_yaw_key = 0;
 	player.lefting_yaw_key = 0;
-	player.righting_pitch = 0;
-	player.lefting_pitch = 0;
 	player.x = spawn.x * HITBOX + (HITBOX / 2);
 	player.y = spawn.y * HITBOX + (HITBOX / 2);
 	player.newx = player.x;
 	player.newy = player.y;
 	player = init_direction(spawn, player);
-	return (player.pitch = 0, player);
+	return (player);
 }

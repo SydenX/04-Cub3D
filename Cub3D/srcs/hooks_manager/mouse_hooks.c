@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:04:36 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:29:46 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:24:50 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,21 @@ int	mouse_hook(int keycode, int x, int y, t_data *data)
 //Tp de la souris au centre de la fenetre de jeu
 void	get_mouse_move(t_data *data)
 {
-	int	deadangle;
-
-	deadangle = 15;
 	mlx_mouse_get_pos(data->prog->win, (data->mousex), (data->mousey));
-	if ((*data->mousex) > (WIDTH / 2) + deadangle)
+	if ((*data->mousex) > (WIDTH / 2))
 	{
 		data->player.righting_yaw = (limitor(*data->mousex, WIDTH)
 				- (WIDTH / 2)) / data->player.sensivity;
 		data->player.lefting_yaw = 0;
 	}
-	else if ((*data->mousex) < (WIDTH / 2) - deadangle)
+	else if ((*data->mousex) < (WIDTH / 2))
 	{
 		data->player.lefting_yaw = ((-1 * (limitor(*data->mousex, - (WIDTH))
 						- (WIDTH / 2)))) / data->player.sensivity;
 		data->player.righting_yaw = 0;
 	}
-	else if ((*data->mousex) >= (WIDTH / 2) - deadangle
-		&& (*data->mousex) <= (WIDTH / 2) + deadangle)
+	else if ((*data->mousex) >= (WIDTH / 2)
+		&& (*data->mousex) <= (WIDTH / 2))
 	{
 		data->player.righting_yaw = 0;
 		data->player.lefting_yaw = 0;

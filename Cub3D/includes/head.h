@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:59:14 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:14:32 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct s_node {
 	t_img			img_W;
 	
 	t_type			type;
-	
+
 	t_doorstate		door_state;
 	int				running_door;
 	int				door_loc;
@@ -101,34 +101,29 @@ typedef struct s_node {
 }	t_node;
 
 typedef struct s_player {
-	int 		x;
-	int			y;
-	float 		yaw;
-	float		pitch;
-	
-	int			newx;
-	int			newy;
+	double 			x;
+	double			y;
+	double 			yaw;
 
-	int			oldx;
-	int			oldy;
-	int			oldyaw;
-	int			oldpitch;
+	double			newx;
+	double			newy;
 
-	int			speed;
-	int			sensivity;
+	double			oldx;
+	double			oldy;
+	double			oldyaw;
 
-	int			forwarding;
-	int			lefting;
-	int			backwarding;
-	int			righting;
+	double			speed;
+	double			sensivity;
 
-	int			righting_yaw;
-	int			lefting_yaw;
-	int			righting_yaw_key;
-	int			lefting_yaw_key;
-	
-	int			righting_pitch;
-	int			lefting_pitch;
+	double			forwarding;
+	double			lefting;
+	double			backwarding;
+	double			righting;
+
+	double			righting_yaw;
+	double			lefting_yaw;
+	double			righting_yaw_key;
+	double			lefting_yaw_key;
 }	t_player;
 
 typedef struct s_data {
@@ -184,7 +179,7 @@ int		toggle_door(t_node *cpy, t_data *data);
 //MAP_INIT
 int		do_map_checks(int fd, char *reader);
 t_node	*read_map(int fd, int fc, char *reader, t_data *data);
-void	write_cubes(int color, int startX, int startY, t_data *data, int taille);
+void	write_cubes(int color, int startX, int startY, t_data *data, int tailleX, int tailleY);
 int	map_loop(t_data *data);
 //MAP_SIZE
 int	count_map(int fd, int x, char *reader);

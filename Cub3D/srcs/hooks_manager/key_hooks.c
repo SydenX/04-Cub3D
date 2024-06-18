@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:02:55 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:27:26 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:21:04 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	key_pressed(int key, t_data *data)
 	else if (key == KEY_D)
 		data->player.righting = data->player.speed;
 	else if (key == KEY_RIGHT)
-		data->player.righting_yaw_key = ulimitor(30 - data->player.sensivity, 1);
+		data->player.righting_yaw_key = ulimitor(23 - data->player.sensivity, 1);
 	else if (key == KEY_LEFT)
-		data->player.lefting_yaw_key = ulimitor(30 - data->player.sensivity, 1);
+		data->player.lefting_yaw_key = ulimitor(23 - data->player.sensivity, 1);
 }
 
 int	key_released(int key, t_data *data)
