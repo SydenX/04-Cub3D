@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:02:55 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 12:04:03 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:27:29 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 int	event_key_pressed(int keycode, t_data *datav)
 {
-	if ((keycode == KEY_W || keycode == KEY_A 
-		|| keycode == KEY_D || keycode == KEY_S
-		|| keycode == KEY_UP || keycode == KEY_RIGHT 
-		|| keycode == KEY_LEFT || keycode == KEY_DOWN) && !datav->in_menu)
+	if ((keycode == KEY_W || keycode == KEY_A
+			|| keycode == KEY_D || keycode == KEY_S
+			|| keycode == KEY_UP || keycode == KEY_RIGHT
+			|| keycode == KEY_LEFT || keycode == KEY_DOWN)
+		&& !datav->in_menu)
 		key_pressed(keycode, datav);
 	else if (keycode == KEY_ESCAPE)
 		close_window(datav);
@@ -56,5 +57,5 @@ int	key_released(int key, t_data *data)
 		data->player.righting_yaw_key = 0;
 	else if (key == KEY_LEFT)
 		data->player.lefting_yaw_key = 0;
-	return 0;
+	return (0);
 }
