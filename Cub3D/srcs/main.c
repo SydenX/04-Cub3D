@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 13:37:46 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:29:27 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_prog	get_prog()
 	prog.mlx = mlx_init();
 	if (prog.mlx == NULL)
 		exit_error("Failed malloc allocation", NULL, NULL, NULL);
-	prog.win = mlx_new_window(prog.mlx, 10 * SIZE, 10 * SIZE, "Cub3D by Syden_");
+	prog.win = mlx_new_window(prog.mlx, WIDTH, HEIGHT, "Cub3D by Syden_");
 	if (prog.win == NULL)
 		exit_error("Failed malloc allocation", NULL, prog.mlx, NULL);
 	return (prog);
@@ -97,6 +97,14 @@ void	move_player(t_data *data)
 		data->player.newx += data->player.righting * cos(yaw_radians + M_PI / 2);
 		data->player.newy += data->player.righting * sin(yaw_radians + M_PI / 2);
 	}
+	float distance = sqrt(((data->player.newx - data->player.x) * (data->player.newx - data->player.x)) + ((data->player.newy - data->player.y) * (data->player.newy - data->player.y)));
+	if (distance >= data->player.speed + 0.01)
+	{
+		float echelle = data->player.speed / distance;
+		data->player.newx += ((data->player.newx - data->player.x) * echelle) - (data->player.newx - data->player.x);
+		data->player.newy += ((data->player.newy - data->player.y) * echelle) - (data->player.newy - data->player.y);
+	}
+
 	data->player.oldx = data->player.x;
 	data->player.oldy = data->player.y;
 	if(check_move_hitbox(data, data->player.newx, data->player.newy))
@@ -118,13 +126,16 @@ void draw_menu(t_data *data)
     int	x;
 	int	y;
 
-    for (x = 0; x < SIZE * 10; x++)
-        for (y = 0; y < SIZE * 10; y++)
+    for (x = 0; x < WIDTH; x++)
+        for (y = 0; y < HEIGHT; y++)
             mlx_pixel_put(data->prog->mlx, data->prog->win, x, y, 0x000000);
     for (x = 100; x < 180; x++)
         for (y = 100; y < 150; y++)
             mlx_pixel_put(data->prog->mlx, data->prog->win, x, y, 0x00FF00);
     for (x = 200; x < 280; x++)
+        for (y = 100; y < 150; y++)
+            mlx_pixel_put(data->prog->mlx, data->prog->win, x, y, 0xAFC2D2);
+	for (x = 300; x < 380; x++)
         for (y = 100; y < 150; y++)
             mlx_pixel_put(data->prog->mlx, data->prog->win, x, y, 0xFF0000);
 }
@@ -140,7 +151,7 @@ int	open_menu(t_data *data)
 	}
 	mlx_clear_window(data->prog->mlx, data->prog->win);
 	mlx_mouse_hide();
-	mlx_mouse_move(data->prog->win, (SIZE * 10 / 2), (SIZE * 10 / 2));
+	mlx_mouse_move(data->prog->win, (WIDTH / 2), (HEIGHT / 2));
 	data->in_menu = 0;
 	return (1);
 }

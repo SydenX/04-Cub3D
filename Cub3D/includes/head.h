@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 13:43:12 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:26:48 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 #include <stdio.h>
 #include <errno.h>
 
-# define SIZE 130
 # define HITBOX 35
 # define PLAYER_SIZE 5
+# define WIDTH 1024
+# define HEIGHT 512
 
 typedef enum e_direction {
 	NORTH,
@@ -213,9 +214,15 @@ int		get_list_size(t_node *list);
 t_node	*get_node_at(t_node *list, int x, int y);
 t_node	find_spawn_point(t_node *list);
 int		update_node(t_node node, t_node *list);
+int		is_node_free(float x, float y, t_data *data);
+
+void	check_to_door(t_data *data, int x, int y);
+int		toggle_door(t_node *cpy, t_data *data);
 
 //MAP_MANAGER
 t_node	*check_nodes_type(t_node *nodes, int size);
 
+//UTILS
+int		ulimitor(int	tolimit, int limit);
 
 #endif

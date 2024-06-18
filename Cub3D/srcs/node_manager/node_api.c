@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 13:40:01 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 13:41:34 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:53:13 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,12 @@ int	update_node(t_node node, t_node *list)
 		cpy++;
 	}
 	return (0);
+}
+
+int	is_node_free(float x, float y, t_data *data)
+{
+	t_node	*node;
+
+	node = get_node_at(data->nodes, x, y);
+	return (node->is_free);
 }

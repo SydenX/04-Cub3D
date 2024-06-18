@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:53:57 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/17 15:11:56 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:26:33 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,21 @@ int		limitor(int	tolimit, int limit)
 			return tolimit;
 	}
 	if (tolimit < limit)
+		return limit;
+	else
+		return tolimit;
+}
+
+int		ulimitor(int	tolimit, int limit)
+{
+	if (limit >= 0)
+	{
+		if (tolimit < limit)
+			return limit;
+		else
+			return tolimit;
+	}
+	if (tolimit > limit)
 		return limit;
 	else
 		return tolimit;
