@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:48:15 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:19:41 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,6 +343,61 @@ void draw_oriented_player(int color, int startX, int startY, t_data *data, int t
     draw_line(data->prog->mlx, data->prog->win, x3, y3, x0, y0, color);
 }
 
+void	check_nodes_arround(t_node node, t_data *data)
+{
+	t_node node1 = *get_node_at(data->nodes, node.x, node.y + 1);
+	t_node node2 = *get_node_at(data->nodes, node.x, node.y - 1);
+	t_node node3 = *get_node_at(data->nodes, node.x - 1, node.y);
+	t_node node4 = *get_node_at(data->nodes, node.x + 1, node.y);
+
+	if (node1.type == WALL)
+		write_cubes(0xFF0000, node1.x * HITBOX, node1.y * HITBOX, data, HITBOX);
+	if (node2.type == WALL)
+		write_cubes(0xFF0000, node2.x * HITBOX, node2.y * HITBOX, data, HITBOX);
+	if (node3.type == WALL)
+		write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX);
+	if (node4.type == WALL)
+		write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX);
+}
+
+int	map_loop(t_data *data)
+{
+	char	*moves;
+	int i = 0;
+	if (!data->in_menu)
+	{
+		get_mouse_move(data);
+		move_player(data);
+		t_node *list = (data->nodes);
+		while (list[i].type != ENDL) {
+			if (list[i].type == DOOR){
+				check_nodes_arround(list[i], data);
+				if (list[i].direction == LAT)
+					write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+				else
+					write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+				if (!list[i].running_door){
+					toggle_door(&list[i], data);
+				}
+				if (list[i].direction == LAT)
+					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX);
+				else
+					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX);
+			}
+			i++;
+		}
+		// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+		if (data->player.oldx != data->player.x || data->player.oldy != data->player.y || data->player.oldyaw != data->player.yaw)
+		{
+			draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
+			draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+			check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data);
+		}
+		// dessiner_des_carres_pour_tester(0xFFFFFF, data->playerx, data->playery, data, PLAYER_SIZE);
+		// mlx_pixel_put(data->prog->mlx, data->prog->win, data->playerx, data->playery, 0xFFFFFF);
+	}
+	return 0;
+}
 
 int	map_init(t_data *data)
 {
@@ -351,7 +406,7 @@ int	map_init(t_data *data)
 	if (!data->in_menu)
 	{
 		get_mouse_move(data);
-		move_player(data);
+		// move_player(data);
 		t_node *list = (data->nodes);
 		while (list[i].type != ENDL) {
 			if (list[i].type == WALL)

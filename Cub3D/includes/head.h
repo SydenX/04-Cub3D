@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:50:02 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:59:14 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ int		toggle_door(t_node *cpy, t_data *data);
 int		do_map_checks(int fd, char *reader);
 t_node	*read_map(int fd, int fc, char *reader, t_data *data);
 void	write_cubes(int color, int startX, int startY, t_data *data, int taille);
+int	map_loop(t_data *data);
 //MAP_SIZE
 int	count_map(int fd, int x, char *reader);
 

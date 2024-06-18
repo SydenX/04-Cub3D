@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:05:06 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 14:19:18 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:06:11 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	init_hooks(t_data *data)
 	mlx_hook((*data).prog->win, 3, 0, &key_released, (data));
 	mlx_hook((*data).prog->win, 17, 0, &close_window, (data));
 	mlx_mouse_hook((*data).prog->win, &mouse_hook, (data));
-	mlx_loop_hook(data->prog->mlx, map_init, data);
+	map_init(data);
+	mlx_loop_hook(data->prog->mlx, &map_loop, data);
 	mlx_loop((*data).prog->mlx);
 }
