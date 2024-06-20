@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 14:46:44 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:21:00 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 #include <stdio.h>
 #include <errno.h>
 
-# define HITBOX 20
-# define PLAYER_SIZE 3
+# define HITBOX 35
+# define PLAYER_SIZE 5
 # define WIDTH 1024
 # define HEIGHT 512
 
