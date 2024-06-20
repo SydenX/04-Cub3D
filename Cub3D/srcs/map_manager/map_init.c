@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 16:25:55 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 12:14:32 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,8 +358,35 @@ void	check_nodes_arround(t_node node, t_data *data, int is_player)
 		write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX, HITBOX);
 	if (node4.type == WALL)
 		write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX, HITBOX);
-}
 
+	if (is_player)
+	{
+		node1 = *get_node_at(data->nodes, node.x + 1, node.y + 1);
+		node2 = *get_node_at(data->nodes, node.x + 1, node.y - 1);
+		node3 = *get_node_at(data->nodes, node.x - 1, node.y + 1);
+		node4 = *get_node_at(data->nodes, node.x - 1, node.y - 1);
+
+		if (node1.type == WALL)
+			write_cubes(0xFF0000, node1.x * HITBOX, node1.y * HITBOX, data, HITBOX, HITBOX);
+		if (node2.type == WALL)
+			write_cubes(0xFF0000, node2.x * HITBOX, node2.y * HITBOX, data, HITBOX, HITBOX);
+		if (node3.type == WALL)
+			write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX, HITBOX);
+		if (node4.type == WALL)
+			write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX, HITBOX);
+	}
+}
+int frame = 0;
+char	*get_moves(char *moves)
+{
+	char	*msg;
+
+	if (!moves)
+		return (NULL);
+	msg = ft_strjoin("Frane: ", moves);
+	free(moves);
+	return (msg);
+}
 int	map_loop(t_data *data)
 {
 	char	*moves;
@@ -385,11 +412,16 @@ int	map_loop(t_data *data)
 			}
 			i++;
 		}
+		mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0x000000, get_moves(ft_itoa(frame)));
+		frame++;
+		mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, get_moves(ft_itoa(frame)));
 		if (data->player.oldx != data->player.x || data->player.oldy != data->player.y || data->player.oldyaw != data->player.yaw)
 		{
-			draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
-			draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
-			check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
+			write_cubes(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, PLAYER_SIZE - 1);
+			write_cubes(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, PLAYER_SIZE - 1);
+			// draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
+			// draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+			// check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
 		}
 	}
 	return 0;

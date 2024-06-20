@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 16:12:15 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:58:10 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	move_player(t_data *data)
 		double echelle = data->player.speed / distance;
 		data->player.newx += ((data->player.newx - data->player.x) * echelle) - (data->player.newx - data->player.x);
 		data->player.newy += ((data->player.newy - data->player.y) * echelle) - (data->player.newy - data->player.y);
+		printf("%f\n", distance);
 	}
 
 	data->player.oldx = data->player.x;
@@ -153,6 +154,7 @@ int	open_menu(t_data *data)
 	mlx_mouse_hide();
 	mlx_mouse_move(data->prog->win, (WIDTH / 2), (HEIGHT / 2));
 	data->in_menu = 0;
+	map_init(data);
 	return (1);
 }
 

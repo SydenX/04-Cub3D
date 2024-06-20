@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 11:57:24 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 16:12:50 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:48:26 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_player	init_player(t_node spawn)
 {
 	t_player	player;
 
-	player.speed = 2;
+	player.speed = 0.04 * HITBOX;
 	player.sensivity = 18;
 	player.forwarding = 0;
 	player.lefting = 0;
