@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 15:19:36 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:25:22 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ void	move_player(t_data *data)
 		data->player.yaw += data->player.righting_yaw;
 	else if (data->player.lefting_yaw != 0)
 		data->player.yaw -= data->player.lefting_yaw;
-	while (data->player.yaw > 360)
-		data->player.yaw -= 360;
-	while (data->player.yaw < 0)
-		data->player.yaw += 360;
+
 	// CALCULS COORDONNEES DEPLACEMENTS
 	double yaw_radians = (data->player.yaw) * (M_PI / 180.0);
 	double oldx = data->player.newx;

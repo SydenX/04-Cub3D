@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 15:21:00 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:23:37 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 # define HITBOX 35
 # define PLAYER_SIZE 5
-# define WIDTH 1024
-# define HEIGHT 512
+# define WIDTH 1324
+# define HEIGHT 612
 
 # define ERROR_INPUTFILE "Unable to read the input file."
 # define ERROR_NOTFORMATTED "File is not correctly formatted."
