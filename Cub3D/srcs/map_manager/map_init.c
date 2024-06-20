@@ -6,11 +6,20 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 12:14:32 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:06:18 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
+
+
+void my_pixel_put(int x, int y, t_data *data, int color)
+{
+	int offset;
+
+	offset = (y * data->img.size_line) + ((data->img.bpp / 8) * x);
+	*(unsigned int *)(data->img.img_pixels + offset) = color;
+}
 
 t_node	*get_node(int x, int y, t_node *list)
 {
@@ -299,14 +308,14 @@ void	write_cubes(int color, int startX, int startY, t_data *data, int tailleX, i
 	while (x < tailleX){
 		y = 0;
 		while (y < tailleY){
-			mlx_pixel_put(data->prog->mlx, data->prog->win, x + startX, y + startY, color);
+			my_pixel_put(x + startX, y + startY, data, color);
 			y++;
 		}
 		x++;
 	}
 }
 
-void draw_line(void *mlx, void *win, int x0, int y0, int x1, int y1, int color) {
+void draw_line(t_data *data, int x0, int y0, int x1, int y1, int color) {
     int dx = abs(x1 - x0);
     int dy = abs(y1 - y0);
     int sx = x0 < x1 ? 1 : -1;
@@ -314,7 +323,7 @@ void draw_line(void *mlx, void *win, int x0, int y0, int x1, int y1, int color) 
     int err = (dx > dy ? dx : -dy) / 2, e2;
 
     while (1) {
-        mlx_pixel_put(mlx, win, x0, y0, color);
+        my_pixel_put(x0, y0, data, color);
         if (x0 == x1 && y0 == y1) break;
         e2 = err;
         if (e2 > -dx) { err -= dy; x0 += sx; }
@@ -337,10 +346,10 @@ void draw_oriented_player(int color, double startX, double startY, t_data *data,
     double x3 = x0 + (double)(taille * cos(yaw_radians - 2.0 * M_PI / 3.0));
     double y3 = y0 + (double)(taille * sin(yaw_radians - 2.0 * M_PI / 3.0));
 
-    draw_line(data->prog->mlx, data->prog->win, x0, y0, x1, y1, color);
-    draw_line(data->prog->mlx, data->prog->win, x1, y1, x2, y2, color);
-    draw_line(data->prog->mlx, data->prog->win, x2, y2, x3, y3, color);
-    draw_line(data->prog->mlx, data->prog->win, x3, y3, x0, y0, color);
+    draw_line(data, x0, y0, x1, y1, color);
+    draw_line(data, x1, y1, x2, y2, color);
+    draw_line(data, x2, y2, x3, y3, color);
+    draw_line(data, x3, y3, x0, y0, color);
 }
 
 void	check_nodes_arround(t_node node, t_data *data, int is_player)
@@ -383,7 +392,7 @@ char	*get_moves(char *moves)
 
 	if (!moves)
 		return (NULL);
-	msg = ft_strjoin("Frane: ", moves);
+	msg = ft_strjoin("Frame: ", moves);
 	free(moves);
 	return (msg);
 }
@@ -412,23 +421,32 @@ int	map_loop(t_data *data)
 			}
 			i++;
 		}
-		mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0x000000, get_moves(ft_itoa(frame)));
-		frame++;
-		mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, get_moves(ft_itoa(frame)));
+
 		if (data->player.oldx != data->player.x || data->player.oldy != data->player.y || data->player.oldyaw != data->player.yaw)
 		{
-			write_cubes(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, PLAYER_SIZE - 1);
-			write_cubes(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, PLAYER_SIZE - 1);
-			// draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
-			// draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
-			// check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
+			draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
+			draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+			check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
 		}
 	}
+	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
+	moves = get_moves(ft_itoa(frame));
+	mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0x000000, moves);
+	free(moves);
+	frame++;
+	moves = get_moves(ft_itoa(frame));
+	mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
+	free(moves);
 	return 0;
 }
 
 int	map_init(t_data *data)
 {
+	data->img.img_ptr = mlx_new_image(data->prog->mlx, WIDTH, HEIGHT);
+ 	data->img.img_pixels = mlx_get_data_addr(data->img.img_ptr,
+                                    &data->img.bpp,
+                                    &data->img.size_line,
+                                    &data->img.endian);
 	char	*moves;
 	int i = 0;
 	if (!data->in_menu)
@@ -445,9 +463,9 @@ int	map_init(t_data *data)
 			}
 			i++;
 		}
-		// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
 		draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
 		draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
 	}
+	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
 	return 0;
 }

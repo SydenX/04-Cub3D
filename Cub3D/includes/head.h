@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 11:49:09 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:46:44 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,13 @@ typedef struct s_rgb {
 }	t_rgb;
 
 typedef struct s_img {
-	void			*img;
 	t_type			type;
 	t_direction		direction;
+	void 			*img_ptr;
+	char 			*img_pixels;
+	int 			bpp;
+	int 			size_line;
+	int 			endian;
 }	t_img;
 
 typedef struct s_node {
@@ -130,7 +134,8 @@ typedef struct s_data {
 	t_prog		*prog;
 	t_node		*nodes;
 	t_player	player;
-
+	t_img		img;
+	
 	void		*txt_path_north;
 	void		*txt_path_east;
 	void		*txt_path_south;

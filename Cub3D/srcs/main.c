@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 11:58:10 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:19:36 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ int	check_move_hitbox(t_data *data, int new_x, int new_y)
 }
 
 void	move_player(t_data *data)
-{
-	mlx_pixel_put(data->prog->mlx, data->prog->win, 150, 150, 0x000000);
-	
+{	
 	data->player.oldyaw = data->player.yaw;
 	// GESTION SOURIS, SI ON BOUGE LE YAW VIA LES KEYs CELA OVERRIDE LA SOURIS
 	if (data->player.righting_yaw_key != 0 || data->player.lefting_yaw_key != 0)
@@ -71,7 +69,10 @@ void	move_player(t_data *data)
 		data->player.yaw += data->player.righting_yaw;
 	else if (data->player.lefting_yaw != 0)
 		data->player.yaw -= data->player.lefting_yaw;
-	
+	while (data->player.yaw > 360)
+		data->player.yaw -= 360;
+	while (data->player.yaw < 0)
+		data->player.yaw += 360;
 	// CALCULS COORDONNEES DEPLACEMENTS
 	double yaw_radians = (data->player.yaw) * (M_PI / 180.0);
 	double oldx = data->player.newx;
@@ -103,7 +104,6 @@ void	move_player(t_data *data)
 		double echelle = data->player.speed / distance;
 		data->player.newx += ((data->player.newx - data->player.x) * echelle) - (data->player.newx - data->player.x);
 		data->player.newy += ((data->player.newy - data->player.y) * echelle) - (data->player.newy - data->player.y);
-		printf("%f\n", distance);
 	}
 
 	data->player.oldx = data->player.x;

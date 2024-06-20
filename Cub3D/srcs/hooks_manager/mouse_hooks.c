@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 12:04:36 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/18 16:24:50 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:18:01 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ int	mouse_hook(int keycode, int x, int y, t_data *data)
 	}
 	return (0);
 }
-
-//TODO Modification du pitch, avec limitation a 90up/down
 
 //Obtenir la position de la souris pour modifier le yaw en fonction de sa position
 //Tp de la souris au centre de la fenetre de jeu
