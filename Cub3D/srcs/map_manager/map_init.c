@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 10:19:28 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:35:49 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,7 +482,6 @@ void	check_nodes_arround_map(t_node node, t_data *data, int is_player)
 
 int	map_loop(t_data *data)
 {
-	char	*moves;
 	int i = 0;
 	if (!data->in_menu)
 	{
@@ -525,20 +524,7 @@ int	map_loop(t_data *data)
 		}
 	}
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
-	// moves = get_frames(ft_itoa(data->frame));
-	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0x000000, moves);
-	// free(moves);
-	// data->frame++;
-	// moves = get_frames(ft_itoa(data->frame));
-	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 15, 0xFFFFFF, moves);
-	// free(moves);
-
-	// moves = get_fps(ft_itoa(data->fps));
-	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 30, 0x000000, moves);
-	// free(moves);
-	// moves = get_fps(ft_itoa(data->fps));
-	// mlx_string_put(data->prog->mlx, data->prog->win, 15, 30, 0xFFFFFF, moves);
-	// free(moves);
+	debug_affichage_frames(data);
 	return 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 10:18:32 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:37:10 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # define HITBOX 35
 # define MINIMAP_HITBOX 15
 # define PLAYER_SIZE 3
-# define WIDTH 1324
-# define HEIGHT 612
+# define WIDTH 1920
+# define HEIGHT 1080
 
 # define ERROR_INPUTFILE "Unable to read the input file."
 # define ERROR_NOTFORMATTED "File is not correctly formatted."
@@ -245,5 +245,6 @@ int		get_map_height(t_data *data);
 void	debugfps(t_data *data);
 char	*get_frames(char *moves);
 char	*get_fps(char *moves);
+void	debug_affichage_frames(t_data *data);
 
 #endif

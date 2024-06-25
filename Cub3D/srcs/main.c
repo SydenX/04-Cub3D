@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 08:55:38 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:36:03 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ int	main(int argc, char **argv)
 	debugfps(&data);
 
 	init_hooks(&data);
-	init_images(&data);
+	// init_images(&data);
 	system("leaks cub3d");
 	return (argc);
 }
