@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 10:35:49 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:43:57 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -491,22 +491,22 @@ int	map_loop(t_data *data)
 		while (list[i].type != ENDL) {
 			if (list[i].type == DOOR){
 				if (list[i].direction == LAT){
-					write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX - list[i].door_loc, HITBOX);
+					// write_cubes(0x000000, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX - list[i].door_loc, HITBOX);
 					write_cubes_map(0x33CCFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (list[i].x * MINIMAP_HITBOX) + list[i].door_loc, (data->minimap_y + MINIMAP_HITBOX / 2) + list[i].y * MINIMAP_HITBOX, data, MINIMAP_HITBOX - list[i].door_loc, MINIMAP_HITBOX);
 				}
 				else{
-					write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX - list[i].door_loc);
+					// write_cubes(0x000000, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX - list[i].door_loc);
 					write_cubes_map(0x33CCFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (list[i].x * MINIMAP_HITBOX), (data->minimap_y + MINIMAP_HITBOX / 2) + (list[i].y * MINIMAP_HITBOX) + list[i].door_loc, data, MINIMAP_HITBOX, MINIMAP_HITBOX - list[i].door_loc);
 				}
 				if (!list[i].running_door){
 					toggle_door(&list[i], data);
 				}
 				if (list[i].direction == LAT){
-					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX - list[i].door_loc, HITBOX);
+					// write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX - list[i].door_loc, HITBOX);
 					write_cubes_map(0x0FFF00, (data->minimap_x + MINIMAP_HITBOX / 2) + (list[i].x * MINIMAP_HITBOX) + list[i].door_loc, (data->minimap_y + MINIMAP_HITBOX / 2) + list[i].y * MINIMAP_HITBOX, data, MINIMAP_HITBOX - list[i].door_loc, MINIMAP_HITBOX);
 				}
 				else{
-					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX - list[i].door_loc);
+					// write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX - list[i].door_loc);
 					write_cubes_map(0x0FFF00, (data->minimap_x + MINIMAP_HITBOX / 2) + (list[i].x * MINIMAP_HITBOX), (data->minimap_y + MINIMAP_HITBOX / 2) + (list[i].y * MINIMAP_HITBOX) + list[i].door_loc, data, MINIMAP_HITBOX, MINIMAP_HITBOX - list[i].door_loc);
 				}
 			}
@@ -515,11 +515,11 @@ int	map_loop(t_data *data)
 
 		if (data->player.oldx != data->player.x || data->player.oldy != data->player.y || data->player.oldyaw != data->player.yaw)
 		{
-			check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
+			// check_nodes_arround(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
 			check_nodes_arround_map(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
-			draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
+			// draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
 			draw_oriented_player_map(0x33CCFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.oldx * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.oldy * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.oldyaw);
-			draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+			// draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
 			draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
 		}
 	}
@@ -552,8 +552,7 @@ int	mini_map_init(t_data *data)
 			}
 			i++;
 		}
-		// draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
-		// draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+		draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
 	}
 	return 0;
 }
@@ -571,18 +570,17 @@ int	map_init(t_data *data)
 	{
 		t_node *list = (data->nodes);
 		while (list[i].type != ENDL) {
-			if (list[i].type == WALL)
-				write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX, HITBOX);
-			if (list[i].type == DOOR){
-				if (list[i].direction == LAT)
-					write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX, HITBOX);
-				else
-					write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX);
-			}
+			// if (list[i].type == WALL)
+			// 	write_cubes(0xFF0000, list[i].x * HITBOX, list[i].y * HITBOX, data, HITBOX, HITBOX);
+			// if (list[i].type == DOOR){
+			// 	if (list[i].direction == LAT)
+			// 		write_cubes(0x0FFF00, (list[i].x * HITBOX) + list[i].door_loc, list[i].y * HITBOX, data, HITBOX, HITBOX);
+			// 	else
+			// 		write_cubes(0x0FFF00, (list[i].x * HITBOX), (list[i].y * HITBOX) + list[i].door_loc, data, HITBOX, HITBOX);
+			// }
 			i++;
 		}
-		draw_oriented_player(0x000000, data->player.oldx, data->player.oldy, data, PLAYER_SIZE, data->player.oldyaw);
-		draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
+		// draw_oriented_player(0xFFFFFF, data->player.x, data->player.y, data, PLAYER_SIZE, data->player.yaw);
 	}
 	mini_map_init(data);
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
