@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 12:10:12 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 13:35:30 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,7 +479,7 @@ void	check_nodes_arround_map(t_node node, t_data *data, int is_player)
 			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node4.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node4.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
 	}
 }
-
+int l = 0;
 int	map_loop(t_data *data)
 {
 	// int i = 0;
@@ -511,8 +511,57 @@ int	map_loop(t_data *data)
 	// 		draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
 	// 	}
 	// }
-	// mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
+	mlx_clear_window (data->prog->mlx, data->prog->win );
+	int x = -1;
+	data->distance = malloc((WIDTH + 1) * sizeof(t_distance *));
+	int i = 0;
+	float fov = 90;
+	float degree = 0 - fov / 2;
+	float playerx = data->player.x - l++;
+	while(playerx > HITBOX)
+		playerx-=HITBOX;
+	playerx /= HITBOX;
+	if (playerx > 0.85)
+		playerx=0.15;
+	if (playerx < 0.15)
+		playerx=0.15;
+	printf("%f\n", playerx);
+	while (i < WIDTH)
+	{
+		float positiveDeg = degree;
+		if (positiveDeg < 0)
+			positiveDeg *= -1;
+		data->distance[i].type = ENDL;
+		if (degree < 0)
+			data->distance[i].d = (playerx / sin(positiveDeg * (M_PI / 180)));
+		else
+			data->distance[i].d = ((1-playerx) / sin(positiveDeg * (M_PI / 180)));
+		degree+=(fov / WIDTH);
+		i++;
+	}
+	data->distance[WIDTH].type = NULLT;
+	while (++x < WIDTH)
+	{
+		float distanceToPoint = (data->distance[x].d);
+		int y = -1;
+		float wall_height = (1 * HEIGHT) / (distanceToPoint);
+		int begin = (HEIGHT / 2) - (wall_height / 2);
+		int end = (HEIGHT / 2) + (wall_height / 2);
+		while(++y < begin)
+			if (x < WIDTH && y < HEIGHT)
+				my_pixel_put(x, y, data, rgb_to_hex(data->c));
+		y = begin - 1;
+		while (++y < end)
+			if (x < WIDTH && y < HEIGHT)
+				my_pixel_put(x, y, data, 0xFFFFFF);
+		y--;
+		while(++y < HEIGHT)
+			if (x < WIDTH && y < HEIGHT)
+				my_pixel_put(x, y, data, rgb_to_hex(data->f));
+	}
+	free(data->distance);
 	debug_affichage_frames(data);
+	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
 	return 0;
 }
 
@@ -546,46 +595,6 @@ int	map_init(t_data *data)
 	// 		i++;
 	// 	}
 	// 	draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
-	// }
-
-	int x = -1;
-	data->distance = malloc((WIDTH + 1) * sizeof(t_distance *));
-	int i = 0;
-	float fov = 90;
-	float degree = 0 - fov / 2;
-	float playerx = data->player.x;
-	while(playerx > 1)
-		playerx--;
-	printf("%f\n", playerx);
-	while (i < WIDTH)
-	{
-		float positiveDeg = degree;
-		if (positiveDeg < 0)
-			positiveDeg *= -1;
-		data->distance[i].type = ENDL;
-		data->distance[i].d = (0.5 / sin(positiveDeg * (M_PI / 180)));
-		degree+=(fov / WIDTH);
-		i++;
-	}
-	data->distance[WIDTH].type = NULLT;
-	// while (++x < WIDTH)
-	// {
-	// 	float distanceToPoint = (data->distance[x].d);
-	// 	int y = -1;
-	// 	float wall_height = (1 * HEIGHT) / (distanceToPoint);
-	// 	int begin = (HEIGHT / 2) - (wall_height / 2);
-	// 	int end = (HEIGHT / 2) + (wall_height / 2);
-	// 	while(++y < begin)
-	// 		if (x < WIDTH && y < WIDTH)
-	// 			my_pixel_put(x, y, data, rgb_to_hex(data->c));
-	// 	y = begin - 1;
-	// 	while (++y < end)
-	// 		if (x < WIDTH && y < WIDTH)
-	// 			my_pixel_put(x, y, data, 0xFFFFFF);
-	// 	y--;
-	// 	while(++y < HEIGHT)
-	// 		if (x < WIDTH && y < WIDTH)
-	// 			my_pixel_put(x, y, data, rgb_to_hex(data->f));
 	// }
 
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
