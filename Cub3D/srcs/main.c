@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 15:25:22 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 08:55:38 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,9 @@ int	main(int argc, char **argv)
 	data.player = init_player(spawn);
 	data.mousex = malloc(sizeof(int));
 	data.mousey = malloc(sizeof(int));
+
+	debugfps(&data);
+
 	init_hooks(&data);
 	init_images(&data);
 	system("leaks cub3d");

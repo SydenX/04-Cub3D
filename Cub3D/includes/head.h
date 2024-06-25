@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/20 15:23:37 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:18:32 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@
 # include <math.h>
 #include <stdio.h>
 #include <errno.h>
+#include <sys/time.h>
+#include <pthread.h>
 
 # define HITBOX 35
-# define PLAYER_SIZE 5
+# define MINIMAP_HITBOX 15
+# define PLAYER_SIZE 3
 # define WIDTH 1324
 # define HEIGHT 612
 
@@ -98,6 +101,7 @@ typedef struct s_node {
 	t_doorstate		door_state;
 	int				running_door;
 	int				door_loc;
+	int				door_loc_map;
 	
 	int				is_free;
 	
@@ -148,6 +152,14 @@ typedef struct s_data {
 	
 	int			in_menu;
 	int			moves;
+
+	int			minimap_x;
+	int			minimap_y;
+	int			minimap_endx;
+	int			minimap_endy;
+
+	int fps;
+	int frame;
 }	t_data;
 
 //MAIN
@@ -226,5 +238,12 @@ t_node	*check_nodes_type(t_node *nodes, int size);
 //UTILS
 int		ulimitor(int	tolimit, int limit);
 int		limitor(int	tolimit, int limit);
+int		get_map_width(t_data *data);
+int		get_map_height(t_data *data);
+
+//DEBUG
+void	debugfps(t_data *data);
+char	*get_frames(char *moves);
+char	*get_fps(char *moves);
 
 #endif

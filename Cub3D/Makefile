@@ -6,7 +6,7 @@
 #    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/06/20 15:29:23 by jtollena         ###   ########.fr        #
+#    Updated: 2024/06/25 08:55:12 by jtollena         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ OBJSDIR = objs
 INC = 
 
 SRC = \
+	debug.c \
 	 main.c \
 		utils.c \
 		map_manager/nodes_type.c \
