@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:53:57 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 09:14:20 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:17:55 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,9 @@ int		get_map_height(t_data *data)
 		i++;
 	}
 	return (max + 1);
+}
+
+unsigned long rgb_to_hex(t_rgb rgb)
+{   
+    return ((rgb.r & 0xff) << 16) + ((rgb.g & 0xff) << 8) + (rgb.b & 0xff);
 }

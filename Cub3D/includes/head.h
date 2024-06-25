@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 10:37:10 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:48:41 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define PLAYER_SIZE 3
 # define WIDTH 1920
 # define HEIGHT 1080
+
+#define FOV (M_PI / 3) // Field of view
 
 # define ERROR_INPUTFILE "Unable to read the input file."
 # define ERROR_NOTFORMATTED "File is not correctly formatted."
@@ -108,6 +110,11 @@ typedef struct s_node {
 	t_direction		direction;
 }	t_node;
 
+typedef struct s_distance {
+	float	d;
+	t_type	type;
+} t_distance;
+
 typedef struct s_player {
 	double 			x;
 	double			y;
@@ -137,6 +144,7 @@ typedef struct s_player {
 typedef struct s_data {
 	t_prog		*prog;
 	t_node		*nodes;
+	t_distance	*distance;
 	t_player	player;
 	t_img		img;
 	
@@ -246,5 +254,6 @@ void	debugfps(t_data *data);
 char	*get_frames(char *moves);
 char	*get_fps(char *moves);
 void	debug_affichage_frames(t_data *data);
+unsigned long rgb_to_hex(t_rgb rgb);
 
 #endif

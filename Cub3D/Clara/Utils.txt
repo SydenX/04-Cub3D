@@ -1,0 +1,11 @@
+
+
+https://lodev.org/cgtutor/raycasting.html
+https://reactive.so/post/42-a-comprehensive-guide-to-cub3d
+https://github.com/herbievine/42/blob/main/cub3d/ray.c
+
+https://github.com/lschrafstetter/42_cub3d/blob/master/src/render/raycast.c
+https://github.com/RhesusP/cub3D/blob/master/srcs/mandatory/raycasting/draw_frame.c
+
+https://permadi.com/1996/05/ray-casting-tutorial-7/
+
