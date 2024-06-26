@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 13:53:16 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:53:03 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,6 +482,57 @@ void	check_nodes_arround_map(t_node node, t_data *data, int is_player)
 float l = 0.0;
 int	map_loop(t_data *data)
 {
+	// mlx_clear_window (data->prog->mlx, data->prog->win );
+	int x = -1;
+	int i1 = 0;
+	float fov = 90;
+	float degree = 0 - fov / 2;
+	float playerx = data->player.x - l;
+	// l+=0.1;
+	while(playerx > HITBOX)
+		playerx-=HITBOX;
+	playerx /= HITBOX;
+	if (playerx > 0.85)
+		playerx=0.15;
+	if (playerx < 0.15)
+		playerx=0.15;
+	while (i1 < WIDTH)
+	{
+		float positiveDeg = degree;
+		if (positiveDeg < 0)
+			positiveDeg *= -1;
+		data->distance[i1].type = ENDL;
+		if (degree < 0)
+			data->distance[i1].d = (playerx / sin(positiveDeg * (M_PI / 180)));
+		else
+			data->distance[i1].d = ((1-playerx) / sin(positiveDeg * (M_PI / 180)));
+		degree+=(fov / WIDTH);
+		i1++;
+	}
+	data->distance[WIDTH].type = NULLT;
+	while (++x < WIDTH)
+	{
+		float distanceToPoint = (data->distance[x].d);
+		int y = -1;
+		float wall_height = (1 * HEIGHT) / (distanceToPoint);
+		int begin = (HEIGHT / 2) - (wall_height / 2);
+		int end = (HEIGHT / 2) + (wall_height / 2);
+		while(++y < begin)
+			if (x < WIDTH && y < HEIGHT)
+				if (!is_in_minimap(x, y, data))
+					my_pixel_put(x, y, data, rgb_to_hex(data->c));
+		y = begin - 1;
+		while (++y < end)
+			if (x < WIDTH && y < HEIGHT)
+				if (!is_in_minimap(x, y, data))
+					my_pixel_put(x, y, data, 0xFFFFFF);
+		y--;
+		while(++y < HEIGHT)
+			if (x < WIDTH && y < HEIGHT)
+				if (!is_in_minimap(x, y, data))
+					my_pixel_put(x, y, data, rgb_to_hex(data->f));
+	}
+
 	int i = 0;
 	if (!data->in_menu)
 	{
@@ -511,58 +562,8 @@ int	map_loop(t_data *data)
 			draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
 		}
 	}
-	
-	// mlx_clear_window (data->prog->mlx, data->prog->win );
-	// int x = -1;
-	// data->distance = malloc((WIDTH + 1) * sizeof(t_distance *));
-	// int i = 0;
-	// float fov = 90;
-	// float degree = 0 - fov / 2;
-	// float playerx = data->player.x - l;
-	// l+=0.1;
-	// while(playerx > HITBOX)
-	// 	playerx-=HITBOX;
-	// playerx /= HITBOX;
-	// if (playerx > 0.85)
-	// 	playerx=0.15;
-	// if (playerx < 0.15)
-	// 	playerx=0.15;
-	// while (i < WIDTH)
-	// {
-	// 	float positiveDeg = degree;
-	// 	if (positiveDeg < 0)
-	// 		positiveDeg *= -1;
-	// 	data->distance[i].type = ENDL;
-	// 	if (degree < 0)
-	// 		data->distance[i].d = (playerx / sin(positiveDeg * (M_PI / 180)));
-	// 	else
-	// 		data->distance[i].d = ((1-playerx) / sin(positiveDeg * (M_PI / 180)));
-	// 	degree+=(fov / WIDTH);
-	// 	i++;
-	// }
-	// data->distance[WIDTH].type = NULLT;
-	// while (++x < WIDTH)
-	// {
-	// 	float distanceToPoint = (data->distance[x].d);
-	// 	int y = -1;
-	// 	float wall_height = (1 * HEIGHT) / (distanceToPoint);
-	// 	int begin = (HEIGHT / 2) - (wall_height / 2);
-	// 	int end = (HEIGHT / 2) + (wall_height / 2);
-	// 	while(++y < begin)
-	// 		if (x < WIDTH && y < HEIGHT)
-	// 			my_pixel_put(x, y, data, rgb_to_hex(data->c));
-	// 	y = begin - 1;
-	// 	while (++y < end)
-	// 		if (x < WIDTH && y < HEIGHT)
-	// 			my_pixel_put(x, y, data, 0xFFFFFF);
-	// 	y--;
-	// 	while(++y < HEIGHT)
-	// 		if (x < WIDTH && y < HEIGHT)
-	// 			my_pixel_put(x, y, data, rgb_to_hex(data->f));
-	// }
-	// free(data->distance);
-	debug_affichage_frames(data);
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
+	debug_affichage_frames(data);
 	return 0;
 }
 
@@ -597,7 +598,6 @@ int	map_init(t_data *data)
 		}
 		draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
 	}
-
 	mlx_put_image_to_window(data->prog->mlx, data->prog->win, data->img.img_ptr, 0, 0);
 	return 0;
 }
