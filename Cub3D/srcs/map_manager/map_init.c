@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/26 10:53:03 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:07:03 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -510,6 +510,12 @@ int	map_loop(t_data *data)
 		i1++;
 	}
 	data->distance[WIDTH].type = NULLT;
+	int c = rgb_to_hex(data->c);
+	int f = rgb_to_hex(data->f);
+	int mpx = data->minimap_x;
+	int mpy = data->minimap_y;
+	int mpex = data->minimap_endx;
+	int mpey = data->minimap_endy;
 	while (++x < WIDTH)
 	{
 		float distanceToPoint = (data->distance[x].d);
@@ -519,18 +525,18 @@ int	map_loop(t_data *data)
 		int end = (HEIGHT / 2) + (wall_height / 2);
 		while(++y < begin)
 			if (x < WIDTH && y < HEIGHT)
-				if (!is_in_minimap(x, y, data))
-					my_pixel_put(x, y, data, rgb_to_hex(data->c));
+				if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
+					my_pixel_put(x, y, data, c);
 		y = begin - 1;
 		while (++y < end)
 			if (x < WIDTH && y < HEIGHT)
-				if (!is_in_minimap(x, y, data))
+				if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
 					my_pixel_put(x, y, data, 0xFFFFFF);
 		y--;
 		while(++y < HEIGHT)
 			if (x < WIDTH && y < HEIGHT)
-				if (!is_in_minimap(x, y, data))
-					my_pixel_put(x, y, data, rgb_to_hex(data->f));
+				if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
+					my_pixel_put(x, y, data, f);
 	}
 
 	int i = 0;
