@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/26 11:07:03 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:35:36 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -486,26 +486,77 @@ int	map_loop(t_data *data)
 	int x = -1;
 	int i1 = 0;
 	float fov = 90;
-	float degree = 0 - fov / 2;
-	float playerx = data->player.x - l;
-	// l+=0.1;
-	while(playerx > HITBOX)
-		playerx-=HITBOX;
-	playerx /= HITBOX;
-	if (playerx > 0.85)
-		playerx=0.15;
+	float yaw = data->player.yaw;
+	float yawrad = yaw * M_PI / 180;
+	float degree = yaw - fov / 2;
+	float playerx = data->player.x;
+	float playery = data->player.y;
+	
+	// playerx /= HITBOX;
 	if (playerx < 0.15)
 		playerx=0.15;
+
 	while (i1 < WIDTH)
 	{
 		float positiveDeg = degree;
 		if (positiveDeg < 0)
 			positiveDeg *= -1;
 		data->distance[i1].type = ENDL;
+		
+		float checker = 1;
+		float cx = playerx;
+		while (cx > HITBOX)
+			cx -= HITBOX;
+		cx = 1 - cx;
+		float cy = playery;
+		while (cy > HITBOX)
+			cy -= HITBOX;
+		cy = 1 - cy;
+		checker = sqrt((cx * cx) + (cy * cy));
+		// while (1){
+		int z = 0;
+		while (z++<1){
+			float newxm = playerx + (checker-1) * cos(degree * M_PI / 180);
+			float newym = playery + (checker-1) * sin(degree * M_PI / 180);
+			
+			float newx = playerx + checker * cos(degree * M_PI / 180);
+			float newy = playery + checker * sin(degree * M_PI / 180);
+			t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
+			if (node != NULL){
+				if (node->type == WALL){
+					// draw_line(data, newxm, newym, newx, newy, 0xFF0000);
+					break;
+				}
+			}
+			// float cx2 = newx;
+			// while (cx2 >= HITBOX)
+			// 	cx2 -= HITBOX;
+			// cx2 = 1 - cx2;
+			// float cy2 = newy;
+			// while (cy2 >= HITBOX)
+			// 	cy2 -= HITBOX;
+			// cy2 = 1 - cy2;
+			// my_pixel_put(newx+cx2, newy+cy2, data, 0xFF0000);
+			// my_pixel_put(newx, newy, data, 0x00FF00);
+			// checker = sqrt((cx2 * cx2) + (cy2 * cy2));
+		}
+
+		// while (1)
+		// {
+			// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
+			// if (node != NULL){
+			// 	if (node->type == WALL){
+			// 		playerx -= newx;
+			// 		break;
+			// 	}
+			// }
+			checker++;
+		// }
+
 		if (degree < 0)
 			data->distance[i1].d = (playerx / sin(positiveDeg * (M_PI / 180)));
 		else
-			data->distance[i1].d = ((1-playerx) / sin(positiveDeg * (M_PI / 180)));
+			data->distance[i1].d = ((0.15) / sin(positiveDeg * (M_PI / 180)));
 		degree+=(fov / WIDTH);
 		i1++;
 	}
@@ -523,22 +574,21 @@ int	map_loop(t_data *data)
 		float wall_height = (1 * HEIGHT) / (distanceToPoint);
 		int begin = (HEIGHT / 2) - (wall_height / 2);
 		int end = (HEIGHT / 2) + (wall_height / 2);
-		while(++y < begin)
-			if (x < WIDTH && y < HEIGHT)
-				if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
-					my_pixel_put(x, y, data, c);
-		y = begin - 1;
-		while (++y < end)
-			if (x < WIDTH && y < HEIGHT)
-				if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
-					my_pixel_put(x, y, data, 0xFFFFFF);
-		y--;
-		while(++y < HEIGHT)
-			if (x < WIDTH && y < HEIGHT)
-				if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
-					my_pixel_put(x, y, data, f);
+		// while(++y < begin)
+		// 	if (x < WIDTH && y < HEIGHT)
+		// 		if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
+		// 			my_pixel_put(x, y, data, c);
+		// y = begin - 1;
+		// while (++y < end)
+		// 	if (x < WIDTH && y < HEIGHT)
+		// 		if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
+		// 			my_pixel_put(x, y, data, 0xFFFFFF);
+		// y--;
+		// while(++y < HEIGHT)
+		// 	if (x < WIDTH && y < HEIGHT)
+		// 		if (!((x > mpx && x < mpex) && (y > mpy && y < mpey)))
+		// 			my_pixel_put(x, y, data, f);
 	}
-
 	int i = 0;
 	if (!data->in_menu)
 	{
