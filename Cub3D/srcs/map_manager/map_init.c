@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/01 12:50:19 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:32:52 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -493,7 +493,7 @@ int	map_loop(t_data *data)
 	float playery = data->player.y;
 	
 	my_pixel_put(playerx, playery, data, 0x0000FF);
-	while (i1 < WIDTH)
+	while (i1 < 1)
 	{
 		float positiveDeg = degree;
 		if (positiveDeg < 0)
@@ -519,65 +519,121 @@ int	map_loop(t_data *data)
 		float oX = 0.0;
 		float oY = 0.0;
 		
-		if ((positiveDeg >= 315 && positiveDeg < 360) || (positiveDeg >= 0 && positiveDeg < 45)){ //NORTH
-			oY = -(cy + 1);
-			oX = ((-oY) * tan(positiveDeg * M_PI / 180));
-		} else if (positiveDeg >= 45 && positiveDeg < 135){ //EAST
-			oX = (HITBOX - cx);
-			oY = oX * tan((positiveDeg - 90) * M_PI / 180);
-		} else if (positiveDeg >= 135 && positiveDeg < 225){ //SOUTH
-			oY = (HITBOX - cy);
-			oX = (-oY) * tan((positiveDeg) * M_PI / 180);
-		} else if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
-			oX = -(cx + 1);
-			oY = oX * tan((positiveDeg - 270) * M_PI / 180);
-		}
-		newx += oX;
-		newy += oY;
-		my_pixel_put(newx, newy, data, 0xFF0000);
-		t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
-		if (node != NULL){
-			if (node->type == WALL){
-				my_pixel_put(newx, newy, data, 0x0000FF);
-				isWall = 1;
-			}
-		}
+		// if ((positiveDeg >= 315 && positiveDeg < 360) || (positiveDeg >= 0 && positiveDeg < 45)){ //NORTH
+		// 	oY = -(cy + 1);
+		// 	oX = ((-oY) * tan(positiveDeg * M_PI / 180));
+		// } else if (positiveDeg >= 45 && positiveDeg < 135){ //EAST
+		// 	oX = (HITBOX - cx);
+		// 	oY = oX * tan((positiveDeg - 90) * M_PI / 180);
+		// } else if (positiveDeg >= 135 && positiveDeg < 225){ //SOUTH
+		// 	oY = (HITBOX - cy);
+		// 	oX = (-oY) * tan((positiveDeg) * M_PI / 180);
+		// } else if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
+		// 	oX = -(cx + 1);
+		// 	oY = oX * tan((positiveDeg - 270) * M_PI / 180);
+		// }
+		// newx += oX;
+		// newy += oY;
+		// my_pixel_put(newx, newy, data, 0xFF0000);
+		// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
+		// if (node != NULL){
+		// 	if (node->type == WALL){
+		// 		my_pixel_put(newx, newy, data, 0x0000FF);
+		// 		isWall = 1;
+		// 	}
+		// }
 
+		float offsetx = HITBOX - (HITBOX - cx);
+		float offsety = HITBOX - (HITBOX - cy);
+
+		float offsetxm = -(HITBOX - cx);
+		float offsetym = -(HITBOX - cy);
+		printf("+ %f %f\n", offsetx, offsety);
+		printf("- %f %f\n", offsetxm, offsetym);
 		while (isWall == 0){
-			// float newxm = playerx + (checker-1) * cos(degree * M_PI / 180);
-			// float newym = playery + (checker-1) * sin(degree * M_PI / 180);
+			float newxm = playerx + (100) * cos(degree * M_PI / 180);
+			float newym = playery + (100) * sin(degree * M_PI / 180);
+
+			t_node *node = get_node_at(data->nodes, playerx / HITBOX, playery / HITBOX);
+
+			float den = (playerx - newxm) * (node->y * HITBOX - node->y * HITBOX + HITBOX) - (playery - newym) * (node->x * HITBOX - node->x * HITBOX + HITBOX);
+			const float t =  ((playerx - node->x * HITBOX) * (node->y * HITBOX - node->y * HITBOX + HITBOX) - (playery - node->y * HITBOX) * (node->x * HITBOX - node->x * HITBOX + HITBOX)) / den;
+			const float u = -((playerx - newxm) * (playery - node->y * HITBOX) - (playery - newxy) * (playerx - node->x * HITBOX)) / den;
+
+			// If there's an intersection...
+			if (t > 0 && t < 1 && u > 0 && u < 1)
+			{
+				// Gets intersection point
+				newx = playerx + t * (newxm - playerx);
+				newy = playery + t * (newxy - playery);
+			}
+
+			my_pixel_put(newx, newy, data, 0xFF0000);
+
 			// if (positiveDeg >= 45  && positiveDeg < 135) //EAST
 			// {
 			// 	oX = playerx + HITBOX;
 			// 	oY = playery + oX * tan(positiveDeg * M_PI / 180);
 			// }
 
-			if ((positiveDeg >= 315 && positiveDeg < 360) || (positiveDeg >= 0 && positiveDeg < 45)){ //NORTH
-				oY = -(HITBOX);
-				oX = ((-oY) * tan(positiveDeg * M_PI / 180));
-			} else if (positiveDeg >= 45 && positiveDeg < 135){ //EAST
-				oX = (HITBOX);
-				oY = oX * tan((positiveDeg - 90) * M_PI / 180);
-			} else if (positiveDeg >= 135 && positiveDeg < 225){ //SOUTH
-				oY = (HITBOX);
-				oX = (-oY) * tan((positiveDeg) * M_PI / 180);
-			} else if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
-				oX = -(HITBOX);
-				oY = oX * tan((positiveDeg - 270) * M_PI / 180);
-			}
-			newx += oX;
-			my_pixel_put(newx, newy, data, 0xFF0000);
-			newx -= oX;
-			newy += oY;
-			my_pixel_put(newx, newy, data, 0xFF0000);
-			newx += oX;
+			// if ((positiveDeg >= 315 && positiveDeg < 360) || (positiveDeg >= 0 && positiveDeg < 45)){ //NORTH
+			// 	oY = (offsety);
+			// 	oX = ((-oY) * tan(positiveDeg * M_PI / 180));
+			// }
+			// if (positiveDeg >= 45 && positiveDeg < 135){ //EAST
+			// 	oX = (offsetx);
+			// 	oY = oX * tan((positiveDeg - 90) * M_PI / 180);
+			// }
+			// if (positiveDeg >= 135 && positiveDeg < 225){ //SOUTH
+			// 	oY = (offsetym);
+			// 	oX = (-oY) * tan((positiveDeg) * M_PI / 180);
+			// }
+			// if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
+			// 	oX = (offsetxm);
+			// 	oY = oX * tan((positiveDeg - 270) * M_PI / 180);
+			// }
+			// newx += oX;
+			// my_pixel_put(newx, newy, data, 0xFF0000);
 			// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
 			// if (node != NULL){
 			// 	if (node->type == WALL){
 			// 		my_pixel_put(newx, newy, data, 0x0000FF);
-					isWall = 1;
+			// 		isWall = 1;
 			// 	}
 			// }
+			// newx -= oX;
+			
+			// newy += oY;
+			// if (isWall == 0)
+			// 	my_pixel_put(newx, newy, data, 0xFF0000);
+			// node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
+			// if (node != NULL){
+			// 	if (node->type == WALL){
+			// 		my_pixel_put(newx, newy, data, 0x0000FF);
+			// 		isWall = 1;
+			// 	}
+			// }
+
+			// newx += oX;
+			// newy += oY;
+			// if (isWall == 0)
+			// 	my_pixel_put(newx, newy, data, 0xFF0000);
+
+			// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
+			// if (node != NULL){
+			// 	if (node->type == WALL){
+			// 		my_pixel_put(newx, newy, data, 0x0000FF);
+			// 		isWall = 1;
+			// 	}
+			// }
+
+			// cx = newx;
+			// while (cx >= HITBOX)
+			// 	cx -= HITBOX;
+			// cy = newy;
+			// while (cy >= HITBOX)
+			// 	cy -= HITBOX;
+			isWall = 1;
 			
 			// } else if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
 			// 	oX = playerx - HITBOX;
