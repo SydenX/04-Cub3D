@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+         #
+#    By: jetol <jetol@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/02 23:04:50 by lolemmen          #+#    #+#              #
-#    Updated: 2024/06/25 08:55:12 by jtollena         ###   ########.fr        #
+#    Updated: 2024/07/03 19:02:29 by jetol            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ NAME = cub3d
 
 RM = rm -rf
 CC = gcc
-CFLAGS = #-Wall -Werror -Wextra 
+CFLAGS = -fsanitize=address -g#-Wall -Werror -Wextra 
 
 # Directories
 

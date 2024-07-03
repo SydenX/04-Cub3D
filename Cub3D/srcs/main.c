@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jetol <jetol@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/26 10:51:01 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/03 19:08:40 by jetol            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int	main(int argc, char **argv)
 	data.mousex = NULL;
 	data.mousey = NULL;
 	data.in_menu = 0;
-	data.distance = malloc((WIDTH + 1) * sizeof(t_distance *));
+	data.distance = malloc((WIDTH + 1) * sizeof(t_distance));
 	prog = get_prog();
 	data.prog = &prog;
 	init_list(argv, reader, filechars, &data);

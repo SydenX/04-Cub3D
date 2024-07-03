@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jetol <jetol@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/03 16:29:08 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/03 19:03:07 by jetol            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # define HITBOX 35
 # define MINIMAP_HITBOX 15
 # define PLAYER_SIZE 3
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 1080//1920
+# define HEIGHT 720//1080
 
 #define FOV (M_PI / 3) // Field of view
 
