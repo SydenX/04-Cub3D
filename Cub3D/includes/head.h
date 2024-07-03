@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/25 11:48:41 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:29:08 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,12 @@ typedef struct s_node {
 
 typedef struct s_distance {
 	float	d;
+	double	v;
+	double	h;
+	float	hx;
+	float	hy;
+	float	vx;
+	float	vy;
 	t_type	type;
 } t_distance;
 

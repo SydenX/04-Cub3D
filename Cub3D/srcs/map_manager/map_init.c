@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/01 14:32:52 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:31:47 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,10 +479,20 @@ void	check_nodes_arround_map(t_node node, t_data *data, int is_player)
 			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node4.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node4.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
 	}
 }
+
+float nor_angle(float angle) // normalize the angle
+{
+	if (angle < 0)
+		angle += (2 * M_PI);
+	if (angle > (2 * M_PI))
+		angle -= (2 * M_PI);
+	return (angle);
+}
+
 float l = 0.0;
 int	map_loop(t_data *data)
 {
-	// mlx_clear_window (data->prog->mlx, data->prog->win );
+	mlx_clear_window (data->prog->mlx, data->prog->win );
 	int x = -1;
 	int i1 = 0;
 	float fov = 90;
@@ -492,209 +502,277 @@ int	map_loop(t_data *data)
 	float playerx = data->player.x;
 	float playery = data->player.y;
 	
-	my_pixel_put(playerx, playery, data, 0x0000FF);
-	while (i1 < 1)
+
+	int y2 = 0;
+	while (++x < WIDTH)
 	{
-		float positiveDeg = degree;
-		if (positiveDeg < 0)
-			positiveDeg += 360;
-		if (positiveDeg >= 360)
-			positiveDeg -= 360;
-		data->distance[i1].type = ENDL;
-		
-		float checker = 1;
-		float cx = playerx;
-		while (cx >= HITBOX)
-			cx -= HITBOX;
-		float cy = playery;
-		while (cy >= HITBOX)
-			cy -= HITBOX;
-		checker = sqrt((cx * cx) + (cy * cy));
-		// checker = (cy / cos((degree + 180) * M_PI / 180));
-		// while (1){
-		int isWall = 0;
-		int color = 0x00FF00;
-		float newx = playerx;
-		float newy = playery;
-		float oX = 0.0;
-		float oY = 0.0;
-		
-		// if ((positiveDeg >= 315 && positiveDeg < 360) || (positiveDeg >= 0 && positiveDeg < 45)){ //NORTH
-		// 	oY = -(cy + 1);
-		// 	oX = ((-oY) * tan(positiveDeg * M_PI / 180));
-		// } else if (positiveDeg >= 45 && positiveDeg < 135){ //EAST
-		// 	oX = (HITBOX - cx);
-		// 	oY = oX * tan((positiveDeg - 90) * M_PI / 180);
-		// } else if (positiveDeg >= 135 && positiveDeg < 225){ //SOUTH
-		// 	oY = (HITBOX - cy);
-		// 	oX = (-oY) * tan((positiveDeg) * M_PI / 180);
-		// } else if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
-		// 	oX = -(cx + 1);
-		// 	oY = oX * tan((positiveDeg - 270) * M_PI / 180);
-		// }
-		// newx += oX;
-		// newy += oY;
-		// my_pixel_put(newx, newy, data, 0xFF0000);
-		// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
-		// if (node != NULL){
-		// 	if (node->type == WALL){
-		// 		my_pixel_put(newx, newy, data, 0x0000FF);
-		// 		isWall = 1;
-		// 	}
-		// }
-
-		float offsetx = HITBOX - (HITBOX - cx);
-		float offsety = HITBOX - (HITBOX - cy);
-
-		float offsetxm = -(HITBOX - cx);
-		float offsetym = -(HITBOX - cy);
-		printf("+ %f %f\n", offsetx, offsety);
-		printf("- %f %f\n", offsetxm, offsetym);
-		while (isWall == 0){
-			float newxm = playerx + (100) * cos(degree * M_PI / 180);
-			float newym = playery + (100) * sin(degree * M_PI / 180);
-
-			t_node *node = get_node_at(data->nodes, playerx / HITBOX, playery / HITBOX);
-
-			float den = (playerx - newxm) * (node->y * HITBOX - node->y * HITBOX + HITBOX) - (playery - newym) * (node->x * HITBOX - node->x * HITBOX + HITBOX);
-			const float t =  ((playerx - node->x * HITBOX) * (node->y * HITBOX - node->y * HITBOX + HITBOX) - (playery - node->y * HITBOX) * (node->x * HITBOX - node->x * HITBOX + HITBOX)) / den;
-			const float u = -((playerx - newxm) * (playery - node->y * HITBOX) - (playery - newxy) * (playerx - node->x * HITBOX)) / den;
-
-			// If there's an intersection...
-			if (t > 0 && t < 1 && u > 0 && u < 1)
-			{
-				// Gets intersection point
-				newx = playerx + t * (newxm - playerx);
-				newy = playery + t * (newxy - playery);
+		if (x % HITBOX == 0){
+			y2 = -1;
+			while (++y2 < HEIGHT){
+				if (y2 % HITBOX == 0)
+					if (x < HEIGHT)
+						draw_line(data, x, y2, WIDTH, y2, 0xFF0000);
+				if (y2 % HITBOX == 0)
+					if (y2 < HEIGHT)
+						draw_line(data, x, y2, x, HEIGHT, 0xFF0000);
 			}
-
-			my_pixel_put(newx, newy, data, 0xFF0000);
-
-			// if (positiveDeg >= 45  && positiveDeg < 135) //EAST
-			// {
-			// 	oX = playerx + HITBOX;
-			// 	oY = playery + oX * tan(positiveDeg * M_PI / 180);
-			// }
-
-			// if ((positiveDeg >= 315 && positiveDeg < 360) || (positiveDeg >= 0 && positiveDeg < 45)){ //NORTH
-			// 	oY = (offsety);
-			// 	oX = ((-oY) * tan(positiveDeg * M_PI / 180));
-			// }
-			// if (positiveDeg >= 45 && positiveDeg < 135){ //EAST
-			// 	oX = (offsetx);
-			// 	oY = oX * tan((positiveDeg - 90) * M_PI / 180);
-			// }
-			// if (positiveDeg >= 135 && positiveDeg < 225){ //SOUTH
-			// 	oY = (offsetym);
-			// 	oX = (-oY) * tan((positiveDeg) * M_PI / 180);
-			// }
-			// if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
-			// 	oX = (offsetxm);
-			// 	oY = oX * tan((positiveDeg - 270) * M_PI / 180);
-			// }
-			// newx += oX;
-			// my_pixel_put(newx, newy, data, 0xFF0000);
-			// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
-			// if (node != NULL){
-			// 	if (node->type == WALL){
-			// 		my_pixel_put(newx, newy, data, 0x0000FF);
-			// 		isWall = 1;
-			// 	}
-			// }
-			// newx -= oX;
-			
-			// newy += oY;
-			// if (isWall == 0)
-			// 	my_pixel_put(newx, newy, data, 0xFF0000);
-			// node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
-			// if (node != NULL){
-			// 	if (node->type == WALL){
-			// 		my_pixel_put(newx, newy, data, 0x0000FF);
-			// 		isWall = 1;
-			// 	}
-			// }
-
-			// newx += oX;
-			// newy += oY;
-			// if (isWall == 0)
-			// 	my_pixel_put(newx, newy, data, 0xFF0000);
-
-			// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
-			// if (node != NULL){
-			// 	if (node->type == WALL){
-			// 		my_pixel_put(newx, newy, data, 0x0000FF);
-			// 		isWall = 1;
-			// 	}
-			// }
-
-			// cx = newx;
-			// while (cx >= HITBOX)
-			// 	cx -= HITBOX;
-			// cy = newy;
-			// while (cy >= HITBOX)
-			// 	cy -= HITBOX;
-			isWall = 1;
-			
-			// } else if (positiveDeg >= 225 && positiveDeg < 315){ //WEST
-			// 	oX = playerx - HITBOX;
-			// 	oY = playery + oX * tan(positiveDeg * M_PI / 180);
-			// } else if (positiveDeg >= 315 && positiveDeg < 45){ //SOUTH
-			// 	oY = playery - HITBOX;
-			// 	oX = playerx + oY * tan(positiveDeg * M_PI / 180);
-			// }
-			// float newx = playerx + (cx / cos((degree + 180) * M_PI / 180)) * cos(degree * M_PI / 180);
-			// float newy = playery + (cy / cos((degree + 180) * M_PI / 180)) * sin(degree * M_PI / 180);
-			// draw_line(data, playerx, playery, newx, newy, 0xFF0000);
-
-			// float cx2 = newx;
-			// while (cx2 >= HITBOX)
-			// 	cx2 -= HITBOX;
-			// cx2 = 1 - cx2;
-			// float cy2 = newy;
-			// while (cy2 >= HITBOX)
-			// 	cy2 -= HITBOX;
-			// cy2 = 1 - cy2;
-			// my_pixel_put(newx, newy+cy2, data, color);
-			// my_pixel_put(newx+cx2, newy, data, color);
-
-			// int isWall = 0;
-			// t_node *node = get_node_at(data->nodes, (newx + cx2) / HITBOX, newy / HITBOX);
-			// if (node != NULL){
-			// 	if (node->type == WALL){
-			// 		draw_line(data, newx + cx2, newy, newx + cx2 + HITBOX, newy, 0xFF0000);
-			// 		isWall = 1;
-			// 		break; } }
-			// node = get_node_at(data->nodes, (newx) / HITBOX, (newy + cy2) / HITBOX);
-			// if (node != NULL){
-			// 	if (node->type == WALL){
-			// 		draw_line(data, newx, newy + cy2, newx, newy + cy2 + HITBOX, 0xFF0000);
-			// 		isWall = 1;
-			// 		break; } }
-			// if (!isWall)
-			// 	checker++;
-			// my_pixel_put(newx, newy, data, 0x00FF00);
-			// checker = sqrt((cx2 * cx2) + (cy2 * cy2));
 		}
-
-		// while (1)
-		// {
-			// t_node *node = get_node_at(data->nodes, newx / HITBOX, newy / HITBOX);
-			// if (node != NULL){
-			// 	if (node->type == WALL){
-			// 		playerx -= newx;
-			// 		break;
-			// 	}
-			// }
-			checker++;
-		// }
-
-		if (degree < 0)
-			data->distance[i1].d = (playerx / sin(positiveDeg * (M_PI / 180)));
-		else
-			data->distance[i1].d = ((0.15) / sin(positiveDeg * (M_PI / 180)));
-		degree+=(fov / WIDTH);
-		i1++;
 	}
+	x = -1;
+
+	my_pixel_put(playerx, playery, data, 0x0000FF);
+	while (x++ < WIDTH)
+	{
+		data->distance[x].h = -1;
+		while (1)
+		{
+			data->distance[i1].type = ENDL;
+
+
+			int x1 = data->player.x;
+			int y1 = data->player.y;
+
+			float normdegree = degree;
+			while (normdegree < 0)
+				normdegree+=360;
+			while (normdegree > 360)
+				normdegree-=360;
+			double blue_y = floor(data->player.y / HITBOX) * HITBOX;
+			double blue_x = data->player.x + (blue_y - data->player.y) / tan((nor_angle(degree + 90)) * M_PI / 180);
+			if (normdegree > 90 && normdegree < 270)
+			{
+				blue_y = (floor(data->player.y / HITBOX) * HITBOX) + HITBOX;
+				blue_x = data->player.x + (data->player.y - blue_y) / -tan((nor_angle(degree + 90)) * M_PI / 180);
+			}
+			if (blue_x >= WIDTH || blue_y >= HEIGHT)
+				break;
+			if (blue_x <= 0 || blue_y <= 0)
+				break;
+			if (blue_x - data->player.x > WIDTH - data->player.x)
+				break;
+			if (blue_y - data->player.y > HEIGHT - data->player.y)
+				break;
+			// draw_line(data, x1, y1, blue_x, blue_y, 0x00FF00);
+
+			// my_pixel_put(blue_x, blue_y, data, 0x00FF00);
+			// printf("%f\n", normdegree);
+
+			t_node *node = NULL;
+			if ((normdegree >= 0 && normdegree < 90) || (normdegree >= 270 && normdegree < 360)){
+				node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX) - 1);
+				if (node != NULL){
+					if (node->type == WALL){
+						data->distance[x].h = sqrt((data->player.x - blue_x * data->player.x - blue_x)+(data->player.y - blue_y * data->player.y - blue_y));
+						data->distance[x].hx = blue_x;
+						data->distance[x].hy = blue_y;
+						// draw_line(data, data->player.x, data->player.y, blue_x, blue_y, 0x00FF00);
+						break;
+					}
+				}
+			} else {
+				node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX));
+				if (node != NULL){
+					if (node->type == WALL){
+						data->distance[x].h = sqrt((data->player.x - blue_x * data->player.x - blue_x)+(data->player.y - blue_y * data->player.y - blue_y));
+						data->distance[x].hx = blue_x;
+						data->distance[x].hy = blue_y;
+						// draw_line(data, data->player.x, data->player.y, blue_x, blue_y, 0x00FF00);
+						break;
+					}
+				}
+			}
+			while (1){
+				float cx = data->player.x - blue_x;
+				float cy = data->player.y - blue_y;
+				float ref = 35 / cy;
+				node = NULL;
+				if (normdegree >= 270 && normdegree < 360)
+				{
+					blue_x -= cx * ref;
+					blue_y -= 35;
+					node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX) - 1);
+				} else if (normdegree >= 0 && normdegree < 90)
+				{
+					blue_x -= cx * ref;
+					blue_y -= 35;
+					node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX) - 1);
+				} else if (normdegree >= 90 && normdegree < 180)
+				{
+					blue_x += cx * ref;
+					blue_y += 35;
+					node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX));
+				} else if (normdegree >= 180 && normdegree < 270)
+				{
+					blue_x += cx * ref;
+					blue_y += 35;
+					node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX));
+				}
+				if (blue_x > WIDTH || blue_y > HEIGHT)
+					break;
+				if (blue_x < 0 || blue_y < 0)
+					break;
+				// my_pixel_put(blue_x, blue_y, data, 0x00FF00);
+				if (node != NULL){
+					if (node->type == WALL){
+						data->distance[x].h = sqrt((data->player.x - blue_x * data->player.x - blue_x)+(data->player.y - blue_y * data->player.y - blue_y));
+						data->distance[x].hx = blue_x;
+						data->distance[x].hy = blue_y;
+						break;
+					}
+				}
+				else
+					break;
+			}
+			// draw_line(data, data->player.x, data->player.y, blue_x, blue_y, 0x00FF00);
+			// float positiveDeg = degree;
+			// if (positiveDeg < 0)
+			// 	positiveDeg+=360;
+			// if (degree < 0)
+			// 	data->distance[x].d = (playerx / sin(positiveDeg * (M_PI / 180)));
+			// else
+			// 	data->distance[x].d = ((0.15) / sin(positiveDeg * (M_PI / 180)));
+			break;
+		}
+		degree+=(fov / WIDTH);
+	}
+	x = -1;
+	while (x++ < WIDTH)
+	{
+		data->distance[x].v = -1;
+		while (1)
+		{
+			data->distance[i1].type = ENDL;
+
+
+			int x1 = data->player.x;
+			int y1 = data->player.y;
+
+			float normdegree = degree;
+			while (normdegree < 0)
+				normdegree+=360;
+			while (normdegree > 360)
+				normdegree-=360;
+			double blue_x = floor(data->player.x / HITBOX) * HITBOX + HITBOX;
+			double blue_y = data->player.y + (blue_x - data->player.x) / -tan((nor_angle(degree)) * M_PI / 180);
+			if (normdegree > 180 && normdegree < 360)
+			{
+				blue_x = (floor(data->player.x / HITBOX) * HITBOX);
+				blue_y = data->player.y + (data->player.x - blue_x) / tan((nor_angle(degree)) * M_PI / 180);
+			}
+			if (blue_x >= WIDTH || blue_y >= HEIGHT)
+				break;
+			if (blue_x <= 0 || blue_y <= 0)
+				break;
+			if (blue_x - data->player.x > WIDTH - data->player.x)
+				break;
+			if (blue_y - data->player.y > HEIGHT - data->player.y)
+				break;
+			// draw_line(data, x1, y1, blue_x, blue_y, 0x00FF00);
+
+			my_pixel_put(blue_x, blue_y, data, 0x00FF00);
+
+			// if (tan((nor_angle(degree + 90)) * M_PI / 180) > 1)
+			// 	break;
+			// printf("%f\n", normdegree);
+
+			t_node *node = NULL;
+			if ((normdegree >= 180 && normdegree < 360)){
+				node = get_node_at(data->nodes, (blue_x / HITBOX - 1), (blue_y / HITBOX));
+				if (node != NULL){
+					if (node->type == WALL){
+						// draw_line(data, data->player.x, data->player.y, blue_x, blue_y, 0x00FF00);
+						data->distance[x].v = sqrt((data->player.x - blue_x * data->player.x - blue_x)+(data->player.y - blue_y * data->player.y - blue_y));
+						data->distance[x].vx = blue_x;
+						data->distance[x].vy = blue_y;
+						break;
+					}
+				}
+			} else {
+				node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX));
+				if (node != NULL){
+					if (node->type == WALL){
+						data->distance[x].v = sqrt((data->player.x - blue_x * data->player.x - blue_x)+(data->player.y - blue_y * data->player.y - blue_y));
+						data->distance[x].vx = blue_x;
+						data->distance[x].vy = blue_y;
+						// draw_line(data, data->player.x, data->player.y, blue_x, blue_y, 0x00FF00);
+						break;
+					}
+				}
+			}
+			while (1){
+				float cx = data->player.x - blue_x;
+				float cy = data->player.y - blue_y;
+				float ref = 35 / cx;
+				node = NULL;
+				if (normdegree >= 270 && normdegree < 360)
+				{
+					blue_y -= cy * ref;
+					blue_x -= 35;
+					node = get_node_at(data->nodes, (blue_x / HITBOX) - 1, (blue_y / HITBOX));
+				} else if (normdegree >= 0 && normdegree < 90)
+				{
+					blue_y += cy * ref;
+					blue_x += 35;
+					node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX));
+				} else if (normdegree >= 90 && normdegree < 180)
+				{
+					blue_y += cy * ref;
+					blue_x += 35;
+					node = get_node_at(data->nodes, blue_x / HITBOX, (blue_y / HITBOX));
+				} else if (normdegree >= 180 && normdegree < 270)
+				{
+					blue_y -= cy * ref;
+					blue_x -= 35;
+					node = get_node_at(data->nodes,(blue_x / HITBOX) - 1, (blue_y / HITBOX));
+				}
+				if (blue_x > WIDTH || blue_y > HEIGHT)
+					break;
+				if (blue_x < 0 || blue_y < 0)
+					break;
+				my_pixel_put(blue_x, blue_y, data, 0x00FF00);
+				if (node != NULL){
+					if (node->type == WALL){
+						data->distance[x].v = sqrt((data->player.x - blue_x * data->player.x - blue_x)+(data->player.y - blue_y * data->player.y - blue_y));
+						data->distance[x].vx = blue_x;
+						data->distance[x].vy = blue_y;
+						break;
+					}
+				}
+				else
+					break;
+			}
+			// draw_line(data, data->player.x, data->player.y, blue_x, blue_y, 0x00FF00);
+			// float positiveDeg = degree;
+			// if (positiveDeg < 0)
+			// 	positiveDeg+=360;
+			// if (degree < 0)
+			// 	data->distance[x].d = (playerx / sin(positiveDeg * (M_PI / 180)));
+			// else
+			// 	data->distance[x].d = ((0.15) / sin(positiveDeg * (M_PI / 180)));
+			break;
+		}
+		degree+=(fov / WIDTH);
+	}
+	x = -1;
+	while (x++ < WIDTH)
+	{
+		if (data->distance[x].h == -1 && data->distance[x].v == -1)
+		{
+
+		}
+		else
+		{
+			// printf("%f\n", data->distance[x].h);
+			// printf("%f\n", data->distance[x].v);
+			// if (data->distance[x].v < data->distance[x].h){
+			// 	if (data->distance[x].vx < WIDTH && data->distance[x].vy < HEIGHT)
+			// 		draw_line(data, data->player.x, data->player.y, data->distance[x].vx, data->distance[x].vy, 0x00FF00);
+			// } else {
+			// 	draw_line(data, data->player.x, data->player.y, data->distance[x].hx, data->distance[x].hy, 0x00FF00);
+			// }
+		}
+	}
+	x = -1;
 	data->distance[WIDTH].type = NULLT;
 	int c = rgb_to_hex(data->c);
 	int f = rgb_to_hex(data->f);
@@ -704,6 +782,17 @@ int	map_loop(t_data *data)
 	int mpey = data->minimap_endy;
 	while (++x < WIDTH)
 	{
+		// if (x % HITBOX == 0){
+		// 	y2 = -1;
+		// 	while (++y2 < HEIGHT){
+		// 		if (y2 % HITBOX == 0)
+		// 			if (x < HEIGHT)
+		// 				draw_line(data, x, y2, WIDTH, y2, 0xFF0000);
+		// 		if (y2 % HITBOX == 0)
+		// 			if (y2 < HEIGHT)
+		// 				draw_line(data, x, y2, x, HEIGHT, 0xFF0000);
+		// 	}
+		// }
 		float distanceToPoint = (data->distance[x].d);
 		int y = -1;
 		float wall_height = (1 * HEIGHT) / (distanceToPoint);
