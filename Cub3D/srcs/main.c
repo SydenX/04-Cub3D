@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jetol <jetol@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:49:43 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/03 19:08:40 by jetol            ###   ########.fr       */
+/*   Updated: 2024/07/04 14:20:37 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ int	main(int argc, char **argv)
 	data.player = init_player(spawn);
 	data.mousex = malloc(sizeof(int));
 	data.mousey = malloc(sizeof(int));
+	data.xlen = get_list_xlen(data.nodes);
+	data.ylen = get_list_ylen(data.nodes);
 	debugfps(&data);
 
 	init_hooks(&data);

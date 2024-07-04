@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/04 12:54:26 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:38:51 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,21 +308,6 @@ int	is_in_minimap(int x, int y, t_data *data)
 	return (0);
 }
 
-void	write_cubes(int color, int startX, int startY, t_data *data, int tailleX, int tailleY)
-{
-	int x = 0;
-	int y = 0;
-	while (x < tailleX){
-		y = 0;
-		while (y < tailleY){
-			if (!is_in_minimap(x + startX, y + startY, data))
-				my_pixel_put(x + startX, y + startY, data, color);
-			y++;
-		}
-		x++;
-	}
-}
-
 void	write_cubes_map(int color, int startX, int startY, t_data *data, int tailleX, int tailleY)
 {
 	int x = 0;
@@ -335,23 +320,6 @@ void	write_cubes_map(int color, int startX, int startY, t_data *data, int taille
 		}
 		x++;
 	}
-}
-
-void draw_line(t_data *data, int x0, int y0, int x1, int y1, int color) {
-    int dx = abs(x1 - x0);
-    int dy = abs(y1 - y0);
-    int sx = x0 < x1 ? 1 : -1;
-    int sy = y0 < y1 ? 1 : -1;
-    int err = (dx > dy ? dx : -dy) / 2, e2;
-
-    while (1) {
-		if (!is_in_minimap(x0, y0, data))
-        	my_pixel_put(x0, y0, data, color);
-        if (x0 == x1 && y0 == y1) break;
-        e2 = err;
-        if (e2 > -dx) { err -= dy; x0 += sx; }
-        if (e2 < dy) { err += dx; y0 += sy; }
-    }
 }
 
 void draw_line_map(t_data *data, int x0, int y0, int x1, int y1, int color) {
@@ -368,27 +336,6 @@ void draw_line_map(t_data *data, int x0, int y0, int x1, int y1, int color) {
         if (e2 > -dx) { err -= dy; x0 += sx; }
         if (e2 < dy) { err += dx; y0 += sy; }
     }
-}
-
-void draw_oriented_player(int color, double startX, double startY, t_data *data, int taille, double yaw_degrees) {
-    double yaw_radians = (yaw_degrees - 125) * M_PI / 180.0;
-
-    double x0 = startX;
-    double y0 = startY;
-
-    double x1 = x0 + (double)(taille * cos(yaw_radians));
-    double y1 = y0 + (double)(taille * sin(yaw_radians));
-
-    double x2 = x0 + (double)(taille * cos(yaw_radians + 2.0 * M_PI / 3.0));
-    double y2 = y0 + (double)(taille * sin(yaw_radians + 2.0 * M_PI / 3.0));
-
-    double x3 = x0 + (double)(taille * cos(yaw_radians - 2.0 * M_PI / 3.0));
-    double y3 = y0 + (double)(taille * sin(yaw_radians - 2.0 * M_PI / 3.0));
-
-    draw_line(data, x0, y0, x1, y1, color);
-    draw_line(data, x1, y1, x2, y2, color);
-    draw_line(data, x2, y2, x3, y3, color);
-    draw_line(data, x3, y3, x0, y0, color);
 }
 
 void draw_oriented_player_map(int color, double startX, double startY, t_data *data, int taille, double yaw_degrees) {
@@ -412,71 +359,37 @@ void draw_oriented_player_map(int color, double startX, double startY, t_data *d
     draw_line_map(data, x3, y3, x0, y0, color);
 }
 
-void	check_nodes_arround(t_node node, t_data *data, int is_player)
-{
-	t_node node1 = *get_node_at(data->nodes, node.x, node.y + 1);
-	t_node node2 = *get_node_at(data->nodes, node.x, node.y - 1);
-	t_node node3 = *get_node_at(data->nodes, node.x - 1, node.y);
-	t_node node4 = *get_node_at(data->nodes, node.x + 1, node.y);
-
-	if (node1.type == WALL)
-		write_cubes(0xFF0000, node1.x * HITBOX, node1.y * HITBOX, data, HITBOX, HITBOX);
-	if (node2.type == WALL)
-		write_cubes(0xFF0000, node2.x * HITBOX, node2.y * HITBOX, data, HITBOX, HITBOX);
-	if (node3.type == WALL)
-		write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX, HITBOX);
-	if (node4.type == WALL)
-		write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX, HITBOX);
-
-	if (is_player)
-	{
-		node1 = *get_node_at(data->nodes, node.x + 1, node.y + 1);
-		node2 = *get_node_at(data->nodes, node.x + 1, node.y - 1);
-		node3 = *get_node_at(data->nodes, node.x - 1, node.y + 1);
-		node4 = *get_node_at(data->nodes, node.x - 1, node.y - 1);
-
-		if (node1.type == WALL)
-			write_cubes(0xFF0000, node1.x * HITBOX, node1.y * HITBOX, data, HITBOX, HITBOX);
-		if (node2.type == WALL)
-			write_cubes(0xFF0000, node2.x * HITBOX, node2.y * HITBOX, data, HITBOX, HITBOX);
-		if (node3.type == WALL)
-			write_cubes(0xFF0000, node3.x * HITBOX, node3.y * HITBOX, data, HITBOX, HITBOX);
-		if (node4.type == WALL)
-			write_cubes(0xFF0000, node4.x * HITBOX, node4.y * HITBOX, data, HITBOX, HITBOX);
-	}
-}
-
 void	check_nodes_arround_map(t_node node, t_data *data, int is_player)
 {
-	t_node node1 = *get_node_at(data->nodes, node.x, node.y + 1);
-	t_node node2 = *get_node_at(data->nodes, node.x, node.y - 1);
-	t_node node3 = *get_node_at(data->nodes, node.x - 1, node.y);
-	t_node node4 = *get_node_at(data->nodes, node.x + 1, node.y);
+	t_node *node1 = get_node_at(data->nodes, node.x, node.y + 1);
+	t_node *node2 = get_node_at(data->nodes, node.x, node.y - 1);
+	t_node *node3 = get_node_at(data->nodes, node.x - 1, node.y);
+	t_node *node4 = get_node_at(data->nodes, node.x + 1, node.y);
 
-	if (node1.type == WALL)
-		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node1.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node1.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
-	if (node2.type == WALL)
-		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node2.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node2.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
-	if (node3.type == WALL)
-		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node3.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node3.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
-	if (node4.type == WALL)
-		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node4.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node4.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+	if (node1 != NULL && node1->type == WALL)
+		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node1->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node1->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+	if (node2 != NULL && node2->type == WALL)
+		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node2->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node2->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+	if (node3 != NULL && node3->type == WALL)
+		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node3->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node3->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+	if (node4 != NULL && node4->type == WALL)
+		write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node4->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node4->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
 
 	if (is_player)
 	{
-		node1 = *get_node_at(data->nodes, node.x + 1, node.y + 1);
-		node2 = *get_node_at(data->nodes, node.x + 1, node.y - 1);
-		node3 = *get_node_at(data->nodes, node.x - 1, node.y + 1);
-		node4 = *get_node_at(data->nodes, node.x - 1, node.y - 1);
+		node1 = get_node_at(data->nodes, node.x + 1, node.y + 1);
+		node2 = get_node_at(data->nodes, node.x + 1, node.y - 1);
+		node3 = get_node_at(data->nodes, node.x - 1, node.y + 1);
+		node4 = get_node_at(data->nodes, node.x - 1, node.y - 1);
 
-		if (node1.type == WALL)
-			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node1.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node1.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
-		if (node2.type == WALL)
-			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node2.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node2.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
-		if (node3.type == WALL)
-			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node3.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node3.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
-		if (node4.type == WALL)
-			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node4.x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node4.y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+		if (node1 != NULL && node1->type == WALL)
+			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node1->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node1->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+		if (node2 != NULL && node2->type == WALL)
+			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node2->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node2->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+		if (node3 != NULL && node3->type == WALL)
+			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node3->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node3->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
+		if (node4 != NULL && node4->type == WALL)
+			write_cubes_map(0xFF0000, (data->minimap_x + MINIMAP_HITBOX / 2) + node4->x * MINIMAP_HITBOX, (data->minimap_y + MINIMAP_HITBOX / 2) + node4->y * MINIMAP_HITBOX, data, MINIMAP_HITBOX, MINIMAP_HITBOX);
 	}
 }
 
@@ -506,21 +419,21 @@ void	vertical_dist(t_data *data, float normdegree, double normpx, int x)
 		t_node *node = get_node_at(data->nodes, (newx / HITBOX), (newy / HITBOX));
 		if (node != NULL)
 			if (node->type == WALL)
-				c = WIDTH / HITBOX;
+				c = data->xlen;
 	} else if ((normdegree > 90 && normdegree < 270)){ //WEST
 		offsetx = normpx;
 		offsety = (offsetx) * (tanf((normdegree) * M_PI / 180));
 		newx = data->player.x - offsetx;
 		newy = data->player.y - offsety;
-		t_node *node = get_node_at(data->nodes, (newx / HITBOX)-1, (newy / HITBOX));
+		t_node *node = get_node_at(data->nodes, (newx / HITBOX) - 1, (newy / HITBOX));
 		if (node != NULL)
 			if (node->type == WALL)
-				c = WIDTH / HITBOX;
+				c = data->xlen;
 	}
 
 	double nnewx = newx;
 	double nnewy = newy;
-	while(c++ < WIDTH / HITBOX){
+	while(c++ < data->xlen){
 		if ((normdegree > 90 && normdegree < 270)){ //WEST
 			double noffsety = (HITBOX) * (tanf((normdegree) * M_PI / 180));
 			nnewx -= HITBOX;
@@ -528,7 +441,7 @@ void	vertical_dist(t_data *data, float normdegree, double normpx, int x)
 			t_node *node = get_node_at(data->nodes, (nnewx / HITBOX) - 1, (nnewy / HITBOX));
 			if (node != NULL)
 				if (node->type == WALL)
-					break;
+					c = data->xlen;
 		} else if ((normdegree >= 0 && normdegree < 90) || (normdegree > 270 && normdegree < 360)){ //EAST
 			double noffsety = (HITBOX) * (tanf((normdegree) * M_PI / 180));
 			nnewx += HITBOX;
@@ -536,12 +449,8 @@ void	vertical_dist(t_data *data, float normdegree, double normpx, int x)
 			t_node *node = get_node_at(data->nodes, (nnewx / HITBOX), (nnewy / HITBOX));
 			if (node != NULL)
 				if (node->type == WALL)
-					break;
+					c = data->xlen;
 		}
-	}
-	if (x == 5){
-		xt = nnewx;
-		yt = nnewy;
 	}
 	// if (nnewx < WIDTH && nnewy < HEIGHT && nnewx > 0 && nnewy > 0)
 	// 	my_pixel_put(nnewx, nnewy, data, 0x00FF00);
@@ -565,7 +474,7 @@ void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
 		t_node *node = get_node_at(data->nodes, (newx / HITBOX), (newy / HITBOX));
 		if (node != NULL)
 			if (node->type == WALL)
-				c = HEIGHT / HITBOX;
+				c = data->ylen;
 	} else if((normdegree >= 180 && normdegree < 360)){ //NORD
 		offsety = normpy;
 		offsetx = (offsety) * (tanf((90 - normdegree) * M_PI / 180));
@@ -574,12 +483,12 @@ void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
 		t_node *node = get_node_at(data->nodes, (newx / HITBOX), (newy / HITBOX)-1);
 		if (node != NULL)
 			if (node->type == WALL)
-				c = HEIGHT / HITBOX;
+				c = data->ylen;
 	}
 
 	double nnewx = newx;
 	double nnewy = newy;
-	while(c++ < HEIGHT / HITBOX){
+	while(c++ < data->ylen){
 		if ((normdegree >= 0 && normdegree < 180)){ //SOUTH
 			double noffsetx = (HITBOX) * (tanf((90 - normdegree) * M_PI / 180));
 			nnewy += HITBOX;
@@ -587,7 +496,7 @@ void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
 			t_node *node = get_node_at(data->nodes, (nnewx / HITBOX), (nnewy / HITBOX));
 			if (node != NULL)
 				if (node->type == WALL)
-					break;
+					c = data->ylen;
 		} else if (normdegree >= 180 && normdegree < 360){ //NORTH
 			double noffsetx = (HITBOX) * (tanf((90 - normdegree) * M_PI / 180));
 			nnewy -= HITBOX;
@@ -595,7 +504,7 @@ void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
 			t_node *node = get_node_at(data->nodes, (nnewx / HITBOX), (nnewy / HITBOX)-1);
 			if (node != NULL)
 				if (node->type == WALL)
-					break;
+					c = data->ylen;
 		}
 	}
 	// if (nnewx < WIDTH && nnewy < HEIGHT && nnewx > 0 && nnewy > 0)
@@ -616,8 +525,6 @@ int	map_loop(t_data *data)
 	float degree = (yaw + 90) - FOV / 2;
 	float playerx = data->player.x;
 	float playery = data->player.y;
-	
-	
 
 	int y2 = 0;
 	// while (++x < WIDTH)
@@ -675,13 +582,13 @@ int	map_loop(t_data *data)
 		if (data->distance[x].h != -1 && data->distance[x].v != -1)
 		{
 			if (data->distance[x].v < data->distance[x].h){
-				if (data->distance[x].vx < WIDTH && data->distance[x].vy < HEIGHT && data->distance[x].vx > 0 && data->distance[x].vy > 0){
+				if (data->distance[x].vx < data->xlen * HITBOX && data->distance[x].vy < data->ylen * HITBOX && data->distance[x].vx > 0 && data->distance[x].vy > 0){
 					data->distance[x].d = fabs(data->distance[x].v);
 					data->distance[x].ttype = 0;
 					// my_pixel_put(data->distance[x].vx, data->distance[x].vy, data, 0x00FF00);
 				}
 			} else {
-				if (data->distance[x].hx < WIDTH && data->distance[x].hy < HEIGHT && data->distance[x].hx > 0 && data->distance[x].hy > 0){
+				if (data->distance[x].hx < data->xlen * HITBOX && data->distance[x].hy < data->ylen * HITBOX && data->distance[x].hx > 0 && data->distance[x].hy > 0){
 					data->distance[x].d = fabs(data->distance[x].h);
 					data->distance[x].ttype = 1;
 					// my_pixel_put(data->distance[x].hx, data->distance[x].hy, data, 0x00FF00);
@@ -759,7 +666,9 @@ int	map_loop(t_data *data)
 
 		if (data->player.oldx != data->player.x || data->player.oldy != data->player.y || data->player.oldyaw != data->player.yaw)
 		{
-			check_nodes_arround_map(*get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX), data, 1);
+			t_node *node = get_node_at(data->nodes, data->player.x / HITBOX, data->player.y / HITBOX);
+			if (node != NULL)
+				check_nodes_arround_map(*node, data, 1);
 			draw_oriented_player_map(0x33CCFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.oldx * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.oldy * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.oldyaw);
 			draw_oriented_player_map(0xFFFFFF, (data->minimap_x + MINIMAP_HITBOX / 2) + (int)(data->player.x * ((float)MINIMAP_HITBOX / HITBOX)), (data->minimap_y + MINIMAP_HITBOX / 2) + (int)(data->player.y * ((float)MINIMAP_HITBOX / HITBOX)), data, PLAYER_SIZE, data->player.yaw);
 		}

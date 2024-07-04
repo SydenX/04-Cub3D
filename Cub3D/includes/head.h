@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/04 12:53:40 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:28:49 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,9 @@ typedef struct s_data {
 
 	int fps;
 	int frame;
+
+	int 		xlen;
+	int			ylen;
 }	t_data;
 
 //MAIN
