@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jetol <jetol@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 08:53:03 by jtollena          #+#    #+#             */
-/*   Updated: 2024/06/26 10:43:05 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:49:29 by jetol            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,25 @@ char	*get_fps(char *moves)
 	return (msg);
 }
 
+char	*get_yaw(char *moves)
+{
+	char	*msg;
+
+	if (!moves)
+		return (NULL);
+	msg = ft_strjoin("YAW: ", moves);
+	free(moves);
+	return (msg);
+}
+
+char *ft_itoayaw(int yaw){
+	while (yaw >= 360)
+		yaw -= 360;
+	while (yaw < 0)
+		yaw += 360;
+	return ft_itoa(yaw);
+}
+
 void	debug_affichage_frames(t_data *data)
 {
 	char	*moves;
@@ -69,5 +88,12 @@ void	debug_affichage_frames(t_data *data)
 	free(moves);
 	moves = get_fps(ft_itoa(data->fps));
 	mlx_string_put(data->prog->mlx, data->prog->win, 15, 30, 0xFFFFFF, moves);
+	free(moves);
+
+	moves = get_yaw(ft_itoayaw(data->player.oldyaw+90));
+	mlx_string_put(data->prog->mlx, data->prog->win, 15, 45, 0x000000, moves);
+	free(moves);
+	moves = get_yaw(ft_itoayaw(data->player.yaw+90));
+	mlx_string_put(data->prog->mlx, data->prog->win, 15, 45, 0xFFFFFF, moves);
 	free(moves);
 }
