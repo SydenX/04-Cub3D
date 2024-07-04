@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/04 11:47:27 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/04 11:48:12 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -560,7 +560,7 @@ void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
 	if ((normdegree >= 0 && normdegree < 90)){ //SOUTH EAST
 		offsety = HITBOX - normpy;
 		offsetx = (offsety) * (tanf((normdegree) * M_PI / 180));
-		newx = data->player.x + offsetx;
+		newx = data->player.x - offsetx;
 		newy = data->player.y + offsety;
 		if (newx < WIDTH && newy < HEIGHT && newx > 0 && newy > 0)
 			my_pixel_put(newx, newy, data, 0x00FF00);
