@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/04 15:08:49 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/04 15:19:55 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -514,10 +514,9 @@ void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
 	data->distance[x].hy = nnewy;
 }
 
-float l = 0.0;
 int	map_loop(t_data *data)
 {
-	mlx_clear_window (data->prog->mlx, data->prog->win);
+	// mlx_clear_window (data->prog->mlx, data->prog->win);
 	int x = -1;
 	int i1 = 0;
 	float yaw = data->player.yaw;
@@ -526,7 +525,7 @@ int	map_loop(t_data *data)
 	float playerx = data->player.x;
 	float playery = data->player.y;
 
-	int y2 = 0;
+	// int y2 = 0;
 	// while (++x < WIDTH)
 	// {
 	// 	if (x % HITBOX == 0){
@@ -541,43 +540,38 @@ int	map_loop(t_data *data)
 	// 		}
 	// 	}
 	// }
-	x = -1;
+	data->distance[WIDTH].type = NULLT;
+	int c = rgb_to_hex(data->c);
+	int f = rgb_to_hex(data->f);
+	int mpx = data->minimap_x;
+	int mpy = data->minimap_y;
+	int mpex = data->minimap_endx;
+	int mpey = data->minimap_endy;
+	// my_pixel_put(playerx, playery, data, 0x0000FF);
+		
+	double normpx = data->player.x;
+	while (normpx >= HITBOX)
+		normpx-=HITBOX;
+	double normpy = data->player.y;
+	while (normpy >= HITBOX)
+		normpy-=HITBOX;
 
-	while (x++ < WIDTH){
-		data->distance[x].h = -1;
-		data->distance[x].v = -1;
-	}
-	x = -1;
-	my_pixel_put(playerx, playery, data, 0x0000FF);
 	while (x++ < WIDTH)
 	{
 		data->distance[x].h = -1;
-		data->distance[i1].type = ENDL;
-
-		int x1 = data->player.x;
-		int y1 = data->player.y;
-
+		data->distance[x].v = -1;
+		data->distance[x].type = ENDL;
 		float normdegree = degree - 90;
 		while (normdegree < 0)
 			normdegree+=360;
 		while (normdegree > 360)
 			normdegree-=360;
 
-		double normpx = data->player.x;
-		while (normpx >= HITBOX)
-			normpx-=HITBOX;
-		double normpy = data->player.y;
-		while (normpy >= HITBOX)
-			normpy-=HITBOX;
-
 		vertical_dist(data,normdegree,normpx,x);
 		horizontal_dist(data,normdegree,normpy,x);
 
 		degree+=(FOV / WIDTH);
-	}
-	x = -1;
-	while (x++ < WIDTH)
-	{
+
 		data->distance[x].d = 10;
 		if (data->distance[x].h != -1 && data->distance[x].v != -1)
 		{
@@ -595,28 +589,6 @@ int	map_loop(t_data *data)
 				}
 			}
 		}
-	}
-	x = -1;
-	data->distance[WIDTH].type = NULLT;
-	int c = rgb_to_hex(data->c);
-	int f = rgb_to_hex(data->f);
-	int mpx = data->minimap_x;
-	int mpy = data->minimap_y;
-	int mpex = data->minimap_endx;
-	int mpey = data->minimap_endy;
-	while (++x < WIDTH)
-	{
-		// if (x % HITBOX == 0){
-		// 	y2 = -1;
-		// 	while (++y2 < HEIGHT){
-		// 		if (y2 % HITBOX == 0)
-		// 			if (x < HEIGHT)
-		// 				draw_line(data, x, y2, WIDTH, y2, 0xFF0000);
-		// 		if (y2 % HITBOX == 0)
-		// 			if (y2 < HEIGHT)
-		// 				draw_line(data, x, y2, x, HEIGHT, 0xFF0000);
-		// 	}
-		// }
 		float distanceToPoint = (data->distance[x].d);
 
 		int color = 0xFFFFFF;
