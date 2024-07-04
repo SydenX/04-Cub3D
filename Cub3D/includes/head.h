@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   head.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jetol <jetol@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:56:19 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/03 19:03:07 by jetol            ###   ########.fr       */
+/*   Updated: 2024/07/04 12:53:40 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define WIDTH 1080//1920
 # define HEIGHT 720//1080
 
-#define FOV (M_PI / 3) // Field of view
+# define FOV 66.0
 
 # define ERROR_INPUTFILE "Unable to read the input file."
 # define ERROR_NOTFORMATTED "File is not correctly formatted."
@@ -118,6 +118,7 @@ typedef struct s_distance {
 	float	hy;
 	float	vx;
 	float	vy;
+	int 	ttype;
 	t_type	type;
 } t_distance;
 
