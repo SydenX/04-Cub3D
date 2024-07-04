@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jetol <jetol@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/04 10:13:26 by jetol            ###   ########.fr       */
+/*   Updated: 2024/07/04 11:47:27 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,6 +489,129 @@ float nor_angle(float angle) // normalize the angle
 	return (angle);
 }
 
+void	vertical_dist(t_data *data, float normdegree, double normpx, int x)
+{
+	double offsetx = 0;
+	double offsety = 0;
+	double newx = 0;
+	double newy = 0;
+	int c = 0;
+	if ((normdegree >= 0 && normdegree < 90) || (normdegree > 270 && normdegree < 360)){ //EAST
+		offsetx = HITBOX - normpx;
+		offsety = (offsetx) * (tanf((normdegree) * M_PI / 180));
+		newx = data->player.x + offsetx;
+		newy = data->player.y + offsety;
+		if (newx < WIDTH && newy < HEIGHT && newx > 0 && newy > 0)
+			my_pixel_put(newx, newy, data, 0x00FF00);
+		t_node *node = get_node_at(data->nodes, (newx / HITBOX), (newy / HITBOX));
+		if (node != NULL)
+			if (node->type == WALL)
+				c = 10;
+	} else if ((normdegree > 90 && normdegree < 270)){ //WEST
+		offsetx = normpx;
+		offsety = (offsetx) * (tanf((normdegree) * M_PI / 180));
+		newx = data->player.x - offsetx;
+		newy = data->player.y - offsety;
+		if (newx < WIDTH && newy < HEIGHT && newx > 0 && newy > 0)
+			my_pixel_put(newx, newy, data, 0x00FF00);
+		t_node *node = get_node_at(data->nodes, (newx / HITBOX)-1, (newy / HITBOX));
+		if (node != NULL)
+			if (node->type == WALL)
+				c = 10;
+	}
+
+	double nnewx = newx;
+	double nnewy = newy;
+	while(c++ < WIDTH / HITBOX){
+		if ((normdegree > 90 && normdegree < 270)){ //WEST
+			double noffsety = (HITBOX) * (tanf((normdegree) * M_PI / 180));
+			nnewx -= HITBOX;
+			nnewy -= noffsety;
+			if (nnewx < WIDTH && nnewy < HEIGHT && nnewx > 0 && nnewy > 0)
+				my_pixel_put(nnewx, nnewy, data, 0x00FF00);
+			t_node *node = get_node_at(data->nodes, (nnewx / HITBOX) - 1, (nnewy / HITBOX));
+			if (node != NULL)
+				if (node->type == WALL)
+					break;
+		} else if ((normdegree >= 0 && normdegree < 90) || (normdegree > 270 && normdegree < 360)){ //EAST
+			double noffsety = (HITBOX) * (tanf((normdegree) * M_PI / 180));
+			nnewx += HITBOX;
+			nnewy += noffsety;
+			if (nnewx < WIDTH && nnewy < HEIGHT && nnewx > 0 && nnewy > 0)
+				my_pixel_put(nnewx, nnewy, data, 0x00FF00);
+			t_node *node = get_node_at(data->nodes, (nnewx / HITBOX), (nnewy / HITBOX));
+			if (node != NULL)
+				if (node->type == WALL)
+					break;
+		}
+	}
+	data->distance[x].v = sqrt(fabs(data->player.x - nnewx * data->player.x - nnewx) + fabs(data->player.y - nnewy * data->player.y - nnewy));
+	data->distance[x].vx = nnewx;
+	data->distance[x].vy = nnewy;
+}
+
+void	horizontal_dist(t_data *data, float normdegree, double normpy, int x)
+{
+	double offsetx = 0;
+	double offsety = 0;
+	double newx = 0;
+	double newy = 0;
+	int c = 0;
+	if ((normdegree >= 0 && normdegree < 90)){ //SOUTH EAST
+		offsety = HITBOX - normpy;
+		offsetx = (offsety) * (tanf((normdegree) * M_PI / 180));
+		newx = data->player.x + offsetx;
+		newy = data->player.y + offsety;
+		if (newx < WIDTH && newy < HEIGHT && newx > 0 && newy > 0)
+			my_pixel_put(newx, newy, data, 0x00FF00);
+		t_node *node = get_node_at(data->nodes, (newx / HITBOX), (newy / HITBOX));
+		if (node != NULL)
+			if (node->type == WALL)
+				c = 10;
+	}
+	// } else if ((normdegree >= 180 && normdegree < 360)){ //NORD
+	// 	offsety = normpy;
+	// 	offsetx = (offsety) * (tanf((normdegree) * M_PI / 180));
+	// 	newx = data->player.x - offsetx;
+	// 	newy = data->player.y - offsety;
+	// 	if (newx < WIDTH && newy < HEIGHT && newx > 0 && newy > 0)
+	// 		my_pixel_put(newx, newy, data, 0x00FF00);
+	// 	t_node *node = get_node_at(data->nodes, (newx / HITBOX)-1, (newy / HITBOX));
+	// 	if (node != NULL)
+	// 		if (node->type == WALL)
+	// 			c = 10;
+	// }
+
+	// double nnewx = newx;
+	// double nnewy = newy;
+	// while(c++ < WIDTH / HITBOX){
+	// 	if ((normdegree > 90 && normdegree < 270)){ //WEST
+	// 		double noffsety = (HITBOX) * (tanf((normdegree) * M_PI / 180));
+	// 		nnewx -= HITBOX;
+	// 		nnewy -= noffsety;
+	// 		if (nnewx < WIDTH && nnewy < HEIGHT && nnewx > 0 && nnewy > 0)
+	// 			my_pixel_put(nnewx, nnewy, data, 0x00FF00);
+	// 		t_node *node = get_node_at(data->nodes, (nnewx / HITBOX) - 1, (nnewy / HITBOX));
+	// 		if (node != NULL)
+	// 			if (node->type == WALL)
+	// 				break;
+	// 	} else if ((normdegree >= 0 && normdegree < 90) || (normdegree > 270 && normdegree < 360)){ //EAST
+	// 		double noffsety = (HITBOX) * (tanf((normdegree) * M_PI / 180));
+	// 		nnewx += HITBOX;
+	// 		nnewy += noffsety;
+	// 		if (nnewx < WIDTH && nnewy < HEIGHT && nnewx > 0 && nnewy > 0)
+	// 			my_pixel_put(nnewx, nnewy, data, 0x00FF00);
+	// 		t_node *node = get_node_at(data->nodes, (nnewx / HITBOX), (nnewy / HITBOX));
+	// 		if (node != NULL)
+	// 			if (node->type == WALL)
+	// 				break;
+	// 	}
+	// }
+	// data->distance[x].v = sqrt(fabs(data->player.x - nnewx * data->player.x - nnewx) + fabs(data->player.y - nnewy * data->player.y - nnewy));
+	// data->distance[x].vx = nnewx;
+	// data->distance[x].vy = nnewy;
+}
+
 float l = 0.0;
 int	map_loop(t_data *data)
 {
@@ -527,33 +650,29 @@ int	map_loop(t_data *data)
 	}
 	x = -1;
 	my_pixel_put(playerx, playery, data, 0x0000FF);
-		while (x++ < WIDTH)
+	while (x++ < WIDTH)
 	{
 		data->distance[x].h = -1;
 		data->distance[i1].type = ENDL;
 
-
 		int x1 = data->player.x;
 		int y1 = data->player.y;
 
-		float normdegree = degree+90;
+		float normdegree = degree - 90;
 		while (normdegree < 0)
 			normdegree+=360;
 		while (normdegree > 360)
 			normdegree-=360;
-		
+
 		double normpx = data->player.x;
 		while (normpx >= HITBOX)
-			normpx/=HITBOX;
+			normpx-=HITBOX;
+		double normpy = data->player.x;
+		while (normpy >= HITBOX)
+			normpy-=HITBOX;
 
-		if (normdegree >= 0 && normdegree < 90){
-			double offsetx = HITBOX - normpx;
-			double offsety = offsetx / cos(nor_angle(normdegree) * M_PI / 180);
-			double newx = data->player.x + offsetx;
-			double newy = data->player.y + offsety;
-			printf("%f %f\n", offsety, offsetx);
-			my_pixel_put(newx, newy, data, 0x00FF00);
-		}
+		// vertical_dist(data,normdegree,normpx,x);
+		horizontal_dist(data,normdegree,normpy,x);
 
 		degree+=(fov / WIDTH);
 	}
