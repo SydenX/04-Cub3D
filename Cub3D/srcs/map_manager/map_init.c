@@ -6,7 +6,7 @@
 /*   By: jtollena <jtollena@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:48:38 by jtollena          #+#    #+#             */
-/*   Updated: 2024/07/04 15:19:55 by jtollena         ###   ########.fr       */
+/*   Updated: 2024/07/05 10:59:52 by jtollena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -576,17 +576,13 @@ int	map_loop(t_data *data)
 		if (data->distance[x].h != -1 && data->distance[x].v != -1)
 		{
 			if (data->distance[x].v < data->distance[x].h){
-				if (data->distance[x].vx < data->xlen * HITBOX && data->distance[x].vy < data->ylen * HITBOX && data->distance[x].vx > 0 && data->distance[x].vy > 0){
 					data->distance[x].d = fabs(data->distance[x].v);
-					data->distance[x].ttype = 0;
-					// my_pixel_put(data->distance[x].vx, data->distance[x].vy, data, 0x00FF00);
-				}
 			} else {
-				if (data->distance[x].hx < data->xlen * HITBOX && data->distance[x].hy < data->ylen * HITBOX && data->distance[x].hx > 0 && data->distance[x].hy > 0){
+				// if (data->distance[x].hx < data->xlen * HITBOX && data->distance[x].hy < data->ylen * HITBOX && data->distance[x].hx > 0 && data->distance[x].hy > 0){
 					data->distance[x].d = fabs(data->distance[x].h);
 					data->distance[x].ttype = 1;
 					// my_pixel_put(data->distance[x].hx, data->distance[x].hy, data, 0x00FF00);
-				}
+				// }
 			}
 		}
 		float distanceToPoint = (data->distance[x].d);
